@@ -1,2 +1,2 @@
 # code-sprawl
-source code visualisation tool
+a source code visualisation tool
