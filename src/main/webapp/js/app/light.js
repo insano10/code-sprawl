@@ -11,10 +11,10 @@ define(["three", "scene"], function (THREE, scene)
     light.castShadow = true;
 //    light.shadowCameraVisible = true;
 
-    light.shadowMapWidth = 512;
-    light.shadowMapHeight = 512;
+    light.shadowMapWidth = 1024;
+    light.shadowMapHeight = 1024;
 
-    var d = 200;
+    var d = 512;
 
     light.shadowCameraLeft = -d;
     light.shadowCameraRight = d;

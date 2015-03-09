@@ -1,31 +1,43 @@
-define(["three", "camera", "controls", "geometry", "light", "material", "renderer", "scene"],
-    function (THREE, camera, controls, geometry, light, material, renderer, scene)
+define(["three", "camera", "controls", "geometry", "light", "material", "renderer", "scene", "data"],
+    function (THREE, camera, controls, geometry, light, material, renderer, scene, cubeData)
     {
         var app = {
             meshes:  [],
             init:    function ()
             {
-                var boxgeometry = new THREE.BoxGeometry(50, 100, 50);
-                var boxmaterial = new THREE.MeshLambertMaterial({ color: 0x0aeedf });
-                var cube = new THREE.Mesh(boxgeometry, boxmaterial);
-                cube.castShadow = true;
-                cube.position.x = 0;
-                cube.position.y = 60;
-                cube.position.z = 0;
-                scene.add(cube);
+                var groundBorderWidth = 100;
+                var gapBetweenCubes = 10;
+                var distanceFromGround = 20;
+                var cubeOffset = gapBetweenCubes + cubeData.dataSideLength;
 
-                var boxgeometry2 = new THREE.BoxGeometry(50, 50, 50);
-                var cube2 = new THREE.Mesh(boxgeometry2, boxmaterial);
-                cube2.castShadow = true;
-                cube2.position.x = 0;
-                cube2.position.y = 35;
-                cube2.position.z = 60;
-                scene.add(cube2);
+                for(var i=0 ; i<cubeData.dataArrayWidth ; i++) {
 
+                    for(var j=0 ; j<cubeData.dataArrayHeight ; j++) {
+
+                        var color = 0x0aeedf;
+
+                        if(i==0 && j==0) {
+                            color = 0xff0000;
+                        }
+
+                        var cubeGeometry = cubeData.data[i][j];
+                        var cube = new THREE.Mesh(new THREE.BoxGeometry(cubeGeometry[0], cubeGeometry[1], cubeGeometry[2]),
+                                                  new THREE.MeshLambertMaterial({ color: color }));
+                        cube.castShadow = true;
+                        cube.position.x = cubeOffset*i;
+                        cube.position.y = distanceFromGround + (cubeGeometry[1]/2);
+                        cube.position.z = cubeOffset*j;
+                        scene.add(cube);
+                    }
+                }
 
                 //ground
-                var groundMaterial = new THREE.MeshPhongMaterial({ color: 0x7d7d7d });
-                plane = new THREE.Mesh(new THREE.PlaneBufferGeometry(500, 500), groundMaterial);
+                var groundSideLengthForData = (cubeData.dataArrayWidth * cubeData.dataSideLength) + ((cubeData.dataArrayWidth-1) * gapBetweenCubes);
+                var groundSideLength = (groundBorderWidth * 2) + groundSideLengthForData;
+                var plane = new THREE.Mesh(new THREE.PlaneBufferGeometry(groundSideLength, groundSideLength),
+                                           new THREE.MeshPhongMaterial({ color: 0x7d7d7d }));
+                plane.position.x =(groundSideLengthForData/2) - (cubeData.dataSideLength/2);
+                plane.position.z =(groundSideLengthForData/2) - (cubeData.dataSideLength/2);
                 plane.rotation.x = -Math.PI / 2;
                 plane.receiveShadow = true;
 

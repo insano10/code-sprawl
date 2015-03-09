@@ -33,6 +33,7 @@ require(
             renderer:          'app/renderer',
             scene:             'app/scene',
             texture:           'app/texture',
+            data:              'data/cubes'
         }
     },
     ["main"],
