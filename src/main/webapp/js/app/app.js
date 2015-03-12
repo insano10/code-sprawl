@@ -1,10 +1,21 @@
-define(["three", "camera", "controls", "geometry", "light", "material", "renderer", "scene", "data"],
-    function (THREE, camera, controls, geometry, light, material, renderer, scene, cubeData)
+define(["three", "camera", "controls", "geometry", "light", "material", "renderer", "scene", "data", "mousePointerLock"],
+    function (THREE, camera, controls, geometry, light, material, renderer, scene, cubeData, mousePointerLock)
     {
+        var controlsEnabled = false;
+        var clock = new THREE.Clock();
+        var raycaster = new THREE.Raycaster( new THREE.Vector3(), new THREE.Vector3( 0, - 1, 0 ), 0, 10 );
+        var velocity = new THREE.Vector3();
+
         var app = {
             meshes:  [],
             init:    function ()
             {
+                //grab the mouse to navigate around the 3D model
+                mousePointerLock.grabPointer(function() {
+                    controlsEnabled = true;
+                    controls.enabled = true;
+                });
+
                 var groundBorderWidth = 100;
                 var gapBetweenCubes = 10;
                 var distanceFromGround = 20;
@@ -47,7 +58,47 @@ define(["three", "camera", "controls", "geometry", "light", "material", "rendere
             animate: function ()
             {
                 window.requestAnimationFrame(app.animate);
-                controls.update();
+
+                if ( controlsEnabled ) {
+                    console.log("controls enabled");
+                    raycaster.ray.origin.copy( controls.getObject().position );
+                    raycaster.ray.origin.y -= 10;
+
+                    var objects = [];
+                    var intersections = raycaster.intersectObjects( objects );
+
+                    var isOnObject = intersections.length > 0;
+
+                    var delta = clock.getDelta();
+
+                    velocity.x -= velocity.x * 10.0 * delta;
+                    velocity.z -= velocity.z * 10.0 * delta;
+
+                    velocity.y -= 9.8 * 100.0 * delta; // 100.0 = mass
+
+//                    if ( moveForward ) velocity.z -= 400.0 * delta;
+//                    if ( moveBackward ) velocity.z += 400.0 * delta;
+
+//                    if ( moveLeft ) velocity.x -= 400.0 * delta;
+//                    if ( moveRight ) velocity.x += 400.0 * delta;
+
+                    if ( isOnObject === true ) {
+                        velocity.y = Math.max( 0, velocity.y );
+
+                    }
+
+                    controls.getObject().translateX( velocity.x * delta );
+                    controls.getObject().translateY( velocity.y * delta );
+                    controls.getObject().translateZ( velocity.z * delta );
+
+                    if ( controls.getObject().position.y < 10 ) {
+
+                        velocity.y = 0;
+                        controls.getObject().position.y = 10;
+
+                    }
+                }
+
                 renderer.render(scene, camera);
             }
         };
