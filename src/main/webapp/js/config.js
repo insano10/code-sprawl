@@ -3,8 +3,8 @@ require(
         shim:  {
             // --- Use shim to mix together all THREE.js subcomponents
             'threeCore':           { exports: 'THREE' },
-            'TrackballControls':   { deps: ['threeCore'], exports: 'THREE' },
             'PointerLockControls': { deps: ['threeCore'], exports: 'THREE' },
+            'FPSControls':         { deps: ['threeCore'], exports: 'THREE' },
             // --- end THREE sub-components
             'detector':            { exports: 'Detector' },
             'stats':               { exports: 'Stats' }
@@ -14,8 +14,8 @@ require(
             // --- start THREE sub-components
             three:               'lib/threeWrapper',
             threeCore:           'lib/three',
-            TrackballControls:   'lib/controls/TrackballControls',
             PointerLockControls: 'lib/controls/PointerLockControls',
+            FPSControls:         'lib/controls/FPSControls',
             // --- end THREE sub-components
             detector:            'lib/Detector',
             stats:               'lib/stats.min',

@@ -1,7 +1,7 @@
 define(["three", "camera", "scene"], function (THREE, camera, scene)
 {
-    var controls = new THREE.PointerLockControls(camera);
-    scene.add( controls.getObject() );
+    var controls = new THREE.FPSControls(camera);
+    controls.addToScene(scene);
 
     return controls;
 });
