@@ -1,8 +1,8 @@
-define(["three", "camera", "controls", "geometry", "light", "material", "renderer", "scene", "data", "mousePointerLock"],
-    function (THREE, camera, controls, geometry, light, material, renderer, scene, cubeData, mousePointerLock)
+define(["three", "camera", "controls", "geometry", "light", "material", "renderer", "scene", "data", "mousePointerLock", "crossHair"],
+    function (THREE, camera, controls, geometry, light, material, renderer, scene, cubeData, mousePointerLock, crossHair)
     {
         var app = {
-            meshes:  [],
+            objects:  [],
             init:    function ()
             {
                 //grab the mouse to navigate around the 3D model
@@ -33,6 +33,7 @@ define(["three", "camera", "controls", "geometry", "light", "material", "rendere
                         cube.position.y = distanceFromGround + (cubeGeometry[1]/2);
                         cube.position.z = cubeOffset*j;
                         scene.add(cube);
+                        app.objects.push(cube);
                     }
                 }
 
@@ -53,6 +54,7 @@ define(["three", "camera", "controls", "geometry", "light", "material", "rendere
             {
                 window.requestAnimationFrame(app.animate);
                 controls.update();
+                crossHair.update(controls, app.objects);
                 renderer.render(scene, camera);
             }
         };

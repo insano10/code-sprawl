@@ -99,6 +99,11 @@ THREE.FPSControls = function (camera)
         pointerLockControls.enabled = isEnabled;
     };
 
+    this.getPosition = function()
+    {
+        return pointerLockControls.getObject().position;
+    };
+
     this.update = function ()
     {
         if (!enabled)
@@ -124,12 +129,6 @@ THREE.FPSControls = function (camera)
         pointerLockControls.getObject().translateX(velocity.x * delta);
         pointerLockControls.getObject().translateY(velocity.y * delta);
         pointerLockControls.getObject().translateZ(velocity.z * delta);
-
-//        var raycaster = new THREE.Raycaster( new THREE.Vector3(), new THREE.Vector3( 0, - 1, 0 ), 0, 10 );
-//        raycaster.ray.origin.copy( controls.getObject().position );
-//        raycaster.ray.origin.y -= 10;
-//        var intersections = raycaster.intersectObjects( objects );
-//        var isOnObject = intersections.length > 0;
 
     }
 

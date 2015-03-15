@@ -36,6 +36,7 @@ require(
             scene:               'app/scene',
             texture:             'app/texture',
             mousePointerLock:    'app/mousePointerLock',
+            crossHair:           'app/crossHair',
             data:                'data/cubes'
         }
     },
