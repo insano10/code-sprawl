@@ -1,14 +1,11 @@
-define(["three", "camera", "controls", "geometry", "light", "material", "renderer", "scene", "data", "mousePointerLock", "crossHair"],
-    function (THREE, camera, controls, geometry, light, material, renderer, scene, cubeData, mousePointerLock, crossHair)
+define(["three", "camera", "controls", "geometry", "light", "material", "renderer", "scene", "data", "crossHair"],
+    function (THREE, camera, controls, geometry, light, material, renderer, scene, cubeData, crossHair)
     {
         var app = {
             objects:  [],
             init:    function ()
             {
-                //grab the mouse to navigate around the 3D model
-                mousePointerLock.grabPointer(function() {
-                    controls.setEnabled(true);
-                });
+                controls.setEnabled(true);
 
                 var groundBorderWidth = 100;
                 var gapBetweenCubes = 10;
