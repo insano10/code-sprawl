@@ -4,15 +4,15 @@ define(["three", "camera", "scene", "renderer"], function (THREE, camera, scene,
     var rayVector = new THREE.Vector3(0, 0, 0.5);
     var INTERSECTED;
     var line;
-    var x,y;
+    var x, y;
 
     function onMouseMove( event ) {
 
         event.preventDefault();
 
-        var elem = renderer.domElement,
-            boundingRect = elem.getBoundingClientRect();
-        x = (event.clientX - boundingRect.left) * (elem.width / boundingRect.width),
+        var elem = renderer.domElement;
+        var boundingRect = elem.getBoundingClientRect();
+        x = (event.clientX - boundingRect.left) * (elem.width / boundingRect.width);
         y = (event.clientY - boundingRect.top) * (elem.height / boundingRect.height);
     }
 
@@ -23,12 +23,13 @@ define(["three", "camera", "scene", "renderer"], function (THREE, camera, scene,
 
         update: function (controls, objects)
         {
-            rayVector.set(((x/window.innerWidth)*2-1), (1-(y/window.innerHeight)*2), 1).unproject(camera);
+
+            var vector = new THREE.Vector3(((x/window.innerWidth)*2-1), (1-(y/window.innerHeight)*2), 1);
+
+            rayVector.set(vector).unproject(camera);
             rayCaster.set(controls.getPosition(), rayVector.sub(controls.getPosition()).normalize());
 
-
             var intersections = rayCaster.intersectObjects(objects);
-            console.log(intersections.length);
 
             if ( intersections.length > 0 ) {
 

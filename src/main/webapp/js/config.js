@@ -14,8 +14,8 @@ require(
             // --- start THREE sub-components
             three:               'lib/threeWrapper',
             threeCore:           'lib/three',
-            PointerLockControls: 'lib/controls/PointerLockControls',
-            FPSControls:         'lib/controls/FPSControls',
+            PointerLockControls: 'controls/PointerLockControls',
+            FPSControls:         'controls/FPSControls',
             // --- end THREE sub-components
             detector:            'lib/Detector',
             stats:               'lib/stats.min',
