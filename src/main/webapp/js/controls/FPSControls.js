@@ -104,6 +104,11 @@ THREE.FPSControls = function (camera)
         return pointerLockControls.getObject().position;
     };
 
+    this.getDirection = function(vector)
+    {
+        return pointerLockControls.getDirection(vector);
+    };
+
     this.update = function ()
     {
         if (!enabled)

@@ -1,45 +1,28 @@
 define(["three", "camera", "scene", "renderer"], function (THREE, camera, scene, renderer)
 {
-    var rayCaster = new THREE.Raycaster();
-    var rayVector = new THREE.Vector3(0, 0, 0.5);
-    var INTERSECTED;
-    var line;
-    var x, y;
-
-    function onMouseMove( event ) {
-
-        event.preventDefault();
-
-        var elem = renderer.domElement;
-        var boundingRect = elem.getBoundingClientRect();
-        x = (event.clientX - boundingRect.left) * (elem.width / boundingRect.width);
-        y = (event.clientY - boundingRect.top) * (elem.height / boundingRect.height);
-    }
-
-    document.addEventListener( 'mousemove', onMouseMove, false );
-
+    var currentIntersectedObject;
+    var debugPickingLine;
 
     return {
 
         update: function (controls, objects)
         {
+            var vectorDirection = new THREE.Vector3();
+            controls.getDirection(vectorDirection);
 
-            var vector = new THREE.Vector3(((x/window.innerWidth)*2-1), (1-(y/window.innerHeight)*2), 1);
-
-            rayVector.set(vector).unproject(camera);
-            rayCaster.set(controls.getPosition(), rayVector.sub(controls.getPosition()).normalize());
+            var rayCaster = new THREE.Raycaster(controls.getPosition(), vectorDirection );
 
             var intersections = rayCaster.intersectObjects(objects);
 
             if ( intersections.length > 0 ) {
 
-                if ( INTERSECTED != intersections[ 0 ].object ) {
+                if ( currentIntersectedObject != intersections[ 0 ].object ) {
 
-                    if ( INTERSECTED ) INTERSECTED.material.emissive.setHex( INTERSECTED.currentHex );
+                    if ( currentIntersectedObject ) currentIntersectedObject.material.emissive.setHex( currentIntersectedObject.currentHex );
 
-                    INTERSECTED = intersections[ 0 ].object;
-                    INTERSECTED.currentHex = INTERSECTED.material.emissive.getHex();
-                    INTERSECTED.material.emissive.setHex( 0xff0000 );
+                    currentIntersectedObject = intersections[ 0 ].object;
+                    currentIntersectedObject.currentHex = currentIntersectedObject.material.emissive.getHex();
+                    currentIntersectedObject.material.emissive.setHex( 0xff0000 );
                 }
 
                 var geometry = new THREE.Geometry();
@@ -49,15 +32,15 @@ define(["three", "camera", "scene", "renderer"], function (THREE, camera, scene,
                 //vertext at object intersection
                 geometry.vertices.push( intersections[0].point );
 
-                scene.remove(line);
-                line = new THREE.Line(geometry, new THREE.LineBasicMaterial({color: 0x990000}));
-                scene.add(line);
+                scene.remove(debugPickingLine);
+                debugPickingLine = new THREE.Line(geometry, new THREE.LineBasicMaterial({color: 0x990000}));
+                scene.add(debugPickingLine);
 
             } else {
 
-                if ( INTERSECTED ) INTERSECTED.material.emissive.setHex( INTERSECTED.currentHex );
+                if ( currentIntersectedObject ) currentIntersectedObject.material.emissive.setHex( currentIntersectedObject.currentHex );
 
-                INTERSECTED = null;
+                currentIntersectedObject = null;
 
             }
         }
