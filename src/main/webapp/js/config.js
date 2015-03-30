@@ -37,7 +37,8 @@ require(
             texture:             'app/texture',
             mousePointerLock:    'app/mousePointerLock',
             crossHair:           'app/crossHair',
-            data:                'data/cubes'
+            data:                'data/cubes',
+            codeUnitBar:         'data/codeUnitBar'
         }
     },
     ["main"],

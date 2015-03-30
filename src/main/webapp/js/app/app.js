@@ -1,5 +1,5 @@
-define(["three", "camera", "controls", "geometry", "light", "material", "renderer", "scene", "data", "crossHair", "mousePointerLock"],
-    function (THREE, camera, controls, geometry, light, material, renderer, scene, cubeData, crossHair, mousePointerLock)
+define(["three", "camera", "controls", "geometry", "light", "material", "renderer", "scene", "data", "crossHair", "mousePointerLock", "codeUnitBar"],
+    function (THREE, camera, controls, geometry, light, material, renderer, scene, cubeData, crossHair, mousePointerLock, CodeUnitBar)
     {
         var app = {
             objects:  [],
@@ -19,21 +19,16 @@ define(["three", "camera", "controls", "geometry", "light", "material", "rendere
 
                     for(var j=0 ; j<cubeData.dataArrayHeight ; j++) {
 
-                        var color = 0x0aeedf;
-
-                        if(i==0 && j==0) {
-                            color = 0xff0000;
-                        }
-
                         var cubeGeometry = cubeData.data[i][j];
-                        var cube = new THREE.Mesh(new THREE.BoxGeometry(cubeGeometry[0], cubeGeometry[1], cubeGeometry[2]),
-                                                  new THREE.MeshLambertMaterial({ color: color }));
-                        cube.castShadow = true;
-                        cube.position.x = cubeOffset*i;
-                        cube.position.y = distanceFromGround + (cubeGeometry[1]/2);
-                        cube.position.z = cubeOffset*j;
-                        scene.add(cube);
-                        app.objects.push(cube);
+
+                        var position = new THREE.Vector3();
+                        position.x = cubeOffset*i;
+                        position.y = distanceFromGround + (cubeGeometry[1]/2);
+                        position.z = cubeOffset*j;
+                        var unit = new CodeUnitBar(cubeGeometry[0], cubeGeometry[1], cubeGeometry[2], "Name");
+                        unit.addToScene(scene, position);
+
+                        app.objects.push(unit);
                     }
                 }
 
