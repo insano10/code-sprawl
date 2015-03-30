@@ -30,9 +30,9 @@ define(["three", "camera", "scene", "renderer"], function (THREE, camera, scene,
 
     return {
 
-        update: function (controls, objects)
+        update: function (controls, objectArray, objectMap)
         {
-            var target = getTarget(controls, objects);
+            var target = getTarget(controls, objectArray);
 
             if (target != null)
             {
@@ -47,6 +47,9 @@ define(["three", "camera", "scene", "renderer"], function (THREE, camera, scene,
                     currentIntersectedObject = target.object;
                     currentIntersectedObject.currentHex = currentIntersectedObject.material.emissive.getHex();
                     currentIntersectedObject.material.emissive.setHex(0xff0000);
+
+                    var codeBarUnit = objectMap[currentIntersectedObject.id];
+                    console.log("Pointing at unit " + codeBarUnit.getName());
                 }
 
                 if (showDebugPickingLine)

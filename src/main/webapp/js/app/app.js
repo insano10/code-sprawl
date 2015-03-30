@@ -2,7 +2,8 @@ define(["three", "camera", "controls", "geometry", "light", "material", "rendere
     function (THREE, camera, controls, geometry, light, material, renderer, scene, cubeData, crossHair, mousePointerLock, CodeUnitBar)
     {
         var app = {
-            objects:  [],
+            objectArray:  [],
+            objectMap:    {},
             init:    function ()
             {
                 //grab the mouse to navigate around the 3D model
@@ -25,10 +26,11 @@ define(["three", "camera", "controls", "geometry", "light", "material", "rendere
                         position.x = cubeOffset*i;
                         position.y = distanceFromGround + (cubeGeometry[1]/2);
                         position.z = cubeOffset*j;
-                        var unit = new CodeUnitBar(cubeGeometry[0], cubeGeometry[1], cubeGeometry[2], "Name");
+                        var unit = new CodeUnitBar(cubeGeometry[0], cubeGeometry[1], cubeGeometry[2], "Bar@ " + JSON.stringify(position));
                         unit.addToScene(scene, position);
 
-                        app.objects.push(unit);
+                        app.objectArray.push(unit);
+                        app.objectMap[unit.getId()] = unit;
                     }
                 }
 
@@ -49,7 +51,7 @@ define(["three", "camera", "controls", "geometry", "light", "material", "rendere
             {
                 window.requestAnimationFrame(app.animate);
                 controls.update();
-                crossHair.update(controls, app.objects);
+                crossHair.update(controls, app.objectArray, app.objectMap);
                 renderer.render(scene, camera);
             }
         };

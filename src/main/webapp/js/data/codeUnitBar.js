@@ -31,6 +31,11 @@ define( ["three"], function (THREE) {
             this.mesh.raycast(raycaster, intersects);
         };
 
+        CodeUnitBar.prototype.getId = function getId()
+        {
+            return this.mesh == null ? null : this.mesh.id;
+        };
+
         CodeUnitBar.prototype.getName = function getName()
         {
             return this.name;
