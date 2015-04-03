@@ -29,7 +29,8 @@ require(
             mousePointerLock:    'controls/mousePointerLock',
             PointerLockControls: 'controls/pointerLockControls',
             data:                'data/cubes',
-            codeUnitBar:         'renderedObjects/codeUnitBar'
+            codeUnitBar:         'renderedObjects/codeUnitBar',
+            informationPanel:    'renderedObjects/informationPanel'
         }
     },
     ["main"],

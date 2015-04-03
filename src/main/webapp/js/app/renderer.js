@@ -7,6 +7,7 @@ define(["three", "container"], function (THREE, container)
     renderer.autoClear = false;
     renderer.shadowMapEnabled = true;
     renderer.shadowMapSoft = true;
+    renderer.domElement.classList.add("main-canvas");
     container.appendChild(renderer.domElement);
 
     var updateSize = function ()

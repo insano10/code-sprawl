@@ -1,4 +1,4 @@
-define(["three", "camera", "scene", "renderer"], function (THREE, camera, scene, renderer)
+define(["three", "camera", "scene", "informationPanel"], function (THREE, camera, scene, informationPanel)
 {
     var currentIntersectedObject;
 
@@ -49,7 +49,7 @@ define(["three", "camera", "scene", "renderer"], function (THREE, camera, scene,
                     currentIntersectedObject.material.emissive.setHex(0xff0000);
 
                     var codeBarUnit = objectMap[currentIntersectedObject.id];
-                    console.log("Pointing at unit " + codeBarUnit.getName());
+                    informationPanel.updateTarget(codeBarUnit);
                 }
 
                 if (showDebugPickingLine)

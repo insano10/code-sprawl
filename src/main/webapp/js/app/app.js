@@ -1,12 +1,12 @@
-define(["three", "camera", "controls", "light", "renderer", "scene", "data", "crossHair", "mousePointerLock", "codeUnitBar"],
-    function (THREE, camera, controls, light, renderer, scene, cubeData, crossHair, mousePointerLock, CodeUnitBar)
+define(["three", "camera", "controls", "light", "renderer", "scene", "data", "crossHair", "mousePointerLock", "codeUnitBar", "informationPanel"],
+    function (THREE, camera, controls, light, renderer, scene, cubeData, crossHair, mousePointerLock, CodeUnitBar, informationPanel)
     {
         var app = {
-            objectArray:     [],
-            objectMap:       {},
-            isAnimating:     false,
-            animationJob:    null,
-            init:            function ()
+            objectArray:      [],
+            objectMap:        {},
+            isAnimating:      false,
+            animationJob:     null,
+            init:             function ()
             {
                 //grab the mouse to navigate around the 3D model
                 mousePointerLock.grabPointer(
@@ -56,37 +56,35 @@ define(["three", "camera", "controls", "light", "renderer", "scene", "data", "cr
                 plane.rotation.x = -Math.PI / 2;
                 plane.receiveShadow = true;
 
-                //information panel
-
                 scene.add(plane);
                 app.isAnimating = true;
             },
-            animate:         function ()
+            animate:          function ()
             {
-                if(app.isAnimating)
+                if (app.isAnimating)
                 {
                     app.animationJob = window.requestAnimationFrame(app.animate);
                     controls.update();
                     crossHair.update(controls, app.objectArray, app.objectMap);
                     renderer.render(scene, camera);
+                    informationPanel.draw();
                 }
             },
-            startAnimation: function()
+            startAnimation:   function ()
             {
-                if(!app.animationJob)
+                if (!app.animationJob)
                 {
                     app.isAnimating = true;
                     app.animate();
                 }
             },
-            cancelAnimation: function ()
+            cancelAnimation:  function ()
             {
                 app.isAnimating = false;
-                if(app.animationJob)
+                if (app.animationJob)
                 {
                     console.log("Cancelling animation");
                     app.animationJob = null;
-//                    window.cancelRequestAnimationFrame(app.animationJob);
                 }
             }
         };
