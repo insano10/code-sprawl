@@ -1,5 +1,5 @@
-define(["three", "camera", "controls", "geometry", "light", "material", "renderer", "scene", "data", "crossHair", "mousePointerLock", "codeUnitBar"],
-    function (THREE, camera, controls, geometry, light, material, renderer, scene, cubeData, crossHair, mousePointerLock, CodeUnitBar)
+define(["three", "camera", "controls", "light", "renderer", "scene", "data", "crossHair", "mousePointerLock", "codeUnitBar"],
+    function (THREE, camera, controls, light, renderer, scene, cubeData, crossHair, mousePointerLock, CodeUnitBar)
     {
         var app = {
             objectArray:     [],
@@ -55,6 +55,8 @@ define(["three", "camera", "controls", "geometry", "light", "material", "rendere
                 plane.position.z = (groundSideLengthForData / 2) - (cubeData.dataSideLength / 2);
                 plane.rotation.x = -Math.PI / 2;
                 plane.receiveShadow = true;
+
+                //information panel
 
                 scene.add(plane);
                 app.isAnimating = true;
