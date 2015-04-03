@@ -15,7 +15,6 @@ define(['detector', 'app', 'container'],
 
                 // Initialize our app and start the animation loop (animate is expected to call itself)
                 app.init();
-                app.animate();
             })
         };
 

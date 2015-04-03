@@ -2,7 +2,7 @@ define(["three", "camera", "scene", "renderer"], function (THREE, camera, scene,
 {
     var currentIntersectedObject;
 
-    var showDebugPickingLine = true;
+    var showDebugPickingLine = false;
     var debugPickingLine;
 
     var showPickingLine = function (origin, target)

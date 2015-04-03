@@ -1,3 +1,3 @@
 define( [], function () {
-  return document.getElementById( 'threejs-container' );
+  return document.getElementById( 'canvas-container' );
 } );

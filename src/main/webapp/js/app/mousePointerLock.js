@@ -1,6 +1,6 @@
 define([], function() {
 
-    var grabPointer = function (controlsEnabledCallback)
+    var grabPointer = function (controlsEnabledCallback, controlsDisabledCallback)
     {
         var blocker = document.getElementById('blocker');
         var instructions = document.getElementById( 'instructions' );
@@ -14,8 +14,8 @@ define([], function() {
             {
                 if (document.pointerLockElement === element || document.mozPointerLockElement === element || document.webkitPointerLockElement === element)
                 {
-                    controlsEnabledCallback();
                     blocker.style.display = 'none';
+                    controlsEnabledCallback();
 
                 }
                 else
@@ -24,6 +24,7 @@ define([], function() {
                     blocker.style.display = '-moz-box';
                     blocker.style.display = 'box';
                     instructions.style.display = '';
+                    controlsDisabledCallback();
                 }
             };
 
