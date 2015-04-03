@@ -85,6 +85,14 @@ THREE.FPSControls = function (camera)
         }
     };
 
+    this.initialise = function(initialPosition, pitchXRotationRad, yawYRotationRad)
+    {
+        pointerLockControls.getObject().position.x = initialPosition.x;
+        pointerLockControls.getObject().position.y = initialPosition.y;
+        pointerLockControls.getObject().position.z = initialPosition.z;
+        pointerLockControls.setRotation(pitchXRotationRad, yawYRotationRad);
+    };
+
     this.addToScene = function (scene)
     {
         document.addEventListener('keydown', onKeyDown, false);

@@ -40,6 +40,12 @@ THREE.PointerLockControls = function ( camera ) {
 
 	};
 
+    this.setRotation = function(pitchXRotation, yawYRotation)
+    {
+        pitchObject.rotation.x = pitchXRotation;
+        yawObject.rotation.y = yawYRotation;
+    };
+
 	this.getDirection = function() {
 
 		// assumes the camera itself is not rotated

@@ -9,6 +9,7 @@ define(["three", "camera", "controls", "geometry", "light", "material", "rendere
                 //grab the mouse to navigate around the 3D model
                 mousePointerLock.grabPointer(function() {
                     controls.setEnabled(true);
+                    controls.initialise({x:1144, y:1000, z:1110}, -0.75, 0.82);
                 });
 
                 var groundBorderWidth = 100;
