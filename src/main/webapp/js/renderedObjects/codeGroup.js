@@ -1,8 +1,8 @@
-define( ["jquery","three", "data", "codeUnitBar", "scene", "sceneObjects"], function ($, THREE, cubeData, CodeUnitBar, scene, SceneObjects) {
+define( ["jquery","three", "CubeData", "codeUnitBar", "scene", "sceneObjects"], function ($, THREE, CubeData, CodeUnitBar, scene, SceneObjects) {
 
     return function()
     {
-        function CodeGroup(id, name)
+        function CodeGroup(id, name, xPositionOffset, zPositionOffset)
         {
             this.id = id;
             this.name = name;
@@ -11,18 +11,19 @@ define( ["jquery","three", "data", "codeUnitBar", "scene", "sceneObjects"], func
 
             var gapBetweenCubes = 10;
             var distanceFromGround = 20;
-            var cubeOffset = gapBetweenCubes + cubeData.dataSideLength;
+            var cubeData = new CubeData();
+            var cubeOffset = gapBetweenCubes + cubeData.getDataSideLength();
 
-            for (var i = 0; i < cubeData.dataArrayWidth; i++)
+            for (var i = 0; i < cubeData.getDataArrayWidth(); i++)
             {
-                for (var j = 0; j < cubeData.dataArrayHeight; j++)
+                for (var j = 0; j < cubeData.getDataArrayHeight(); j++)
                 {
-                    var cubeGeometry = cubeData.data[i][j];
+                    var cubeGeometry = cubeData.getGeometryAt(i,j);
 
                     var position = new THREE.Vector3();
-                    position.x = cubeOffset * i;
+                    position.x = xPositionOffset + cubeOffset * i;
                     position.y = distanceFromGround + (cubeGeometry[1] / 2);
-                    position.z = cubeOffset * j;
+                    position.z = zPositionOffset + cubeOffset * j;
                     var unit = new CodeUnitBar(cubeGeometry[0], cubeGeometry[1], cubeGeometry[2], "Bar@ " + JSON.stringify(position));
                     unit.setPosition(position);
 
@@ -31,13 +32,13 @@ define( ["jquery","three", "data", "codeUnitBar", "scene", "sceneObjects"], func
             }
 
             var groundBorderWidth = 100;
-            var groundSideLengthForData = (cubeData.dataArrayWidth * cubeData.dataSideLength) + ((cubeData.dataArrayWidth - 1) * gapBetweenCubes);
+            var groundSideLengthForData = (cubeData.getDataArrayWidth() * cubeData.getDataSideLength()) + ((cubeData.getDataArrayWidth() - 1) * gapBetweenCubes);
             var groundSideLength = (groundBorderWidth * 2) + groundSideLengthForData;
             this.ground = new THREE.Mesh(
                 new THREE.PlaneBufferGeometry(groundSideLength, groundSideLength),
                 new THREE.MeshPhongMaterial({ color: 0x7d7d7d }));
-            this.ground.position.x = (groundSideLengthForData / 2) - (cubeData.dataSideLength / 2);
-            this.ground.position.z = (groundSideLengthForData / 2) - (cubeData.dataSideLength / 2);
+            this.ground.position.x = xPositionOffset + (groundSideLengthForData / 2) - (cubeData.getDataSideLength() / 2);
+            this.ground.position.z = zPositionOffset + (groundSideLengthForData / 2) - (cubeData.getDataSideLength() / 2);
             this.ground.rotation.x = -Math.PI / 2;
             this.ground.receiveShadow = true;
         }

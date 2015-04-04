@@ -32,7 +32,7 @@ require(
             FPSControls:         'controls/fpsControls',
             mousePointerLock:    'controls/mousePointerLock',
             PointerLockControls: 'controls/pointerLockControls',
-            data:                'data/cubes',
+            CubeData:            'data/CubeData',
             codeUnitBar:         'renderedObjects/codeUnitBar',
             codeGroup:           'renderedObjects/codeGroup',
             informationPanel:    'renderedObjects/informationPanel'

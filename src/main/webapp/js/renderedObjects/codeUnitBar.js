@@ -44,6 +44,11 @@ define( ["three"], function (THREE) {
             return this.name;
         };
 
+        CodeUnitBar.prototype.getObjectById = function getObjectById(objectId)
+        {
+            return undefined;
+        };
+
         return CodeUnitBar;
     }();
 } );

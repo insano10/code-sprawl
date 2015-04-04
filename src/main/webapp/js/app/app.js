@@ -1,5 +1,5 @@
-define(["three", "camera", "controls", "light", "renderer", "scene", "sceneObjects", "data", "crossHair", "mousePointerLock", "codeGroup", "informationPanel"],
-    function (THREE, camera, controls, light, renderer, scene, SceneObjects, cubeData, crossHair, mousePointerLock, CodeGroup, informationPanel)
+define(["three", "camera", "controls", "light", "renderer", "scene", "sceneObjects", "crossHair", "mousePointerLock", "codeGroup", "informationPanel"],
+    function (THREE, camera, controls, light, renderer, scene, SceneObjects, crossHair, mousePointerLock, CodeGroup, informationPanel)
     {
         return function ()
         {
@@ -14,10 +14,11 @@ define(["three", "camera", "controls", "light", "renderer", "scene", "sceneObjec
             {
                 grabPointer(this);
 
-                var codeGroup = new CodeGroup(0, "Hello Code Group");
-                codeGroup.addToScene(scene);
+                createCodeGroup(0, this.topLevelObjects, 0, 0);
+                createCodeGroup(1, this.topLevelObjects, 800, 0);
+                createCodeGroup(2, this.topLevelObjects, 0, 800);
+                createCodeGroup(3, this.topLevelObjects, 800, 800);
 
-                this.topLevelObjects.add(codeGroup);
                 this.isAnimating = true;
             };
 
@@ -66,6 +67,13 @@ define(["three", "camera", "controls", "light", "renderer", "scene", "sceneObjec
                     {
                         app.stopAnimation();
                     });
+            };
+
+            var createCodeGroup = function createCodeGroup(id, sceneObjects, xPositionOffset, zPositionOffset)
+            {
+                var codeGroup = new CodeGroup(id, "Hello Code Group " + id, xPositionOffset, zPositionOffset);
+                codeGroup.addToScene(scene);
+                sceneObjects.add(codeGroup);
             };
 
             return Application;
