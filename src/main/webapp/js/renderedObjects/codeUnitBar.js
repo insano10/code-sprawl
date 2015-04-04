@@ -10,15 +10,15 @@ define( ["three"], function (THREE) {
             this.height = height;
             this.depth = depth;
             this.name = name;
-            this.mesh = null;
-        }
 
-        CodeUnitBar.prototype.addToScene = function addToScene(scene, position3D)
-        {
             this.mesh = new THREE.Mesh(
                 new THREE.BoxGeometry(this.width, this.height, this.depth),
                 new THREE.MeshLambertMaterial({ color: DEFAULT_COLOUR }));
             this.mesh.castShadow = true;
+        }
+
+        CodeUnitBar.prototype.addToScene = function addToScene(scene, position3D)
+        {
             this.mesh.position.x = position3D.x;
             this.mesh.position.y = position3D.y;
             this.mesh.position.z = position3D.z;
@@ -33,7 +33,7 @@ define( ["three"], function (THREE) {
 
         CodeUnitBar.prototype.getId = function getId()
         {
-            return this.mesh == null ? null : this.mesh.id;
+            return this.mesh.id;
         };
 
         CodeUnitBar.prototype.getName = function getName()
