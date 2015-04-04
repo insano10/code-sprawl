@@ -1,12 +1,11 @@
-define(["three", "camera", "controls", "light", "renderer", "scene", "data", "crossHair", "mousePointerLock", "codeUnitBar", "informationPanel"],
-    function (THREE, camera, controls, light, renderer, scene, cubeData, crossHair, mousePointerLock, CodeUnitBar, informationPanel)
+define(["three", "camera", "controls", "light", "renderer", "scene", "sceneObjects", "data", "crossHair", "mousePointerLock", "codeUnitBar", "informationPanel"],
+    function (THREE, camera, controls, light, renderer, scene, SceneObjects, cubeData, crossHair, mousePointerLock, CodeUnitBar, informationPanel)
     {
         var app = {
-            objectArray:      [],
-            objectMap:        {},
-            isAnimating:      false,
-            animationJob:     null,
-            init:             function ()
+            sceneObjects:    new SceneObjects(),
+            isAnimating:     false,
+            animationJob:    null,
+            init:            function ()
             {
                 //grab the mouse to navigate around the 3D model
                 mousePointerLock.grabPointer(
@@ -41,8 +40,7 @@ define(["three", "camera", "controls", "light", "renderer", "scene", "data", "cr
                         var unit = new CodeUnitBar(cubeGeometry[0], cubeGeometry[1], cubeGeometry[2], "Bar@ " + JSON.stringify(position));
                         unit.addToScene(scene, position);
 
-                        app.objectArray.push(unit);
-                        app.objectMap[unit.getId()] = unit;
+                        app.sceneObjects.add(unit);
                     }
                 }
 
@@ -59,18 +57,18 @@ define(["three", "camera", "controls", "light", "renderer", "scene", "data", "cr
                 scene.add(plane);
                 app.isAnimating = true;
             },
-            animate:          function ()
+            animate:         function ()
             {
                 if (app.isAnimating)
                 {
                     app.animationJob = window.requestAnimationFrame(app.animate);
                     controls.update();
-                    crossHair.update(controls, app.objectArray, app.objectMap);
+                    crossHair.update(controls, app.sceneObjects);
                     renderer.render(scene, camera);
                     informationPanel.draw();
                 }
             },
-            startAnimation:   function ()
+            startAnimation:  function ()
             {
                 if (!app.animationJob)
                 {
@@ -78,7 +76,7 @@ define(["three", "camera", "controls", "light", "renderer", "scene", "data", "cr
                     app.animate();
                 }
             },
-            cancelAnimation:  function ()
+            cancelAnimation: function ()
             {
                 app.isAnimating = false;
                 if (app.animationJob)

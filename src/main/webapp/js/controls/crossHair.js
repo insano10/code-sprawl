@@ -17,22 +17,22 @@ define(["three", "camera", "scene", "informationPanel"], function (THREE, camera
         scene.add(debugPickingLine);
     };
 
-    var getTarget = function (controls, objects)
+    var getTarget = function (controls, sceneObjects)
     {
         var vectorDirection = new THREE.Vector3();
         controls.getDirection(vectorDirection);
 
         var rayCaster = new THREE.Raycaster(controls.getPosition(), vectorDirection);
-        var intersections = rayCaster.intersectObjects(objects);
+        var intersections = rayCaster.intersectObjects(sceneObjects.getObjectArray());
 
         return (intersections.length > 0) ? intersections[0] : null;
     };
 
     return {
 
-        update: function (controls, objectArray, objectMap)
+        update: function (controls, sceneObjects)
         {
-            var target = getTarget(controls, objectArray);
+            var target = getTarget(controls, sceneObjects);
 
             if (target != null)
             {
@@ -48,7 +48,7 @@ define(["three", "camera", "scene", "informationPanel"], function (THREE, camera
                     currentIntersectedObject.currentHex = currentIntersectedObject.material.emissive.getHex();
                     currentIntersectedObject.material.emissive.setHex(0xff0000);
 
-                    var codeBarUnit = objectMap[currentIntersectedObject.id];
+                    var codeBarUnit = sceneObjects.getObjectById(currentIntersectedObject.id);
                     informationPanel.updateTarget(codeBarUnit);
                 }
 

@@ -23,6 +23,7 @@ require(
             light:               'app/light',
             renderer:            'app/renderer',
             scene:               'app/scene',
+            sceneObjects:        'app/sceneObjects',
             texture:             'app/texture',
             crossHair:           'controls/crossHair',
             FPSControls:         'controls/fpsControls',
