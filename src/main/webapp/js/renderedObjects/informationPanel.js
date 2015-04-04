@@ -31,8 +31,11 @@ define(["three", "container"], function (THREE, container)
         context.fillStyle = "#000000";
         context.fillText("Target Unit", x, y);
 
-        context.font = "16px Helvetica Neue";
-        context.fillText("Name: " + this.target.getName(), x, y + 30);
+        if(this.target != null)
+        {
+            context.font = "16px Helvetica Neue";
+            context.fillText("Name: " + this.target.getName(), x, y + 30);
+        }
     };
 
     return new InformationPanel();

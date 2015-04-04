@@ -4,6 +4,7 @@ define([], function() {
     {
         var blocker = document.getElementById('blocker');
         var instructions = document.getElementById( 'instructions' );
+        var startButton = document.getElementsByClassName('start-button')[0];
         var havePointerLock = 'pointerLockElement' in document || 'mozPointerLockElement' in document || 'webkitPointerLockElement' in document;
 
         if (havePointerLock)
@@ -42,7 +43,7 @@ define([], function() {
             document.addEventListener('mozpointerlockerror', pointerLockError, false);
             document.addEventListener('webkitpointerlockerror', pointerLockError, false);
 
-            instructions.addEventListener('click', function (event)
+            startButton.addEventListener('click', function (event)
             {
                 instructions.style.display = 'none';
 
