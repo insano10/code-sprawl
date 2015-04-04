@@ -16,9 +16,9 @@ define(["jquery"], function ($)
         {
             var cubeData = [];
 
-            for (var groupId = 0; groupId < 4; groupId++)
+            for (var groupId = 0; groupId < 9; groupId++)
             {
-                for (var unitId = 0; unitId < 100; unitId++)
+                for (var unitId = 0; unitId < Math.floor(Math.random() * 150) + 1; unitId++)
                 {
                     cubeData.push(createTestUnit(groupId, unitId));
                 }

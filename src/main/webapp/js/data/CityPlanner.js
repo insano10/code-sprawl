@@ -68,6 +68,7 @@ define(["jquery", "CityBlueprint", "CodeNeighbourhood", "CodeUnit"], function ($
 
                 if(column == cityWidth)
                 {
+                    column = 0;
                     xBoundary = 0;
                     zBoundary += maxZLengthOfRow;
                     maxZLengthOfRow = -1;

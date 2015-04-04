@@ -4,7 +4,7 @@ define( ["jquery", "three", "scene", "sceneObjects"], function ($, THREE, scene,
     {
         function CodeNeighbourhood(id, name, codeUnitArray, ground, xLength, zLength)
         {
-            this.id = id;
+            this.id = "Neighbourhood-" + id;
             this.name = name;
             this.ground = ground;
             this.xLength = xLength;
