@@ -1,4 +1,4 @@
-define(["three", "camera", "scene", "informationPanel"], function (THREE, camera, scene, informationPanel)
+define(["three", "camera", "scene", "InformationPanel"], function (THREE, camera, scene, InformationPanel)
 {
     var currentIntersectedObject;
 
@@ -49,7 +49,7 @@ define(["three", "camera", "scene", "informationPanel"], function (THREE, camera
                     currentIntersectedObject.material.emissive.setHex(0xff0000);
 
                     var codeBarUnit = sceneObjects.getObjectById(currentIntersectedObject.id);
-                    informationPanel.updateTarget(codeBarUnit);
+                    InformationPanel.updateTarget(codeBarUnit);
                 }
 
                 if (showDebugPickingLine)
@@ -62,7 +62,7 @@ define(["three", "camera", "scene", "informationPanel"], function (THREE, camera
                 if (currentIntersectedObject) currentIntersectedObject.material.emissive.setHex(currentIntersectedObject.currentHex);
 
                 currentIntersectedObject = null;
-                informationPanel.clearTarget();
+                InformationPanel.clearTarget();
             }
 
         }

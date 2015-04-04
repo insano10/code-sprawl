@@ -32,10 +32,11 @@ require(
             FPSControls:         'controls/fpsControls',
             mousePointerLock:    'controls/mousePointerLock',
             PointerLockControls: 'controls/pointerLockControls',
-            CubeData:            'data/CubeData',
-            codeUnitBar:         'renderedObjects/codeUnitBar',
-            codeGroup:           'renderedObjects/codeGroup',
-            informationPanel:    'renderedObjects/informationPanel'
+            CityPlanner:         'data/CityPlanner',
+            CityBlueprint:       'data/TestCityBlueprint',
+            CodeUnit:            'renderedObjects/CodeUnit',
+            CodeNeighbourhood:   'renderedObjects/CodeNeighbourhood',
+            InformationPanel:    'renderedObjects/InformationPanel'
         }
     },
     ["main"],

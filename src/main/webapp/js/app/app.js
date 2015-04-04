@@ -1,5 +1,5 @@
-define(["three", "camera", "controls", "light", "renderer", "scene", "sceneObjects", "crossHair", "mousePointerLock", "codeGroup", "informationPanel"],
-    function (THREE, camera, controls, light, renderer, scene, SceneObjects, crossHair, mousePointerLock, CodeGroup, informationPanel)
+define(["jquery", "three", "camera", "controls", "light", "renderer", "scene", "sceneObjects", "crossHair", "mousePointerLock", "CityPlanner", "InformationPanel"],
+    function ($, THREE, camera, controls, light, renderer, scene, SceneObjects, crossHair, mousePointerLock, CityPlanner, InformationPanel)
     {
         return function ()
         {
@@ -14,11 +14,15 @@ define(["three", "camera", "controls", "light", "renderer", "scene", "sceneObjec
             {
                 grabPointer(this);
 
-                createCodeGroup(0, this.topLevelObjects, 0, 0);
-                createCodeGroup(1, this.topLevelObjects, 800, 0);
-                createCodeGroup(2, this.topLevelObjects, 0, 800);
-                createCodeGroup(3, this.topLevelObjects, 800, 800);
+                var app = this;
+                var cityPlanner = new CityPlanner();
+                cityPlanner.loadCity();
 
+                $.each(cityPlanner.getNeighbourhoods(), function(idx, neighbourhood) {
+                   app.topLevelObjects.add(neighbourhood);
+                });
+
+                this.topLevelObjects.addToScene(scene);
                 this.isAnimating = true;
             };
 
@@ -30,7 +34,7 @@ define(["three", "camera", "controls", "light", "renderer", "scene", "sceneObjec
                     controls.update();
                     crossHair.update(controls, this.topLevelObjects);
                     renderer.render(scene, camera);
-                    informationPanel.draw();
+                    InformationPanel.draw();
                 }
             };
 
@@ -67,13 +71,6 @@ define(["three", "camera", "controls", "light", "renderer", "scene", "sceneObjec
                     {
                         app.stopAnimation();
                     });
-            };
-
-            var createCodeGroup = function createCodeGroup(id, sceneObjects, xPositionOffset, zPositionOffset)
-            {
-                var codeGroup = new CodeGroup(id, "Neighbourhood: " + id, xPositionOffset, zPositionOffset);
-                codeGroup.addToScene(scene);
-                sceneObjects.add(codeGroup);
             };
 
             return Application;
