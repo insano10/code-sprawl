@@ -1,12 +1,19 @@
 define(["three", "camera", "controls", "light", "renderer", "scene", "sceneObjects", "data", "crossHair", "mousePointerLock", "codeUnitBar", "informationPanel"],
     function (THREE, camera, controls, light, renderer, scene, SceneObjects, cubeData, crossHair, mousePointerLock, CodeUnitBar, informationPanel)
     {
-        var app = {
-            sceneObjects:    new SceneObjects(),
-            isAnimating:     false,
-            animationJob:    null,
-            init:            function ()
+        return function ()
+        {
+            function Application()
             {
+                this.sceneObjects = new SceneObjects();
+                this.isAnimating = false;
+                this.currentAnimationFrame = null;
+            }
+
+            Application.prototype.initialise = function initialise()
+            {
+                var app = this;
+
                 //grab the mouse to navigate around the 3D model
                 mousePointerLock.grabPointer(
                     function ()
@@ -17,7 +24,7 @@ define(["three", "camera", "controls", "light", "renderer", "scene", "sceneObjec
                     },
                     function ()
                     {
-                        app.cancelAnimation();
+                        app.stopAnimation();
                     });
 
                 var groundBorderWidth = 100;
@@ -40,7 +47,7 @@ define(["three", "camera", "controls", "light", "renderer", "scene", "sceneObjec
                         var unit = new CodeUnitBar(cubeGeometry[0], cubeGeometry[1], cubeGeometry[2], "Bar@ " + JSON.stringify(position));
                         unit.addToScene(scene, position);
 
-                        app.sceneObjects.add(unit);
+                        this.sceneObjects.add(unit);
                     }
                 }
 
@@ -55,36 +62,42 @@ define(["three", "camera", "controls", "light", "renderer", "scene", "sceneObjec
                 plane.receiveShadow = true;
 
                 scene.add(plane);
-                app.isAnimating = true;
-            },
-            animate:         function ()
+                this.isAnimating = true;
+            };
+
+            Application.prototype.animate = function animate()
             {
-                if (app.isAnimating)
+                if (this.isAnimating)
                 {
-                    app.animationJob = window.requestAnimationFrame(app.animate);
+                    this.currentAnimationFrame = window.requestAnimationFrame(this.animate.bind(this));
                     controls.update();
-                    crossHair.update(controls, app.sceneObjects);
+                    crossHair.update(controls, this.sceneObjects);
                     renderer.render(scene, camera);
                     informationPanel.draw();
                 }
-            },
-            startAnimation:  function ()
+            };
+
+            Application.prototype.startAnimation = function startAnimation()
             {
-                if (!app.animationJob)
+                if (!this.currentAnimationFrame)
                 {
-                    app.isAnimating = true;
-                    app.animate();
+                    this.isAnimating = true;
+                    this.animate();
                 }
-            },
-            cancelAnimation: function ()
+            };
+
+            Application.prototype.stopAnimation = function stopAnimation()
             {
-                app.isAnimating = false;
-                if (app.animationJob)
+                this.isAnimating = false;
+                if (this.currentAnimationFrame)
                 {
                     console.log("Cancelling animation");
-                    app.animationJob = null;
+                    window.cancelRequestAnimationFrame(this.currentAnimationFrame);
+                    this.currentAnimationFrame = null;
                 }
-            }
-        };
-        return app;
+            };
+
+            return Application;
+
+        }();
     });

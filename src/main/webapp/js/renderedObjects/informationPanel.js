@@ -1,5 +1,6 @@
 define(["three", "container"], function (THREE, container)
 {
+    //static
     function InformationPanel()
     {
         this.target = null;

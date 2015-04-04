@@ -1,5 +1,6 @@
 define([], function() {
 
+    //static function
     var grabPointer = function (controlsEnabledCallback, controlsDisabledCallback)
     {
         var blocker = document.getElementById('blocker');
