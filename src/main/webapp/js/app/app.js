@@ -1,11 +1,11 @@
-define(["three", "camera", "controls", "light", "renderer", "scene", "sceneObjects", "data", "crossHair", "mousePointerLock", "codeUnitBar", "informationPanel"],
-    function (THREE, camera, controls, light, renderer, scene, SceneObjects, cubeData, crossHair, mousePointerLock, CodeUnitBar, informationPanel)
+define(["three", "camera", "controls", "light", "renderer", "scene", "sceneObjects", "data", "crossHair", "mousePointerLock", "codeGroup", "informationPanel"],
+    function (THREE, camera, controls, light, renderer, scene, SceneObjects, cubeData, crossHair, mousePointerLock, CodeGroup, informationPanel)
     {
         return function ()
         {
             function Application()
             {
-                this.sceneObjects = new SceneObjects();
+                this.topLevelObjects = new SceneObjects();
                 this.isAnimating = false;
                 this.currentAnimationFrame = null;
             }
@@ -14,41 +14,10 @@ define(["three", "camera", "controls", "light", "renderer", "scene", "sceneObjec
             {
                 grabPointer(this);
 
-                var groundBorderWidth = 100;
-                var gapBetweenCubes = 10;
-                var distanceFromGround = 20;
-                var cubeOffset = gapBetweenCubes + cubeData.dataSideLength;
+                var codeGroup = new CodeGroup(0, "Hello Code Group");
+                codeGroup.addToScene(scene);
 
-                for (var i = 0; i < cubeData.dataArrayWidth; i++)
-                {
-
-                    for (var j = 0; j < cubeData.dataArrayHeight; j++)
-                    {
-
-                        var cubeGeometry = cubeData.data[i][j];
-
-                        var position = new THREE.Vector3();
-                        position.x = cubeOffset * i;
-                        position.y = distanceFromGround + (cubeGeometry[1] / 2);
-                        position.z = cubeOffset * j;
-                        var unit = new CodeUnitBar(cubeGeometry[0], cubeGeometry[1], cubeGeometry[2], "Bar@ " + JSON.stringify(position));
-                        unit.addToScene(scene, position);
-
-                        this.sceneObjects.add(unit);
-                    }
-                }
-
-                //ground
-                var groundSideLengthForData = (cubeData.dataArrayWidth * cubeData.dataSideLength) + ((cubeData.dataArrayWidth - 1) * gapBetweenCubes);
-                var groundSideLength = (groundBorderWidth * 2) + groundSideLengthForData;
-                var plane = new THREE.Mesh(new THREE.PlaneBufferGeometry(groundSideLength, groundSideLength),
-                    new THREE.MeshPhongMaterial({ color: 0x7d7d7d }));
-                plane.position.x = (groundSideLengthForData / 2) - (cubeData.dataSideLength / 2);
-                plane.position.z = (groundSideLengthForData / 2) - (cubeData.dataSideLength / 2);
-                plane.rotation.x = -Math.PI / 2;
-                plane.receiveShadow = true;
-
-                scene.add(plane);
+                this.topLevelObjects.add(codeGroup);
                 this.isAnimating = true;
             };
 
@@ -58,7 +27,7 @@ define(["three", "camera", "controls", "light", "renderer", "scene", "sceneObjec
                 {
                     this.currentAnimationFrame = window.requestAnimationFrame(this.animate.bind(this));
                     controls.update();
-                    crossHair.update(controls, this.sceneObjects);
+                    crossHair.update(controls, this.topLevelObjects);
                     renderer.render(scene, camera);
                     informationPanel.draw();
                 }
@@ -79,7 +48,6 @@ define(["three", "camera", "controls", "light", "renderer", "scene", "sceneObjec
                 if (this.currentAnimationFrame)
                 {
                     console.log("Cancelling animation");
-                    window.cancelRequestAnimationFrame(this.currentAnimationFrame);
                     this.currentAnimationFrame = null;
                 }
             };

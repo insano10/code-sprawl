@@ -1,6 +1,7 @@
 require(
     {
         shim:  {
+            "bootstrap":           { deps: ['jquery'] },
             'threeCore':           { exports: 'THREE' },
             'PointerLockControls': { deps: ['threeCore'], exports: 'THREE' },
             'FPSControls':         { deps: ['threeCore'], exports: 'THREE' },
@@ -8,13 +9,15 @@ require(
             'stats':               { exports: 'Stats' }
         },
         paths: {
-            three:               'lib/threeWrapper',
-            threeCore:           'lib/three',
-            detector:            'lib/Detector',
-            stats:               'lib/stats.min',
-            text:                'lib/text',
-            shader:              'lib/shader',
-            shaders:             'shaders',
+            bootstrap: "lib/bootstrap-3.3.0/js/bootstrap.min",
+            jquery:    'lib/jquery-2.1.0.min',
+            three:     'lib/threeWrapper',
+            threeCore: 'lib/three',
+            detector:  'lib/Detector',
+            stats:     'lib/stats.min',
+            text:      'lib/text',
+            shader:    'lib/shader',
+            shaders:   'shaders',
 
             app:                 'app/app',
             sceneObjects:        'app/sceneObjects',
@@ -31,6 +34,7 @@ require(
             PointerLockControls: 'controls/pointerLockControls',
             data:                'data/cubes',
             codeUnitBar:         'renderedObjects/codeUnitBar',
+            codeGroup:           'renderedObjects/codeGroup',
             informationPanel:    'renderedObjects/informationPanel'
         }
     },

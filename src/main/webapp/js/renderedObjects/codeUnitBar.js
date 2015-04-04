@@ -17,12 +17,15 @@ define( ["three"], function (THREE) {
             this.mesh.castShadow = true;
         }
 
-        CodeUnitBar.prototype.addToScene = function addToScene(scene, position3D)
+        CodeUnitBar.prototype.setPosition = function setPosition(position3D)
         {
             this.mesh.position.x = position3D.x;
             this.mesh.position.y = position3D.y;
             this.mesh.position.z = position3D.z;
+        };
 
+        CodeUnitBar.prototype.addToScene = function addToScene(scene)
+        {
             scene.add(this.mesh);
         };
 

@@ -23,7 +23,7 @@ define(["three", "camera", "scene", "informationPanel"], function (THREE, camera
         controls.getDirection(vectorDirection);
 
         var rayCaster = new THREE.Raycaster(controls.getPosition(), vectorDirection);
-        var intersections = rayCaster.intersectObjects(sceneObjects.getObjectArray());
+        var intersections = rayCaster.intersectObjects([sceneObjects]);
 
         return (intersections.length > 0) ? intersections[0] : null;
     };

@@ -1,4 +1,4 @@
-define( [], function () {
+define( ["jquery"], function ($) {
 
     return function()
     {
@@ -21,7 +21,35 @@ define( [], function () {
 
         SceneObjects.prototype.getObjectById = function getObjectById(objectId)
         {
-            return this.objectMap[objectId];
+            var objectToReturn = this.objectMap[objectId];
+
+            if(!objectToReturn)
+            {
+                $.each(this.getObjectArray(), function(idx, object) {
+                    objectToReturn = object.getObjectById(objectId);
+
+                    if(objectToReturn)
+                    {
+                        return false; //break
+                    }
+                });
+            }
+
+            return objectToReturn;
+        };
+
+        SceneObjects.prototype.addToScene = function addToScene(scene)
+        {
+            $.each(this.getObjectArray(), function(idx, object) {
+               object.addToScene(scene);
+            });
+        };
+
+        SceneObjects.prototype.raycast = function raycast(raycaster, intersects)
+        {
+            $.each(this.getObjectArray(), function(idx, object) {
+                object.raycast(raycaster, intersects);
+            });
         };
 
         return SceneObjects;
