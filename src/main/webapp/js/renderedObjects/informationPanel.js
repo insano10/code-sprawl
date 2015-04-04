@@ -20,6 +20,11 @@ define(["three", "container"], function (THREE, container)
         this.target = codeUnitBar;
     };
 
+    InformationPanel.prototype.clearTarget = function clearTarget()
+    {
+        this.target = null;
+    };
+
     InformationPanel.prototype.draw = function draw()
     {
         var context = this.canvas.getContext('2d');
@@ -30,12 +35,13 @@ define(["three", "container"], function (THREE, container)
         var y = 40;
         context.font = "20px Helvetica Neue";
         context.fillStyle = "#000000";
-        context.fillText("Target Unit", x, y);
+        context.fillText("Unit Inspection", x, y);
 
         if(this.target != null)
         {
             context.font = "16px Helvetica Neue";
-            context.fillText("Name: " + this.target.getName(), x, y + 30);
+            context.fillText("Neighbourhood: " + this.target.getGroupName(), x, y + 30);
+            context.fillText("Unit Name: " + this.target.getName(), x, y + 60);
         }
     };
 

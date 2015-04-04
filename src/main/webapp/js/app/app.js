@@ -71,7 +71,7 @@ define(["three", "camera", "controls", "light", "renderer", "scene", "sceneObjec
 
             var createCodeGroup = function createCodeGroup(id, sceneObjects, xPositionOffset, zPositionOffset)
             {
-                var codeGroup = new CodeGroup(id, "Hello Code Group " + id, xPositionOffset, zPositionOffset);
+                var codeGroup = new CodeGroup(id, "Neighbourhood: " + id, xPositionOffset, zPositionOffset);
                 codeGroup.addToScene(scene);
                 sceneObjects.add(codeGroup);
             };

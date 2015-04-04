@@ -62,6 +62,7 @@ define(["three", "camera", "scene", "informationPanel"], function (THREE, camera
                 if (currentIntersectedObject) currentIntersectedObject.material.emissive.setHex(currentIntersectedObject.currentHex);
 
                 currentIntersectedObject = null;
+                informationPanel.clearTarget();
             }
 
         }

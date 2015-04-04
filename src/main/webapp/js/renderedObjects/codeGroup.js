@@ -24,7 +24,7 @@ define( ["jquery","three", "CubeData", "codeUnitBar", "scene", "sceneObjects"], 
                     position.x = xPositionOffset + cubeOffset * i;
                     position.y = distanceFromGround + (cubeGeometry[1] / 2);
                     position.z = zPositionOffset + cubeOffset * j;
-                    var unit = new CodeUnitBar(cubeGeometry[0], cubeGeometry[1], cubeGeometry[2], "Bar@ " + JSON.stringify(position));
+                    var unit = new CodeUnitBar(cubeGeometry[0], cubeGeometry[1], cubeGeometry[2], "Bar@ " + JSON.stringify(position), this.name);
                     unit.setPosition(position);
 
                     this.sceneObjects.add(unit);

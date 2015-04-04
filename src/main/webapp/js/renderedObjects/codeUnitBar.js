@@ -4,12 +4,13 @@ define( ["three"], function (THREE) {
     {
         var DEFAULT_COLOUR = 0x0aeedf;
 
-        function CodeUnitBar(width, height, depth, name)
+        function CodeUnitBar(width, height, depth, name, groupName)
         {
             this.width = width;
             this.height = height;
             this.depth = depth;
             this.name = name;
+            this.groupName = groupName;
 
             this.mesh = new THREE.Mesh(
                 new THREE.BoxGeometry(this.width, this.height, this.depth),
@@ -42,6 +43,11 @@ define( ["three"], function (THREE) {
         CodeUnitBar.prototype.getName = function getName()
         {
             return this.name;
+        };
+
+        CodeUnitBar.prototype.getGroupName = function getGroupName()
+        {
+            return this.groupName;
         };
 
         CodeUnitBar.prototype.getObjectById = function getObjectById(objectId)
