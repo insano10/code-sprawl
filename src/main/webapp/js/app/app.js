@@ -12,20 +12,7 @@ define(["three", "camera", "controls", "light", "renderer", "scene", "sceneObjec
 
             Application.prototype.initialise = function initialise()
             {
-                var app = this;
-
-                //grab the mouse to navigate around the 3D model
-                mousePointerLock.grabPointer(
-                    function ()
-                    {
-                        controls.setEnabled(true);
-                        controls.initialise({x: 1144, y: 1000, z: 1110}, -0.75, 0.82);
-                        app.startAnimation();
-                    },
-                    function ()
-                    {
-                        app.stopAnimation();
-                    });
+                grabPointer(this);
 
                 var groundBorderWidth = 100;
                 var gapBetweenCubes = 10;
@@ -95,6 +82,22 @@ define(["three", "camera", "controls", "light", "renderer", "scene", "sceneObjec
                     window.cancelRequestAnimationFrame(this.currentAnimationFrame);
                     this.currentAnimationFrame = null;
                 }
+            };
+
+            var grabPointer = function grabPointer(app)
+            {
+                //grab the mouse to navigate around the 3D model
+                mousePointerLock.grabPointer(
+                    function ()
+                    {
+                        controls.setEnabled(true);
+                        controls.initialise({x: 1144, y: 1000, z: 1110}, -0.75, 0.82);
+                        app.startAnimation();
+                    },
+                    function ()
+                    {
+                        app.stopAnimation();
+                    });
             };
 
             return Application;
