@@ -1,4 +1,4 @@
-define(["jquery", "TestCityBlueprint", "CodeNeighbourhood", "CodeUnit"], function ($, TestCityBlueprint, CodeNeighbourhood, CodeUnit)
+define(["jquery", "TestCityBlueprint", "CodeNeighbourhood", "CodeUnit", "sceneObjects", "scene"], function ($, TestCityBlueprint, CodeNeighbourhood, CodeUnit, SceneObjects, scene)
 {
     return function ()
     {
@@ -10,7 +10,7 @@ define(["jquery", "TestCityBlueprint", "CodeNeighbourhood", "CodeUnit"], functio
         function CityPlanner()
         {
             this.neighbourhoodToUnitArrayMap = {};
-            this.constructedNeighbourhoods = [];
+            this.sceneObjects = new SceneObjects();
         }
 
         CityPlanner.prototype.loadTestCity = function loadTestCity()
@@ -20,6 +20,8 @@ define(["jquery", "TestCityBlueprint", "CodeNeighbourhood", "CodeUnit"], functio
 
         CityPlanner.prototype.loadCity = function loadCity(bluePrint)
         {
+            this.sceneObjects.clear(scene);
+
             console.log("Loading city inhabitants");
             loadInhabitants(this, bluePrint);
 
@@ -27,9 +29,9 @@ define(["jquery", "TestCityBlueprint", "CodeNeighbourhood", "CodeUnit"], functio
             buildNeighbourhoods(this);
         };
 
-        CityPlanner.prototype.getNeighbourhoods = function getNeighbourhoods()
+        CityPlanner.prototype.getSceneObjects = function getSceneObjects()
         {
-            return this.constructedNeighbourhoods;
+            return this.sceneObjects;
         };
 
         var loadInhabitants = function loadInhabitants(cityPlanner, bluePrint)
@@ -65,7 +67,7 @@ define(["jquery", "TestCityBlueprint", "CodeNeighbourhood", "CodeUnit"], functio
             $.each(cityPlanner.neighbourhoodToUnitArrayMap, function (name, unitArray)
             {
                 var neighbourhood = buildNeighbourhood(groupId++, name, unitArray, xBoundary, zBoundary);
-                cityPlanner.constructedNeighbourhoods.push(neighbourhood);
+                cityPlanner.sceneObjects.add(neighbourhood);
 
                 column++;
                 xBoundary += neighbourhood.getXLength();
@@ -79,6 +81,8 @@ define(["jquery", "TestCityBlueprint", "CodeNeighbourhood", "CodeUnit"], functio
                     maxZLengthOfRow = -1;
                 }
             });
+
+            cityPlanner.sceneObjects.addToScene(scene);
         };
 
         var buildNeighbourhood = function buildNeighbourhood(id, name, unitArray, xBoundary, zBoundary)

@@ -45,6 +45,16 @@ define( ["jquery"], function ($) {
             });
         };
 
+        SceneObjects.prototype.clear = function clear(scene)
+        {
+            $.each(this.getObjectArray(), function(idx, object) {
+                object.removeFromScene(scene);
+            });
+
+            this.objectArray = [];
+            this.objectMap = {};
+        };
+
         SceneObjects.prototype.raycast = function raycast(raycaster, intersects)
         {
             $.each(this.getObjectArray(), function(idx, object) {

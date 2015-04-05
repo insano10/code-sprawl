@@ -23,6 +23,12 @@ define( ["jquery", "three", "scene", "sceneObjects"], function ($, THREE, scene,
             scene.add(this.ground);
         };
 
+        CodeNeighbourhood.prototype.removeFromScene = function removeFromScene(scene)
+        {
+            this.sceneObjects.clear(scene);
+            scene.remove(this.ground);
+        };
+
         CodeNeighbourhood.prototype.raycast = function raycast(raycaster, intersects)
         {
             this.sceneObjects.raycast(raycaster, intersects);

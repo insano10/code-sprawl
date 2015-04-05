@@ -30,6 +30,11 @@ define( ["three"], function (THREE) {
             scene.add(this.mesh);
         };
 
+        CodeUnitBar.prototype.removeFromScene = function removeFromScene(scene)
+        {
+            scene.remove(this.mesh);
+        };
+
         CodeUnitBar.prototype.raycast = function raycast(raycaster, intersects)
         {
             this.mesh.raycast(raycaster, intersects);

@@ -5,7 +5,6 @@ define(["jquery", "three", "camera", "controls", "light", "renderer", "scene", "
         {
             function Application(cityPlanner)
             {
-                this.topLevelObjects = new SceneObjects();
                 this.isAnimating = false;
                 this.currentAnimationFrame = null;
                 this.cityPlanner = cityPlanner;
@@ -18,11 +17,6 @@ define(["jquery", "three", "camera", "controls", "light", "renderer", "scene", "
                 var app = this;
                 this.cityPlanner.loadTestCity();
 
-                $.each(this.cityPlanner.getNeighbourhoods(), function(idx, neighbourhood) {
-                   app.topLevelObjects.add(neighbourhood);
-                });
-
-                this.topLevelObjects.addToScene(scene);
                 this.isAnimating = true;
             };
 
@@ -32,7 +26,7 @@ define(["jquery", "three", "camera", "controls", "light", "renderer", "scene", "
                 {
                     this.currentAnimationFrame = window.requestAnimationFrame(this.animate.bind(this));
                     controls.update();
-                    crossHair.update(controls, this.topLevelObjects);
+                    crossHair.update(controls, this.cityPlanner.getSceneObjects());
                     renderer.render(scene, camera);
                     InformationPanel.draw();
                 }
