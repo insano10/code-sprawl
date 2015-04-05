@@ -7,7 +7,8 @@ define(['detector', 'app', 'container', 'uiBehaviour', 'CityPlanner'],
             {
                 var cityPlanner = new CityPlanner();
 
-                uiBehaviour.setBehaviour();
+                var loadCityCallback = $.proxy(cityPlanner.loadCity, cityPlanner);
+                uiBehaviour.setBehaviour(loadCityCallback);
 
                 console.log("Initializing!");
 

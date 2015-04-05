@@ -1,6 +1,6 @@
-define(['jquery'], function($) {
+define(['jquery', 'LoadedCityBlueprint'], function($, LoadedCityBlueprint) {
 
-    var setBehaviour = function ()
+    var setBehaviour = function (loadCityCallback)
     {
         var sourceDirectoryBtn = $('#source-directory-btn');
         sourceDirectoryBtn.bind({
@@ -38,6 +38,9 @@ define(['jquery'], function($) {
                     {
                         console.log('finished inspecting. Response is ' + response);
                         loadingIcon.hide();
+
+                        var codeUnits = JSON.parse(response);
+                        loadCityCallback(new LoadedCityBlueprint(codeUnits));
                     },
                     error:    function (e)
                     {

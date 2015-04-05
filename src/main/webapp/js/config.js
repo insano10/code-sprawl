@@ -34,6 +34,7 @@ require(
             PointerLockControls: 'controls/pointerLockControls',
             CityPlanner:         'data/CityPlanner',
             TestCityBlueprint:   'data/TestCityBlueprint',
+            LoadedCityBlueprint: 'data/LoadedCityBlueprint',
             CodeUnit:            'renderedObjects/CodeUnit',
             CodeNeighbourhood:   'renderedObjects/CodeNeighbourhood',
             InformationPanel:    'renderedObjects/InformationPanel',

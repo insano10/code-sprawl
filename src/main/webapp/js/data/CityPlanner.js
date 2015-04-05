@@ -1,4 +1,5 @@
-define(["jquery", "TestCityBlueprint", "CodeNeighbourhood", "CodeUnit", "sceneObjects", "scene"], function ($, TestCityBlueprint, CodeNeighbourhood, CodeUnit, SceneObjects, scene)
+define(["jquery", "TestCityBlueprint", "CodeNeighbourhood", "CodeUnit", "sceneObjects", "scene", "renderer", "camera"],
+    function ($, TestCityBlueprint, CodeNeighbourhood, CodeUnit, SceneObjects, scene, renderer, camera)
 {
     return function ()
     {
@@ -20,7 +21,7 @@ define(["jquery", "TestCityBlueprint", "CodeNeighbourhood", "CodeUnit", "sceneOb
 
         CityPlanner.prototype.loadCity = function loadCity(bluePrint)
         {
-            this.sceneObjects.clear(scene);
+            clearCity(this);
 
             console.log("Loading city inhabitants");
             loadInhabitants(this, bluePrint);
@@ -130,6 +131,14 @@ define(["jquery", "TestCityBlueprint", "CodeNeighbourhood", "CodeUnit", "sceneOb
             ground.receiveShadow = true;
 
             return new CodeNeighbourhood(id, name, codeUnits, ground, groundSideXLength, groundSideZLength);
+        };
+
+        var clearCity = function clearCity(cityPlanner)
+        {
+            cityPlanner.sceneObjects.clear(scene);
+            cityPlanner.neighbourhoodToUnitArrayMap = {};
+//            window.requestAnimationFrame($.noop);
+//            renderer.render(scene, camera);
         };
 
         return CityPlanner;
