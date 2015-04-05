@@ -1,6 +1,7 @@
 package com.insano10.codesprawl.servlets;
 
 import com.google.gson.Gson;
+import com.insano10.codespawl.source.CodeUnit;
 import com.insano10.codespawl.source.SourceInspector;
 import com.insano10.codespawl.source.language.JavaFileInspector;
 
@@ -11,6 +12,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Collection;
 
 public class SourceServlet extends HttpServlet
 {
@@ -22,7 +24,7 @@ public class SourceServlet extends HttpServlet
     {
         if(request.getRequestURI().endsWith("/source"))
         {
-            String inspectionResponse = SOURCE_INSPECTOR.inspect();
+            Collection<CodeUnit> inspectionResponse = SOURCE_INSPECTOR.inspect();
             response.getWriter().print(GSON.toJson(inspectionResponse));
             response.setStatus(HttpServletResponse.SC_OK);
         }

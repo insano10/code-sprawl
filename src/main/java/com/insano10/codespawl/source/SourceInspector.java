@@ -3,8 +3,8 @@ package com.insano10.codespawl.source;
 import org.apache.log4j.Logger;
 
 import java.nio.file.Path;
-
-import static com.insano10.codespawl.source.Language.JAVA;
+import java.util.Collection;
+import java.util.Collections;
 
 public class SourceInspector
 {
@@ -23,32 +23,25 @@ public class SourceInspector
         this.sourceRoot = path;
     }
 
-    public String inspect()
+    public Collection<CodeUnit> inspect()
     {
         if(sourceRoot != null)
         {
             LOGGER.info("Inspecting: " + sourceRoot);
 
-            final Path javaRoot = getRootDirectoryForLanguage(JAVA);
+            final Path javaRoot = javaFileInspector.getRootDirectoryIn(sourceRoot);
+            Collection<CodeUnit> codeUnits = javaFileInspector.getCodeUnitsIn(javaRoot);
 
-            LOGGER.info("Java root is: " + javaRoot);
+            LOGGER.info("Found " + codeUnits.size() + " Java code units");
 
+            return codeUnits;
         }
         else
         {
             LOGGER.warn("No source root set");
         }
 
-        return "foo";
+        return Collections.emptyList();
     }
 
-    public Path getRootDirectoryForLanguage(Language language)
-    {
-        switch (language)
-        {
-            case JAVA:
-                return javaFileInspector.getRootDirectoryIn(sourceRoot);
-        }
-        throw new RuntimeException("Language " + language + " not yet supported");
-    }
 }
