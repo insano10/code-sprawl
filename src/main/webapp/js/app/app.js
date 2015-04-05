@@ -58,7 +58,7 @@ define(["jquery", "three", "camera", "controls", "light", "renderer", "scene", "
                     function ()
                     {
                         controls.setEnabled(true);
-                        controls.initialise({x: 1144, y: 1000, z: 1110}, -0.75, 0.82);
+                        controls.reset();
                         app.startAnimation();
                     },
                     function ()

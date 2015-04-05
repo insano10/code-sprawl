@@ -2,7 +2,7 @@
  * @author insano10
  */
 
-THREE.FPSControls = function (camera)
+THREE.FPSControls = function (camera, initialPosition, initialPitchXRotationRad, initialYawYRotationRad)
 {
     var pointerLockControls = new THREE.PointerLockControls(camera);
     var clock = new THREE.Clock();
@@ -14,6 +14,9 @@ THREE.FPSControls = function (camera)
     var moveUp = false;
     var moveDown = false;
     var enabled = false;
+    var initialPosition = initialPosition;
+    var initialPitchXRotationRad = initialPitchXRotationRad;
+    var initialYawYRotationRad = initialYawYRotationRad;
 
     var speed = 5000.0;
 
@@ -85,12 +88,12 @@ THREE.FPSControls = function (camera)
         }
     };
 
-    this.initialise = function(initialPosition, pitchXRotationRad, yawYRotationRad)
+    this.reset = function()
     {
         pointerLockControls.getObject().position.x = initialPosition.x;
         pointerLockControls.getObject().position.y = initialPosition.y;
         pointerLockControls.getObject().position.z = initialPosition.z;
-        pointerLockControls.setRotation(pitchXRotationRad, yawYRotationRad);
+        pointerLockControls.setRotation(initialPitchXRotationRad, initialYawYRotationRad);
     };
 
     this.addToScene = function (scene)
