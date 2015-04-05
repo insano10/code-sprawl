@@ -2,6 +2,7 @@ package com.insano10.codesprawl.servlets;
 
 import com.google.gson.Gson;
 import com.insano10.codespawl.source.SourceInspector;
+import com.insano10.codespawl.source.language.JavaFileInspector;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -14,7 +15,7 @@ import java.nio.file.Paths;
 public class SourceServlet extends HttpServlet
 {
     private static final Gson GSON = new Gson();
-    private static final SourceInspector SOURCE_INSPECTOR = new SourceInspector();
+    private static final SourceInspector SOURCE_INSPECTOR = new SourceInspector(new JavaFileInspector());
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
