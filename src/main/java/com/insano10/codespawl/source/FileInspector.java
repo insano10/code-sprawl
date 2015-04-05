@@ -5,7 +5,5 @@ import java.util.Collection;
 
 public interface FileInspector
 {
-    Path getRootDirectoryIn(Path projectPath);
-
-    Collection<CodeUnit> getCodeUnitsIn(Path languageRoot);
+    Collection<CodeUnit> getCodeUnitsIn(Path projectPath);
 }

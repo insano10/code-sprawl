@@ -18,7 +18,22 @@ public class JavaFileInspector implements FileInspector
     private static final Logger LOGGER = Logger.getLogger(JavaFileInspector.class);
 
     @Override
-    public Path getRootDirectoryIn(Path projectPath)
+    public Collection<CodeUnit> getCodeUnitsIn(Path projectPath)
+    {
+        final Path languageRoot = getRootDirectoryIn(projectPath);
+
+        final PathMatcher pathMatcher = FileSystems.getDefault().getPathMatcher("glob:***.java");
+        final List<Path> matchingJavaPaths = getMatchingPathsIn(languageRoot, pathMatcher);
+
+        final List<CodeUnit> codeUnits = matchingJavaPaths.
+                stream().
+                map(p -> convert(p, languageRoot)).
+                collect(toList());
+
+        return codeUnits;
+    }
+
+    private Path getRootDirectoryIn(Path projectPath)
     {
         final PathMatcher pathMatcher = FileSystems.getDefault().getPathMatcher("glob:**/src/main/java");
         final List<Path> matchingJavaPaths = getMatchingPathsIn(projectPath, pathMatcher);
@@ -34,20 +49,6 @@ public class JavaFileInspector implements FileInspector
         }
 
         return matchingJavaPaths.get(0);
-    }
-
-    @Override
-    public Collection<CodeUnit> getCodeUnitsIn(Path languageRoot)
-    {
-        final PathMatcher pathMatcher = FileSystems.getDefault().getPathMatcher("glob:***.java");
-        final List<Path> matchingJavaPaths = getMatchingPathsIn(languageRoot, pathMatcher);
-
-        final List<CodeUnit> codeUnits = matchingJavaPaths.
-                stream().
-                map(p -> convert(p, languageRoot)).
-                collect(toList());
-
-        return codeUnits;
     }
 
     private List<Path> getMatchingPathsIn(final Path rootPath, final PathMatcher pathMatcher)

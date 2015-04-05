@@ -12,12 +12,13 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Arrays;
 import java.util.Collection;
 
 public class SourceServlet extends HttpServlet
 {
     private static final Gson GSON = new Gson();
-    private static final SourceInspector SOURCE_INSPECTOR = new SourceInspector(new JavaFileInspector());
+    private static final SourceInspector SOURCE_INSPECTOR = new SourceInspector(Arrays.asList(new JavaFileInspector()));
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException

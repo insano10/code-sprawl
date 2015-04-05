@@ -5,17 +5,19 @@ import org.apache.log4j.Logger;
 import java.nio.file.Path;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class SourceInspector
 {
     private static final Logger LOGGER = Logger.getLogger(SourceInspector.class);
 
-    private final FileInspector javaFileInspector;
+    private final Collection<FileInspector> fileInspectors;
     private Path sourceRoot;
 
-    public SourceInspector(FileInspector javaFileInspector)
+    public SourceInspector(Collection<FileInspector> fileInspectors)
     {
-        this.javaFileInspector = javaFileInspector;
+        this.fileInspectors = fileInspectors;
     }
 
     public void setPath(Path path)
@@ -25,16 +27,18 @@ public class SourceInspector
 
     public Collection<CodeUnit> inspect()
     {
-        if(sourceRoot != null)
+        if (sourceRoot != null)
         {
             LOGGER.info("Inspecting: " + sourceRoot);
 
-            final Path javaRoot = javaFileInspector.getRootDirectoryIn(sourceRoot);
-            Collection<CodeUnit> codeUnits = javaFileInspector.getCodeUnitsIn(javaRoot);
+            List<CodeUnit> allCodeUnits = fileInspectors.stream().
+                    map(i -> i.getCodeUnitsIn(sourceRoot)).
+                    flatMap(Collection::stream).
+                    collect(Collectors.toList());
 
-            LOGGER.info("Found " + codeUnits.size() + " Java code units");
+            LOGGER.info("Found " + allCodeUnits.size() + " Java code units");
 
-            return codeUnits;
+            return allCodeUnits;
         }
         else
         {
