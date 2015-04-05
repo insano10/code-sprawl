@@ -36,7 +36,8 @@ require(
             CityBlueprint:       'data/TestCityBlueprint',
             CodeUnit:            'renderedObjects/CodeUnit',
             CodeNeighbourhood:   'renderedObjects/CodeNeighbourhood',
-            InformationPanel:    'renderedObjects/InformationPanel'
+            InformationPanel:    'renderedObjects/InformationPanel',
+            uiBehaviour:         'uiBehaviour/uiBehaviour'
         }
     },
     ["main"],

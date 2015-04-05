@@ -12,7 +12,7 @@
 
     <servlet-mapping>
         <servlet-name>SourceServlet</servlet-name>
-        <url-pattern>/codesprawl/project</url-pattern>
+        <url-pattern>/codesprawl/project/source</url-pattern>
     </servlet-mapping>
 
 </web-app>

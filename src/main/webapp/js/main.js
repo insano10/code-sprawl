@@ -1,10 +1,12 @@
-define(['detector', 'app', 'container'],
-    function (Detector, Application, container)
+define(['detector', 'app', 'container', 'uiBehaviour'],
+    function (Detector, Application, container, uiBehaviour)
     {
         var start = function ()
         {
             $(document).ready(function ()
             {
+                uiBehaviour.setBehaviour();
+
                 console.log("Initializing!");
 
                 if (!Detector.webgl)

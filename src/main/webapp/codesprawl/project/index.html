@@ -14,11 +14,16 @@
 <body class="body">
 
 <div class="menu-bar">
-    <div id="blocker">
+    <div id="blocker" class="col-lg-6">
         <div id="instructions" class="col-md-12">
             <button class="btn btn-default start-button">Start</button>
             (W, A, S, D = Move, R, F = Up/Down, MOUSE = Look around)
         </div>
+    </div>
+    <div class="col-lg-6">
+        <label for="source-directory-input">Choose source root:</label>
+        <input id="source-directory-input" type="text" size="100" value="/home/jenny/IdeaProjects/code-sprawl/src/test/resources/testProject"/>
+        <button id="source-directory-btn" class="btn btn-default">Ok</button>
     </div>
 </div>
 <div id="canvas-container">
