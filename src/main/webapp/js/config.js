@@ -33,7 +33,7 @@ require(
             mousePointerLock:    'controls/mousePointerLock',
             PointerLockControls: 'controls/pointerLockControls',
             CityPlanner:         'data/CityPlanner',
-            CityBlueprint:       'data/TestCityBlueprint',
+            TestCityBlueprint:   'data/TestCityBlueprint',
             CodeUnit:            'renderedObjects/CodeUnit',
             CodeNeighbourhood:   'renderedObjects/CodeNeighbourhood',
             InformationPanel:    'renderedObjects/InformationPanel',

@@ -1,10 +1,12 @@
-define(['detector', 'app', 'container', 'uiBehaviour'],
-    function (Detector, Application, container, uiBehaviour)
+define(['detector', 'app', 'container', 'uiBehaviour', 'CityPlanner'],
+    function (Detector, Application, container, uiBehaviour, CityPlanner)
     {
         var start = function ()
         {
             $(document).ready(function ()
             {
+                var cityPlanner = new CityPlanner();
+
                 uiBehaviour.setBehaviour();
 
                 console.log("Initializing!");
@@ -15,7 +17,7 @@ define(['detector', 'app', 'container', 'uiBehaviour'],
                     container.innerHTML = "";
                 }
 
-                var app = new Application();
+                var app = new Application(cityPlanner);
                 app.initialise();
             })
         };

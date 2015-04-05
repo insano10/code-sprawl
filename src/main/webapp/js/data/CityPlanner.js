@@ -1,4 +1,4 @@
-define(["jquery", "CityBlueprint", "CodeNeighbourhood", "CodeUnit"], function ($, CityBlueprint, CodeNeighbourhood, CodeUnit)
+define(["jquery", "TestCityBlueprint", "CodeNeighbourhood", "CodeUnit"], function ($, TestCityBlueprint, CodeNeighbourhood, CodeUnit)
 {
     return function ()
     {
@@ -13,10 +13,15 @@ define(["jquery", "CityBlueprint", "CodeNeighbourhood", "CodeUnit"], function ($
             this.constructedNeighbourhoods = [];
         }
 
-        CityPlanner.prototype.loadCity = function loadCity()
+        CityPlanner.prototype.loadTestCity = function loadTestCity()
+        {
+            this.loadCity(new TestCityBlueprint());
+        };
+
+        CityPlanner.prototype.loadCity = function loadCity(bluePrint)
         {
             console.log("Loading city inhabitants");
-            loadInhabitants(this);
+            loadInhabitants(this, bluePrint);
 
             console.log("Building neighbourhoods");
             buildNeighbourhoods(this);
@@ -27,9 +32,9 @@ define(["jquery", "CityBlueprint", "CodeNeighbourhood", "CodeUnit"], function ($
             return this.constructedNeighbourhoods;
         };
 
-        var loadInhabitants = function loadInhabitants(cityPlanner)
+        var loadInhabitants = function loadInhabitants(cityPlanner, bluePrint)
         {
-            var data = new CityBlueprint().getInhabitants();
+            var data = bluePrint.getInhabitants();
 
             $.each(data, function (idx, unit)
             {

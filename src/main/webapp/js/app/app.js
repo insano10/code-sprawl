@@ -1,13 +1,14 @@
-define(["jquery", "three", "camera", "controls", "light", "renderer", "scene", "sceneObjects", "crossHair", "mousePointerLock", "CityPlanner", "InformationPanel"],
-    function ($, THREE, camera, controls, light, renderer, scene, SceneObjects, crossHair, mousePointerLock, CityPlanner, InformationPanel)
+define(["jquery", "three", "camera", "controls", "light", "renderer", "scene", "sceneObjects", "crossHair", "mousePointerLock", "InformationPanel"],
+    function ($, THREE, camera, controls, light, renderer, scene, SceneObjects, crossHair, mousePointerLock, InformationPanel)
     {
         return function ()
         {
-            function Application()
+            function Application(cityPlanner)
             {
                 this.topLevelObjects = new SceneObjects();
                 this.isAnimating = false;
                 this.currentAnimationFrame = null;
+                this.cityPlanner = cityPlanner;
             }
 
             Application.prototype.initialise = function initialise()
@@ -15,10 +16,9 @@ define(["jquery", "three", "camera", "controls", "light", "renderer", "scene", "
                 grabPointer(this);
 
                 var app = this;
-                var cityPlanner = new CityPlanner();
-                cityPlanner.loadCity();
+                this.cityPlanner.loadTestCity();
 
-                $.each(cityPlanner.getNeighbourhoods(), function(idx, neighbourhood) {
+                $.each(this.cityPlanner.getNeighbourhoods(), function(idx, neighbourhood) {
                    app.topLevelObjects.add(neighbourhood);
                 });
 

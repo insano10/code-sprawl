@@ -5,6 +5,7 @@ import com.insano10.codespawl.source.FileInspector;
 import org.apache.log4j.Logger;
 
 import java.io.IOException;
+import java.nio.charset.Charset;
 import java.nio.file.*;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -94,7 +95,7 @@ public class JavaFileInspector implements FileInspector
     {
         try
         {
-            return Files.readAllLines(codeUnitPath).size();
+            return Files.readAllLines(codeUnitPath, Charset.forName("UTF-8")).size();
         }
         catch (IOException e)
         {
