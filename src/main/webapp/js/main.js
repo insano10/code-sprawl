@@ -1,5 +1,5 @@
-define(['detector', 'app', 'container', 'uiBehaviour', 'CityPlanner'],
-    function (Detector, Application, container, uiBehaviour, CityPlanner)
+define(['detector', 'app', 'container', 'uiBehaviour', 'CityPlanner', 'controls', 'renderer', 'scene', 'camera'],
+    function (Detector, Application, container, uiBehaviour, CityPlanner, controls, renderer, scene, camera)
     {
         var start = function ()
         {
@@ -7,7 +7,13 @@ define(['detector', 'app', 'container', 'uiBehaviour', 'CityPlanner'],
             {
                 var cityPlanner = new CityPlanner();
 
-                var loadCityCallback = $.proxy(cityPlanner.loadCity, cityPlanner);
+                var loadCityCallback = function (bluePrint)
+                {
+                    cityPlanner.loadCity(bluePrint);
+                    controls.reset();
+                    renderer.render(scene, camera);
+                };
+
                 uiBehaviour.setBehaviour(loadCityCallback);
 
                 console.log("Initializing!");

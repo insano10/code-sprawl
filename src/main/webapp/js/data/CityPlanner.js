@@ -1,5 +1,5 @@
-define(["jquery", "TestCityBlueprint", "CodeNeighbourhood", "CodeUnit", "sceneObjects", "scene", "renderer", "camera", "controls"],
-    function ($, TestCityBlueprint, CodeNeighbourhood, CodeUnit, SceneObjects, scene, renderer, camera, controls)
+define(["jquery", "TestCityBlueprint", "CodeNeighbourhood", "CodeUnit", "sceneObjects", "scene"],
+    function ($, TestCityBlueprint, CodeNeighbourhood, CodeUnit, SceneObjects, scene)
 {
     return function ()
     {
@@ -84,9 +84,6 @@ define(["jquery", "TestCityBlueprint", "CodeNeighbourhood", "CodeUnit", "sceneOb
             });
 
             cityPlanner.sceneObjects.addToScene(scene);
-
-            controls.reset();
-            renderer.render(scene, camera);
         };
 
         var buildNeighbourhood = function buildNeighbourhood(id, name, unitArray, xBoundary, zBoundary)
@@ -140,8 +137,6 @@ define(["jquery", "TestCityBlueprint", "CodeNeighbourhood", "CodeUnit", "sceneOb
         {
             cityPlanner.sceneObjects.clear(scene);
             cityPlanner.neighbourhoodToUnitArrayMap = {};
-
-//            renderer.render(scene, camera);
         };
 
         return CityPlanner;
