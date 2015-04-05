@@ -37,10 +37,11 @@ define(['jquery', 'LoadedCityBlueprint'], function($, LoadedCityBlueprint) {
                     success:  function (response)
                     {
                         console.log('finished inspecting. Response is ' + response);
-                        loadingIcon.hide();
 
                         var codeUnits = JSON.parse(response);
                         loadCityCallback(new LoadedCityBlueprint(codeUnits));
+
+                        loadingIcon.hide();
                     },
                     error:    function (e)
                     {
