@@ -24,6 +24,30 @@ define(['jquery'], function($) {
 
             }
         });
+
+        var sourceInspectBtn = $('#source-inspect-btn');
+        sourceInspectBtn.bind({
+            click: function(event) {
+
+                var loadingIcon = $('.loading');
+                loadingIcon.show();
+                $.ajax({
+                    type:     'GET',
+                    url:      window.location.href.split("#")[0] + 'source',
+                    success:  function (response)
+                    {
+                        console.log('finished inspecting. Response is ' + response);
+                        loadingIcon.hide();
+                    },
+                    error:    function (e)
+                    {
+                        console.log("failed to inspect. " + JSON.stringify(e));
+                        loadingIcon.hide();
+                    }
+                });
+
+            }
+        });
     };
 
     return { setBehaviour: setBehaviour };

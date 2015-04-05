@@ -20,7 +20,7 @@ public class SourceInspector
         this.sourceRoot = path;
     }
 
-    public void inspect()
+    public String inspect()
     {
         if(sourceRoot != null)
         {
@@ -31,5 +31,7 @@ public class SourceInspector
         {
             LOGGER.warn("No source root set");
         }
+
+        return "foo";
     }
 }

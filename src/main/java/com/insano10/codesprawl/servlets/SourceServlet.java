@@ -21,8 +21,8 @@ public class SourceServlet extends HttpServlet
     {
         if(request.getRequestURI().endsWith("/source"))
         {
-            SOURCE_INSPECTOR.inspect();
-            response.getWriter().print(GSON.toJson(""));
+            String inspectionResponse = SOURCE_INSPECTOR.inspect();
+            response.getWriter().print(GSON.toJson(inspectionResponse));
             response.setStatus(HttpServletResponse.SC_OK);
         }
         else
