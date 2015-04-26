@@ -4,8 +4,6 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.BDDMockito;
 
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
@@ -17,8 +15,6 @@ import static org.mockito.Mockito.mock;
 
 public class SourceInspectorTest
 {
-    private static final Path PROJECT_ROOT = Paths.get("foo");
-
     private final FileInspector inspector1 = mock(FileInspector.class);
     private final FileInspector inspector2 = mock(FileInspector.class);
 
@@ -36,13 +32,13 @@ public class SourceInspectorTest
     {
         //given
         List<CodeUnit> javaUnits = Arrays.asList(
-                new CodeUnit("group1", "name1", 10, 3, JAVA),
-                new CodeUnit("group1", "name2", 99, 12, JAVA));
+                new CodeUnitBuilder().groupName("group1").name("name1").lineCount(10).methodCount(3).language(JAVA).createCodeUnit(),
+                new CodeUnitBuilder().groupName("group1").name("name2").lineCount(99).methodCount(12).language(JAVA).createCodeUnit());
 
         List<CodeUnit> javascriptUnits = Arrays.asList(
-                new CodeUnit("group2", "nameA", 5, 1, JAVASCRIPT),
-                new CodeUnit("group3", "nameB", 1, 0, JAVASCRIPT),
-                new CodeUnit("group3", "nameC", 87, 4, JAVASCRIPT));
+                new CodeUnitBuilder().groupName("group2").name("nameA").lineCount(5).methodCount(1).language(JAVASCRIPT).createCodeUnit(),
+                new CodeUnitBuilder().groupName("group3").name("nameB").lineCount(1).methodCount(0).language(JAVASCRIPT).createCodeUnit(),
+                new CodeUnitBuilder().groupName("group3").name("nameC").lineCount(87).methodCount(4).language(JAVASCRIPT).createCodeUnit());
 
         BDDMockito.given(inspector1.getCodeUnits()).willReturn(javaUnits);
         BDDMockito.given(inspector2.getCodeUnits()).willReturn(javascriptUnits);

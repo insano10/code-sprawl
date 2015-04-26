@@ -1,6 +1,7 @@
 package com.insano10.codesprawl.source.language;
 
 import com.insano10.codesprawl.source.CodeUnit;
+import com.insano10.codesprawl.source.CodeUnitBuilder;
 import com.insano10.codesprawl.source.Language;
 import com.insano10.codesprawl.utils.Utils;
 import org.junit.Before;
@@ -38,7 +39,7 @@ public class JavaFileInspectorTest
         //First hit Build -> Rebuild
         try
         {
-            if(Files.exists(PROJECT_CLASS_ROOT))
+            if (Files.exists(PROJECT_CLASS_ROOT))
             {
                 Utils.deleteFolder(PROJECT_CLASS_ROOT);
             }
@@ -55,7 +56,13 @@ public class JavaFileInspectorTest
     public void shouldFindCodeUnits() throws Exception
     {
         //given
-        final CodeUnit anExpectedCodeUnit = new CodeUnit("com/insano10/codesprawl/shoppingApp/service/shopping/domain", "Item", 19, 3, Language.JAVA);
+        final CodeUnit anExpectedCodeUnit = new CodeUnitBuilder().
+                groupName("com/insano10/codesprawl/shoppingApp/service/shopping/domain").
+                name("Item").
+                lineCount(19).
+                methodCount(3).
+                language(Language.JAVA).
+                createCodeUnit();
 
         //when
         Collection<CodeUnit> codeUnits = inspector.getCodeUnits();

@@ -8,7 +8,7 @@ public class CodeUnit
     private final int methodCount;
     private final Language language;
 
-    public CodeUnit(String groupName, String name, int lineCount, int methodCount, Language language)
+    CodeUnit(String groupName, String name, int lineCount, int methodCount, Language language)
     {
         this.groupName = groupName;
         this.name = name;

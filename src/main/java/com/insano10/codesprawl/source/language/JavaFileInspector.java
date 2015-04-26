@@ -1,19 +1,18 @@
 package com.insano10.codesprawl.source.language;
 
 import com.insano10.codesprawl.source.CodeUnit;
+import com.insano10.codesprawl.source.CodeUnitBuilder;
 import com.insano10.codesprawl.source.FileInspector;
+import com.insano10.codesprawl.source.Language;
 import org.apache.log4j.Logger;
 
 import java.io.IOException;
-import java.net.URL;
-import java.net.URLClassLoader;
 import java.nio.charset.Charset;
 import java.nio.file.*;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import static com.insano10.codesprawl.source.Language.JAVA;
 import static java.util.stream.Collectors.toList;
 
 public class JavaFileInspector implements FileInspector
@@ -94,12 +93,14 @@ public class JavaFileInspector implements FileInspector
 
     private CodeUnit convert(final Path codeUnitPath, Path languageRoot, ClassLoader classLoader)
     {
-        final String groupName = languageRoot.relativize(codeUnitPath.getParent()).toString();
-        final String name = getCodeUnitName(codeUnitPath);
-        final int lineCount = getLineCount(codeUnitPath);
-        final int methodCount = getMethodCount(codeUnitPath, classLoader);
+        final CodeUnitBuilder codeUnitBuilder = new CodeUnitBuilder().language(Language.JAVA);
 
-        return new CodeUnit(groupName, name, lineCount, methodCount, JAVA);
+        codeUnitBuilder.groupName(languageRoot.relativize(codeUnitPath.getParent()).toString());
+        codeUnitBuilder.name(getCodeUnitName(codeUnitPath));
+        codeUnitBuilder.lineCount(getLineCount(codeUnitPath));
+        codeUnitBuilder.methodCount(getMethodCount(codeUnitPath, classLoader));
+
+        return codeUnitBuilder.createCodeUnit();
     }
 
     private int getLineCount(final Path codeUnitPath)
