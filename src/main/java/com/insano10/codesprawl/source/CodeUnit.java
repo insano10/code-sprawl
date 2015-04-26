@@ -4,16 +4,18 @@ public class CodeUnit
 {
     private final String groupName;
     private final String name;
-    private final int lineCount;
-    private final int methodCount;
+    private final long lineCount;
+    private final long publicMethodCount;
+    private final long totalMethodCount;
     private final Language language;
 
-    CodeUnit(String groupName, String name, int lineCount, int methodCount, Language language)
+    CodeUnit(String groupName, String name, long lineCount, long publicMethodCount, long totalMethodCount, Language language)
     {
         this.groupName = groupName;
         this.name = name;
         this.lineCount = lineCount;
-        this.methodCount = methodCount;
+        this.publicMethodCount = publicMethodCount;
+        this.totalMethodCount = totalMethodCount;
         this.language = language;
     }
 
@@ -26,7 +28,8 @@ public class CodeUnit
         CodeUnit codeUnit = (CodeUnit) o;
 
         if (lineCount != codeUnit.lineCount) return false;
-        if (methodCount != codeUnit.methodCount) return false;
+        if (totalMethodCount != codeUnit.totalMethodCount) return false;
+        if (publicMethodCount != codeUnit.publicMethodCount) return false;
         if (!groupName.equals(codeUnit.groupName)) return false;
         if (language != codeUnit.language) return false;
         if (!name.equals(codeUnit.name)) return false;
@@ -39,8 +42,9 @@ public class CodeUnit
     {
         int result = groupName.hashCode();
         result = 31 * result + name.hashCode();
-        result = 31 * result + lineCount;
-        result = 31 * result + methodCount;
+        result = 31 * result + (int) (lineCount ^ (lineCount >>> 32));
+        result = 31 * result + (int) (publicMethodCount ^ (publicMethodCount >>> 32));
+        result = 31 * result + (int) (totalMethodCount ^ (totalMethodCount >>> 32));
         result = 31 * result + language.hashCode();
         return result;
     }
@@ -52,7 +56,8 @@ public class CodeUnit
                 "groupName='" + groupName + '\'' +
                 ", name='" + name + '\'' +
                 ", lineCount=" + lineCount +
-                ", methodCount=" + methodCount +
+                ", publicMethodCount=" + publicMethodCount +
+                ", totalMethodCount=" + totalMethodCount +
                 ", language=" + language +
                 '}';
     }

@@ -32,13 +32,13 @@ public class SourceInspectorTest
     {
         //given
         List<CodeUnit> javaUnits = Arrays.asList(
-                new CodeUnitBuilder().groupName("group1").name("name1").lineCount(10).methodCount(3).language(JAVA).createCodeUnit(),
-                new CodeUnitBuilder().groupName("group1").name("name2").lineCount(99).methodCount(12).language(JAVA).createCodeUnit());
+                new CodeUnitBuilder().groupName("group1").name("name1").lineCount(10).publicMethodCount(3).language(JAVA).createCodeUnit(),
+                new CodeUnitBuilder().groupName("group1").name("name2").lineCount(99).publicMethodCount(12).language(JAVA).createCodeUnit());
 
         List<CodeUnit> javascriptUnits = Arrays.asList(
-                new CodeUnitBuilder().groupName("group2").name("nameA").lineCount(5).methodCount(1).language(JAVASCRIPT).createCodeUnit(),
-                new CodeUnitBuilder().groupName("group3").name("nameB").lineCount(1).methodCount(0).language(JAVASCRIPT).createCodeUnit(),
-                new CodeUnitBuilder().groupName("group3").name("nameC").lineCount(87).methodCount(4).language(JAVASCRIPT).createCodeUnit());
+                new CodeUnitBuilder().groupName("group2").name("nameA").lineCount(5).publicMethodCount(1).language(JAVASCRIPT).createCodeUnit(),
+                new CodeUnitBuilder().groupName("group3").name("nameB").lineCount(1).publicMethodCount(0).language(JAVASCRIPT).createCodeUnit(),
+                new CodeUnitBuilder().groupName("group3").name("nameC").lineCount(87).publicMethodCount(4).language(JAVASCRIPT).createCodeUnit());
 
         BDDMockito.given(inspector1.getCodeUnits()).willReturn(javaUnits);
         BDDMockito.given(inspector2.getCodeUnits()).willReturn(javascriptUnits);

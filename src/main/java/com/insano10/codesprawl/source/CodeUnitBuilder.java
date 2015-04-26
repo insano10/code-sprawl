@@ -4,8 +4,9 @@ public class CodeUnitBuilder
 {
     private String groupName = "Unknown";
     private String name = "Unknown";
-    private int lineCount = 0;
-    private int methodCount = 0;
+    private long lineCount = 0;
+    private long publicMethodCount = 0;
+    private long totalMethodCount = 0;
     private Language language = null;
 
     public CodeUnitBuilder groupName(String groupName)
@@ -20,15 +21,21 @@ public class CodeUnitBuilder
         return this;
     }
 
-    public CodeUnitBuilder lineCount(int lineCount)
+    public CodeUnitBuilder lineCount(long lineCount)
     {
         this.lineCount = lineCount;
         return this;
     }
 
-    public CodeUnitBuilder methodCount(int methodCount)
+    public CodeUnitBuilder publicMethodCount(long count)
     {
-        this.methodCount = methodCount;
+        this.publicMethodCount = count;
+        return this;
+    }
+
+    public CodeUnitBuilder totalMethodCount(long count)
+    {
+        this.totalMethodCount = count;
         return this;
     }
 
@@ -40,6 +47,6 @@ public class CodeUnitBuilder
 
     public CodeUnit createCodeUnit()
     {
-        return new CodeUnit(groupName, name, lineCount, methodCount, language);
+        return new CodeUnit(groupName, name, lineCount, publicMethodCount, totalMethodCount, language);
     }
 }

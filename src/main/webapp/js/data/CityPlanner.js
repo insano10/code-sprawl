@@ -105,7 +105,8 @@ define(["jquery", "TestCityBlueprint", "CodeNeighbourhood", "CodeUnit", "sceneOb
                 position.y = DISTANCE_FROM_GROUND + (unit.lineCount / 2);
                 position.z = zBoundary + cubeOffset * row;
 
-                var codeUnit = new CodeUnit(UNIT_SIDE_LENGTH, unit.lineCount, UNIT_SIDE_LENGTH, unit.name, unit.groupName, unit.lineCount, unit.methodCount);
+                var codeUnit = new CodeUnit(UNIT_SIDE_LENGTH, unit.lineCount, UNIT_SIDE_LENGTH, unit.name, unit.groupName, unit.lineCount,
+                    unit.publicMethodCount, unit.totalMethodCount);
                 codeUnit.setPosition(position);
                 codeUnits.push(codeUnit);
 

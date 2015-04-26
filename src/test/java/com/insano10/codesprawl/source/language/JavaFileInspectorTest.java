@@ -60,7 +60,8 @@ public class JavaFileInspectorTest
                 groupName("com/insano10/codesprawl/shoppingApp/service/shopping/domain").
                 name("Item").
                 lineCount(19).
-                methodCount(3).
+                totalMethodCount(3).
+                publicMethodCount(1).
                 language(Language.JAVA).
                 createCodeUnit();
 

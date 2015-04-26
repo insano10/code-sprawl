@@ -7,9 +7,11 @@ import com.insano10.codesprawl.source.Language;
 import org.apache.log4j.Logger;
 
 import java.io.IOException;
+import java.lang.reflect.Modifier;
 import java.nio.charset.Charset;
 import java.nio.file.*;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
@@ -98,7 +100,7 @@ public class JavaFileInspector implements FileInspector
         codeUnitBuilder.groupName(languageRoot.relativize(codeUnitPath.getParent()).toString());
         codeUnitBuilder.name(getCodeUnitName(codeUnitPath));
         codeUnitBuilder.lineCount(getLineCount(codeUnitPath));
-        codeUnitBuilder.methodCount(getMethodCount(codeUnitPath, classLoader));
+        populateMethodCounts(codeUnitPath, classLoader, codeUnitBuilder);
 
         return codeUnitBuilder.createCodeUnit();
     }
@@ -116,19 +118,23 @@ public class JavaFileInspector implements FileInspector
         return 0;
     }
 
-    private int getMethodCount(final Path codeUnitPath, final ClassLoader classLoader)
+    private void populateMethodCounts(final Path codeUnitPath, final ClassLoader classLoader, CodeUnitBuilder codeUnitBuilder)
     {
         final String className = getCodeUnitFullyQualifiedClassName(codeUnitPath);
         try
         {
             Class<?> codeUnitClass = classLoader.loadClass(className);
-            return codeUnitClass.getDeclaredMethods().length;
+
+            long publicMethodCount = Arrays.asList(codeUnitClass.getDeclaredMethods()).stream().filter(m -> Modifier.isPublic(m.getModifiers())).count();
+            long totalMethodCount = codeUnitClass.getDeclaredMethods().length;
+
+            codeUnitBuilder.publicMethodCount(publicMethodCount);
+            codeUnitBuilder.totalMethodCount(totalMethodCount);
         }
         catch (ClassNotFoundException e)
         {
             LOGGER.error("Cannot find class: " + className);
         }
-        return 0;
     }
 
     private String getCodeUnitName(Path codeUnitPath)
