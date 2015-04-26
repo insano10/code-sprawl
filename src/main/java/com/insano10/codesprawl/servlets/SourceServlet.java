@@ -1,9 +1,9 @@
 package com.insano10.codesprawl.servlets;
 
 import com.google.gson.Gson;
-import com.insano10.codespawl.source.CodeUnit;
-import com.insano10.codespawl.source.SourceInspector;
-import com.insano10.codespawl.source.language.JavaFileInspector;
+import com.insano10.codesprawl.source.CodeUnit;
+import com.insano10.codesprawl.source.SourceInspector;
+import com.insano10.codesprawl.source.language.JavaFileInspector;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;

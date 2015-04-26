@@ -4,7 +4,7 @@ define( ["three"], function (THREE) {
     {
         var DEFAULT_COLOUR = 0x0aeedf;
 
-        function CodeUnit(width, height, depth, name, groupName, lineCount)
+        function CodeUnit(width, height, depth, name, groupName, lineCount, methodCount)
         {
             this.width = width;
             this.height = height;
@@ -12,6 +12,7 @@ define( ["three"], function (THREE) {
             this.name = name;
             this.groupName = groupName;
             this.lineCount = lineCount;
+            this.methodCount = methodCount;
 
             this.mesh = new THREE.Mesh(
                 new THREE.BoxGeometry(this.width, this.height, this.depth),
@@ -59,6 +60,11 @@ define( ["three"], function (THREE) {
         CodeUnit.prototype.getLineCount = function getLineCount()
         {
             return this.lineCount;
+        };
+
+        CodeUnit.prototype.getMethodCount = function getMethodCount()
+        {
+            return this.methodCount;
         };
 
         CodeUnit.prototype.getObjectById = function getObjectById(objectId)
