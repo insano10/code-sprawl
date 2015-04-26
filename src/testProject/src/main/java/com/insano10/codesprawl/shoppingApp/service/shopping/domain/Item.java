@@ -12,4 +12,8 @@ public class Item
     {
         return "WOW";
     }
+
+    void doSomethingSecret()
+    {
+    }
 }

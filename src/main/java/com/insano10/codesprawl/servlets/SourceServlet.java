@@ -10,6 +10,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.net.URL;
+import java.net.URLClassLoader;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Collection;
@@ -43,9 +45,10 @@ public class SourceServlet extends HttpServlet
             final String classLocation = request.getParameter("classLocation");
             final Path sourcePath = Paths.get(sourceLocation);
             final Path classPath = Paths.get(classLocation);
+            final ClassLoader classLoader = new URLClassLoader(new URL[] {classPath.toUri().toURL()});
 
             SOURCE_INSPECTOR.reset();
-            SOURCE_INSPECTOR.addFileInspector(new JavaFileInspector(sourcePath, classPath));
+            SOURCE_INSPECTOR.addFileInspector(new JavaFileInspector(sourcePath, classLoader));
 
             response.getWriter().print(GSON.toJson(""));
             response.setStatus(HttpServletResponse.SC_OK);
