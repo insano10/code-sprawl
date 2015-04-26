@@ -14,16 +14,24 @@
 <body class="body">
 
 <div class="menu-bar">
-    <div id="blocker" class="col-lg-6">
+    <div id="blocker" class="col-lg-5 menu-buttons-container">
         <div id="instructions" class="col-md-12">
             <button class="btn btn-default start-button">Start</button>
             (W, A, S, D = Move, R, F = Up/Down, MOUSE = Look around)
         </div>
     </div>
-    <div class="col-lg-6">
-        <label for="source-directory-input">Choose source root:</label>
-        <input id="source-directory-input" type="text" size="100" value="/home/jenny/IdeaProjects/code-sprawl/src/test/resources/testProject"/>
-        <button id="source-directory-btn" class="btn btn-default">Ok</button>
+    <div class="col-lg-6 directory-container">
+        <div>
+            <label class="directory-label" for="source-directory-input">Choose source root:</label>
+            <input id="source-directory-input" type="text" size="100" value="/home/jenny/IdeaProjects/code-sprawl/src/testProject"/>
+        </div>
+        <div>
+            <label class="directory-label" for="class-directory-input">Choose class root:</label>
+            <input id="class-directory-input" type="text" size="100" value="/home/jenny/IdeaProjects/code-sprawl/target/test-classes"/>
+        </div>
+    </div>
+    <div class="col-lg-1 menu-buttons-container">
+        <button id="set-directories-btn" class="btn btn-default">Ok</button>
         <button id="source-inspect-btn" class="btn btn-default">Inspect</button>
     </div>
 </div>

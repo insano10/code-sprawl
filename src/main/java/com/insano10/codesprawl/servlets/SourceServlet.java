@@ -12,18 +12,17 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.Arrays;
 import java.util.Collection;
 
 public class SourceServlet extends HttpServlet
 {
     private static final Gson GSON = new Gson();
-    private static final SourceInspector SOURCE_INSPECTOR = new SourceInspector(Arrays.asList(new JavaFileInspector()));
+    private static final SourceInspector SOURCE_INSPECTOR = new SourceInspector();
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
     {
-        if(request.getRequestURI().endsWith("/source"))
+        if(request.getRequestURI().endsWith("/definition"))
         {
             Collection<CodeUnit> inspectionResponse = SOURCE_INSPECTOR.inspect();
             response.getWriter().print(GSON.toJson(inspectionResponse));
@@ -38,11 +37,15 @@ public class SourceServlet extends HttpServlet
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
     {
-        if(request.getRequestURI().endsWith("/source"))
+        if(request.getRequestURI().endsWith("/definition/location"))
         {
-            final String sourceLocation = request.getParameter("location");
+            final String sourceLocation = request.getParameter("sourceLocation");
+            final String classLocation = request.getParameter("classLocation");
             final Path sourcePath = Paths.get(sourceLocation);
-            SOURCE_INSPECTOR.setPath(sourcePath);
+            final Path classPath = Paths.get(classLocation);
+
+            SOURCE_INSPECTOR.reset();
+            SOURCE_INSPECTOR.addFileInspector(new JavaFileInspector(sourcePath, classPath));
 
             response.getWriter().print(GSON.toJson(""));
             response.setStatus(HttpServletResponse.SC_OK);

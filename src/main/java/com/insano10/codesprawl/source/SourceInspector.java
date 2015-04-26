@@ -3,6 +3,7 @@ package com.insano10.codesprawl.source;
 import org.apache.log4j.Logger;
 
 import java.nio.file.Path;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
@@ -12,40 +13,29 @@ public class SourceInspector
 {
     private static final Logger LOGGER = Logger.getLogger(SourceInspector.class);
 
-    private final Collection<FileInspector> fileInspectors;
-    private Path sourceRoot;
+    private final Collection<FileInspector> fileInspectors = new ArrayList<>();
 
-    public SourceInspector(Collection<FileInspector> fileInspectors)
+    public void reset()
     {
-        this.fileInspectors = fileInspectors;
+        fileInspectors.clear();
     }
 
-    public void setPath(Path path)
+    public void addFileInspector(FileInspector fileInspector)
     {
-        this.sourceRoot = path;
+        this.fileInspectors.add(fileInspector);
     }
 
     public Collection<CodeUnit> inspect()
     {
-        if (sourceRoot != null)
-        {
-            LOGGER.info("Inspecting: " + sourceRoot);
+        List<CodeUnit> allCodeUnits = fileInspectors.stream().
+                map(FileInspector::getCodeUnits).
+                flatMap(Collection::stream).
+                collect(Collectors.toList());
 
-            List<CodeUnit> allCodeUnits = fileInspectors.stream().
-                    map(i -> i.getCodeUnitsIn(sourceRoot)).
-                    flatMap(Collection::stream).
-                    collect(Collectors.toList());
+        LOGGER.info("Found " + allCodeUnits.size() + " Java code units");
 
-            LOGGER.info("Found " + allCodeUnits.size() + " Java code units");
+        return allCodeUnits;
 
-            return allCodeUnits;
-        }
-        else
-        {
-            LOGGER.warn("No source root set");
-        }
-
-        return Collections.emptyList();
     }
 
 }

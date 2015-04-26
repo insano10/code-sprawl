@@ -3,7 +3,6 @@ define([], function() {
     //static function
     var grabPointer = function (controlsEnabledCallback, controlsDisabledCallback)
     {
-        var blocker = document.getElementById('blocker');
         var instructions = document.getElementById( 'instructions' );
         var startButton = document.getElementsByClassName('start-button')[0];
         var havePointerLock = 'pointerLockElement' in document || 'mozPointerLockElement' in document || 'webkitPointerLockElement' in document;
@@ -16,23 +15,20 @@ define([], function() {
             {
                 if (document.pointerLockElement === element || document.mozPointerLockElement === element || document.webkitPointerLockElement === element)
                 {
-                    blocker.style.display = 'none';
+                    startButton.enabled = false;
                     controlsEnabledCallback();
 
                 }
                 else
                 {
-                    blocker.style.display = '-webkit-box';
-                    blocker.style.display = '-moz-box';
-                    blocker.style.display = 'box';
-                    instructions.style.display = '';
+                    startButton.enabled = true;
+                    startButton.blur();
                     controlsDisabledCallback();
                 }
             };
 
             var pointerLockError = function (event)
             {
-                instructions.style.display = '';
             };
 
             // Hook pointer lock state change events
@@ -46,8 +42,6 @@ define([], function() {
 
             startButton.addEventListener('click', function (event)
             {
-                instructions.style.display = 'none';
-
                 // Ask the browser to lock the pointer
                 element.requestPointerLock = element.requestPointerLock || element.mozRequestPointerLock || element.webkitRequestPointerLock;
 

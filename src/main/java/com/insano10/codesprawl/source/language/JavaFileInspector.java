@@ -17,11 +17,19 @@ import static java.util.stream.Collectors.toList;
 public class JavaFileInspector implements FileInspector
 {
     private static final Logger LOGGER = Logger.getLogger(JavaFileInspector.class);
+    private final Path sourcePath;
+    private final Path classPath;
+
+    public JavaFileInspector(Path sourcePath, Path classPath)
+    {
+        this.sourcePath = sourcePath;
+        this.classPath = classPath;
+    }
 
     @Override
-    public Collection<CodeUnit> getCodeUnitsIn(Path projectPath)
+    public Collection<CodeUnit> getCodeUnits()
     {
-        final Path languageRoot = getRootDirectoryIn(projectPath);
+        final Path languageRoot = getRootDirectoryIn(sourcePath);
 
         final PathMatcher pathMatcher = FileSystems.getDefault().getPathMatcher("glob:***.java");
         final List<Path> matchingJavaPaths = getMatchingPathsIn(languageRoot, pathMatcher);

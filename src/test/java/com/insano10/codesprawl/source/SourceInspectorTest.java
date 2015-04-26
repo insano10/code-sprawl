@@ -1,5 +1,6 @@
 package com.insano10.codesprawl.source;
 
+import org.junit.Before;
 import org.junit.Test;
 import org.mockito.BDDMockito;
 
@@ -21,8 +22,14 @@ public class SourceInspectorTest
     private final FileInspector inspector1 = mock(FileInspector.class);
     private final FileInspector inspector2 = mock(FileInspector.class);
 
-    private final SourceInspector inspector = new SourceInspector(Arrays.asList(inspector1, inspector2));
+    private final SourceInspector inspector = new SourceInspector();
 
+    @Before
+    public void setUp() throws Exception
+    {
+        inspector.addFileInspector(inspector1);
+        inspector.addFileInspector(inspector2);
+    }
 
     @Test
     public void shouldGetAllCodeUnits() throws Exception
@@ -37,10 +44,8 @@ public class SourceInspectorTest
                 new CodeUnit("group3", "nameB", 1, 0, JAVASCRIPT),
                 new CodeUnit("group3", "nameC", 87, 4, JAVASCRIPT));
 
-        BDDMockito.given(inspector1.getCodeUnitsIn(PROJECT_ROOT)).willReturn(javaUnits);
-        BDDMockito.given(inspector2.getCodeUnitsIn(PROJECT_ROOT)).willReturn(javascriptUnits);
-
-        inspector.setPath(PROJECT_ROOT);
+        BDDMockito.given(inspector1.getCodeUnits()).willReturn(javaUnits);
+        BDDMockito.given(inspector2.getCodeUnits()).willReturn(javascriptUnits);
 
         //when
         Collection<CodeUnit> codeUnits = inspector.inspect();

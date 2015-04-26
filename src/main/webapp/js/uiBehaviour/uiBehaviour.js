@@ -2,23 +2,28 @@ define(['jquery', 'LoadedCityBlueprint'], function($, LoadedCityBlueprint) {
 
     var setBehaviour = function (loadCityCallback)
     {
-        var sourceDirectoryBtn = $('#source-directory-btn');
-        sourceDirectoryBtn.bind({
+        var setDirectoriesBtn = $('#set-directories-btn');
+        setDirectoriesBtn.bind({
             click: function(event) {
                 var sourceDirectory = $('#source-directory-input').val();
+                var classDirectory = $('#class-directory-input').val();
 
                 $.ajax({
                     type:     'POST',
-                    url:      window.location.href.split("#")[0] + 'source',
+                    url:      window.location.href.split("#")[0] + "definition/location",
                     dataType: "json",
-                    data:     {location: sourceDirectory},
+                    data:     {
+                        sourceLocation: sourceDirectory,
+                        classLocation: classDirectory
+                    },
                     success:  function (response)
                     {
                         console.log('set source directory to ' + sourceDirectory);
+                        console.log('set class directory to ' + classDirectory);
                     },
                     error:    function (e)
                     {
-                        console.log("failed to set source directory to " + sourceDirectory + ". " + e);
+                        console.log("failed to set source directory to " + sourceDirectory + " and class directory to " + classDirectory + ". " + JSON.stringify(e));
                     }
                 });
 
@@ -33,7 +38,7 @@ define(['jquery', 'LoadedCityBlueprint'], function($, LoadedCityBlueprint) {
                 loadingIcon.show();
                 $.ajax({
                     type:     'GET',
-                    url:      window.location.href.split("#")[0] + 'source',
+                    url:      window.location.href.split("#")[0] + 'definition',
                     success:  function (response)
                     {
                         console.log('finished inspecting. Response is ' + response);

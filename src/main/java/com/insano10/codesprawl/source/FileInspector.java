@@ -5,5 +5,5 @@ import java.util.Collection;
 
 public interface FileInspector
 {
-    Collection<CodeUnit> getCodeUnitsIn(Path projectPath);
+    Collection<CodeUnit> getCodeUnits();
 }
