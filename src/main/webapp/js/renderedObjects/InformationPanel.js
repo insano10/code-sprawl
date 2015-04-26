@@ -42,6 +42,7 @@ define(["three", "container"], function (THREE, container)
             context.font = "16px Helvetica Neue";
             context.fillText("Neighbourhood: " + this.target.getGroupName(), x, y + 30);
             context.fillText("Unit Name: " + this.target.getName(), x, y + 60);
+            context.fillText("Line count: " + this.target.getLineCount(), x, y + 90);
         }
     };
 

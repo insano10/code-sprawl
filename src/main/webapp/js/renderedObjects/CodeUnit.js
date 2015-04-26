@@ -4,13 +4,14 @@ define( ["three"], function (THREE) {
     {
         var DEFAULT_COLOUR = 0x0aeedf;
 
-        function CodeUnitBar(width, height, depth, name, groupName)
+        function CodeUnit(width, height, depth, name, groupName, lineCount)
         {
             this.width = width;
             this.height = height;
             this.depth = depth;
             this.name = name;
             this.groupName = groupName;
+            this.lineCount = lineCount;
 
             this.mesh = new THREE.Mesh(
                 new THREE.BoxGeometry(this.width, this.height, this.depth),
@@ -18,48 +19,53 @@ define( ["three"], function (THREE) {
             this.mesh.castShadow = true;
         }
 
-        CodeUnitBar.prototype.setPosition = function setPosition(position3D)
+        CodeUnit.prototype.setPosition = function setPosition(position3D)
         {
             this.mesh.position.x = position3D.x;
             this.mesh.position.y = position3D.y;
             this.mesh.position.z = position3D.z;
         };
 
-        CodeUnitBar.prototype.addToScene = function addToScene(scene)
+        CodeUnit.prototype.addToScene = function addToScene(scene)
         {
             scene.add(this.mesh);
         };
 
-        CodeUnitBar.prototype.removeFromScene = function removeFromScene(scene)
+        CodeUnit.prototype.removeFromScene = function removeFromScene(scene)
         {
             scene.remove(this.mesh);
         };
 
-        CodeUnitBar.prototype.raycast = function raycast(raycaster, intersects)
+        CodeUnit.prototype.raycast = function raycast(raycaster, intersects)
         {
             this.mesh.raycast(raycaster, intersects);
         };
 
-        CodeUnitBar.prototype.getId = function getId()
+        CodeUnit.prototype.getId = function getId()
         {
             return this.mesh.id;
         };
 
-        CodeUnitBar.prototype.getName = function getName()
+        CodeUnit.prototype.getName = function getName()
         {
             return this.name;
         };
 
-        CodeUnitBar.prototype.getGroupName = function getGroupName()
+        CodeUnit.prototype.getGroupName = function getGroupName()
         {
             return this.groupName;
         };
 
-        CodeUnitBar.prototype.getObjectById = function getObjectById(objectId)
+        CodeUnit.prototype.getLineCount = function getLineCount()
+        {
+            return this.lineCount;
+        };
+
+        CodeUnit.prototype.getObjectById = function getObjectById(objectId)
         {
             return undefined;
         };
 
-        return CodeUnitBar;
+        return CodeUnit;
     }();
 } );
