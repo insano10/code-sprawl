@@ -53,10 +53,10 @@ public class JavaFileInspectorTest
     }
 
     @Test
-    public void shouldFindCodeUnits() throws Exception
+    public void shouldFindCodeUnitsAcrossMultipleSourceRoots() throws Exception
     {
         //given
-        final CodeUnit anExpectedCodeUnit = new CodeUnitBuilder().
+        final CodeUnit anExpectedCodeUnitFromModuleA = new CodeUnitBuilder().
                 groupName("com/insano10/codesprawl/shoppingApp/service/shopping/domain").
                 name("Item").
                 lineCount(19).
@@ -65,12 +65,22 @@ public class JavaFileInspectorTest
                 language(Language.JAVA).
                 createCodeUnit();
 
+        final CodeUnit anExpectedCodeUnitFromModuleB = new CodeUnitBuilder().
+                groupName("com/insano10/codesprawl/discoveryApp/objects").
+                name("Discoverer").
+                lineCount(21).
+                totalMethodCount(2).
+                publicMethodCount(1).
+                language(Language.JAVA).
+                createCodeUnit();
+
         //when
         Collection<CodeUnit> codeUnits = inspector.getCodeUnits();
 
         //then
-        assertThat(codeUnits).hasSize(9);
-        assertThat(codeUnits).contains(anExpectedCodeUnit);
+        assertThat(codeUnits).hasSize(10);
+        assertThat(codeUnits).contains(anExpectedCodeUnitFromModuleA);
+        assertThat(codeUnits).contains(anExpectedCodeUnitFromModuleB);
     }
 
 

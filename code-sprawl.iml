@@ -24,7 +24,8 @@
       <sourceFolder url="file://$MODULE_DIR$/src/main/resources" type="java-resource" />
       <sourceFolder url="file://$MODULE_DIR$/src/test/resources" type="java-test-resource" />
       <sourceFolder url="file://$MODULE_DIR$/src/testProject/java" isTestSource="true" />
-      <sourceFolder url="file://$MODULE_DIR$/src/testProject/src/main/java" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/src/testProject/moduleA/src/main/java" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/src/testProject/moduleB/src/main/java" isTestSource="true" />
       <excludeFolder url="file://$MODULE_DIR$/node_modules" />
       <excludeFolder url="file://$MODULE_DIR$/target" />
     </content>

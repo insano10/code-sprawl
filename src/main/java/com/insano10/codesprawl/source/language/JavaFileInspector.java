@@ -10,10 +10,7 @@ import java.io.IOException;
 import java.lang.reflect.Modifier;
 import java.nio.charset.Charset;
 import java.nio.file.*;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
 
 import static java.util.stream.Collectors.toList;
 
@@ -32,35 +29,33 @@ public class JavaFileInspector implements FileInspector
     @Override
     public Collection<CodeUnit> getCodeUnits()
     {
-        final Path languageRoot = getRootDirectoryIn(sourcePath);
+        final Collection<Path> languageRoots = getRootDirectoriesIn(sourcePath);
 
         final PathMatcher pathMatcher = FileSystems.getDefault().getPathMatcher("glob:***.java");
-        final List<Path> matchingJavaPaths = getMatchingPathsIn(languageRoot, pathMatcher);
 
-        final List<CodeUnit> codeUnits = matchingJavaPaths.
-                stream().
-                map(p -> convert(p, languageRoot, classLoader)).
+        List<CodeUnit> codeUnits = languageRoots.stream().
+                map(r -> getCodeUnitsIn(r, pathMatcher)).
+                flatMap(Collection::stream).
                 collect(toList());
 
         return codeUnits;
     }
 
-    private Path getRootDirectoryIn(Path projectPath)
+    private List<CodeUnit> getCodeUnitsIn(Path sourceRoot, PathMatcher pathMatcher)
+    {
+        final List<Path> matchingJavaPaths = getMatchingPathsIn(sourceRoot, pathMatcher);
+
+        return matchingJavaPaths.
+                stream().
+                map(p -> convert(p, sourceRoot, classLoader)).
+                collect(toList());
+    }
+
+    private Collection<Path> getRootDirectoriesIn(Path projectPath)
     {
         final PathMatcher pathMatcher = FileSystems.getDefault().getPathMatcher("glob:**/src/main/java");
-        final List<Path> matchingJavaPaths = getMatchingPathsIn(projectPath, pathMatcher);
 
-        if (matchingJavaPaths.isEmpty())
-        {
-            return null;
-        }
-
-        if (matchingJavaPaths.size() > 1)
-        {
-            throw new RuntimeException("Found " + matchingJavaPaths.size() + " java paths. Only expected a maximum of 1");
-        }
-
-        return matchingJavaPaths.get(0);
+        return getMatchingPathsIn(projectPath, pathMatcher);
     }
 
     private List<Path> getMatchingPathsIn(final Path rootPath, final PathMatcher pathMatcher)
