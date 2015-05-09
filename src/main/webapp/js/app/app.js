@@ -29,7 +29,6 @@ define(["jquery", "three", "tween", "camera", "controls", "light", "renderer", "
                     this.currentAnimationFrame = window.requestAnimationFrame(this.animate.bind(this));
                     TWEEN.update();
                     controls.update();
-                    this.cameraMover.update();
                     crossHair.update(controls, this.cityPlanner.getSceneObjects());
                     renderer.render(scene, camera);
                     InformationPanel.draw();
