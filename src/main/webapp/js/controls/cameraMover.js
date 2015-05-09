@@ -34,6 +34,12 @@ define(["controls"], function (controls)
             }
         };
 
+        CameraMover.prototype.lookAt = function lookAt(codeUnitName)
+        {
+            var chosenUnit = this.codeUnits[codeUnitName];
+            controls.lookAt(chosenUnit.getFocusPoint());
+        };
+
 
         CameraMover.prototype.onCityLoaded = function onCityLoaded(codeUnits)
         {

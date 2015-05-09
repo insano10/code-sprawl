@@ -38,16 +38,21 @@ define(['jquery', 'LoadedCityBlueprint', 'controls'], function ($, LoadedCityBlu
                 }
             });
 
-            document.addEventListener('keydown', onKeyDown, false);
+            var onKeyDownWrapper = function (event)
+            {
+                onKeyDown(event, cameraMover);
+            };
+
+            document.addEventListener('keydown', onKeyDownWrapper, false);
         }
 
-        var onKeyDown = function (event)
+        var onKeyDown = function (event, cameraMover)
         {
+            var searchBar = $("#code-unit-search");
+
             switch (event.keyCode)
             {
                 case 17: // Ctrl
-
-                    var searchBar = $("#code-unit-search");
 
                     if (isSearching)
                     {
@@ -64,6 +69,13 @@ define(['jquery', 'LoadedCityBlueprint', 'controls'], function ($, LoadedCityBlu
 
                     break;
 
+                case 13: // Return
+
+                    if (isSearching)
+                    {
+                        var codeUnitName = searchBar.val();
+                        cameraMover.lookAt(codeUnitName);
+                    }
             }
         };
 
