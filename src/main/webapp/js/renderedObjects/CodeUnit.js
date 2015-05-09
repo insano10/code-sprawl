@@ -17,7 +17,7 @@ define( ["three"], function (THREE) {
 
             this.mesh = new THREE.Mesh(
                 new THREE.BoxGeometry(this.width, this.height, this.depth),
-                new THREE.MeshLambertMaterial({ color: DEFAULT_COLOUR }));
+                new THREE.MeshLambertMaterial({ color: DEFAULT_COLOUR, wrapAround: true }));
             this.mesh.castShadow = true;
         }
 
