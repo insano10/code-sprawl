@@ -3,6 +3,7 @@ require(
         shim:  {
             "bootstrap":           { deps: ['jquery'] },
             'threeCore':           { exports: 'THREE' },
+            'tween':               { exports: 'TWEEN' },
             'PointerLockControls': { deps: ['threeCore'], exports: 'THREE' },
             'FPSControls':         { deps: ['threeCore'], exports: 'THREE' },
             'detector':            { exports: 'Detector' },
@@ -13,6 +14,7 @@ require(
             jquery:    'lib/jquery-2.1.0.min',
             three:     'lib/threeWrapper',
             threeCore: 'lib/three',
+            tween:     'lib/tween.min',
             detector:  'lib/Detector',
             stats:     'lib/stats.min',
             text:      'lib/text',
@@ -32,6 +34,7 @@ require(
             FPSControls:         'controls/fpsControls',
             mousePointerLock:    'controls/mousePointerLock',
             PointerLockControls: 'controls/pointerLockControls',
+            cameraMover:         'controls/cameraMover',
             CityPlanner:         'data/CityPlanner',
             TestCityBlueprint:   'data/TestCityBlueprint',
             LoadedCityBlueprint: 'data/LoadedCityBlueprint',

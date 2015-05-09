@@ -1,5 +1,5 @@
-define(["jquery", "three", "camera", "controls", "light", "renderer", "scene", "sceneObjects", "crossHair", "mousePointerLock", "InformationPanel"],
-    function ($, THREE, camera, controls, light, renderer, scene, SceneObjects, crossHair, mousePointerLock, InformationPanel)
+define(["jquery", "three", "tween", "camera", "controls", "light", "renderer", "scene", "sceneObjects", "crossHair", "mousePointerLock", "InformationPanel"],
+    function ($, THREE, TWEEN, camera, controls, light, renderer, scene, SceneObjects, crossHair, mousePointerLock, InformationPanel)
     {
         return function ()
         {
@@ -25,6 +25,7 @@ define(["jquery", "three", "camera", "controls", "light", "renderer", "scene", "
                 if (this.isAnimating)
                 {
                     this.currentAnimationFrame = window.requestAnimationFrame(this.animate.bind(this));
+                    TWEEN.update();
                     controls.update();
                     crossHair.update(controls, this.cityPlanner.getSceneObjects());
                     renderer.render(scene, camera);
