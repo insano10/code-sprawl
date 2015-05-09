@@ -1,8 +1,10 @@
-define(['jquery', 'LoadedCityBlueprint'], function ($, LoadedCityBlueprint)
+define(['jquery', 'LoadedCityBlueprint', 'controls'], function ($, LoadedCityBlueprint, controls)
 {
 
     return function ()
     {
+        var isSearching = false;
+
         function UiBehaviour(cameraMover)
         {
             this.cameraMover = cameraMover;
@@ -35,7 +37,35 @@ define(['jquery', 'LoadedCityBlueprint'], function ($, LoadedCityBlueprint)
 
                 }
             });
+
+            document.addEventListener('keydown', onKeyDown, false);
         }
+
+        var onKeyDown = function (event)
+        {
+            switch (event.keyCode)
+            {
+                case 17: // Ctrl
+
+                    var searchBar = $("#code-unit-search");
+
+                    if (isSearching)
+                    {
+                        searchBar.blur();
+                        searchBar.val('');
+                        controls.setEnabled(true);
+                    }
+                    else
+                    {
+                        searchBar.focus();
+                        controls.setEnabled(false);
+                    }
+                    isSearching = !isSearching;
+
+                    break;
+
+            }
+        };
 
         UiBehaviour.prototype.setLoadCityCallback = function setLoadCityCallback(loadCityCallback)
         {
