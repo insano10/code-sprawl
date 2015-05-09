@@ -3,11 +3,12 @@ define(["jquery", "three", "tween", "camera", "controls", "light", "renderer", "
     {
         return function ()
         {
-            function Application(cityPlanner)
+            function Application(cityPlanner, cameraMover)
             {
                 this.isAnimating = false;
                 this.currentAnimationFrame = null;
                 this.cityPlanner = cityPlanner;
+                this.cameraMover = cameraMover;
             }
 
             Application.prototype.initialise = function initialise()
@@ -16,6 +17,7 @@ define(["jquery", "three", "tween", "camera", "controls", "light", "renderer", "
 
                 var app = this;
                 this.cityPlanner.loadTestCity();
+                this.cameraMover.onCityLoaded(this.cityPlanner.getCodeUnits());
 
                 this.isAnimating = true;
             };
@@ -27,6 +29,7 @@ define(["jquery", "three", "tween", "camera", "controls", "light", "renderer", "
                     this.currentAnimationFrame = window.requestAnimationFrame(this.animate.bind(this));
                     TWEEN.update();
                     controls.update();
+                    this.cameraMover.update();
                     crossHair.update(controls, this.cityPlanner.getSceneObjects());
                     renderer.render(scene, camera);
                     InformationPanel.draw();

@@ -78,6 +78,11 @@ define( ["three"], function (THREE) {
             return undefined;
         };
 
+        CodeUnit.prototype.getFocusPoint = function getFocusPoint()
+        {
+            return {x: this.mesh.position.x + (this.width/2), y: this.height + 1200, z: this.mesh.position.z + (this.depth/2)};
+        };
+
         return CodeUnit;
     }();
 } );

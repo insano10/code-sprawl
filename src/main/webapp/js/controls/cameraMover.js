@@ -1,22 +1,46 @@
-define(["three", "tween"], function (THREE, TWEEN)
+define(["controls"], function (controls)
 {
+    return function ()
+    {
+        var shouldMove = false;
 
-    return  {
-
-        lookAtFromAbove: function (positionObject, rotationObject, targetPosition, animationDuration)
+        function CameraMover()
         {
-            new TWEEN.Tween(positionObject.position).to({
-                x: targetPosition.x,
-                y: targetPosition.y,
-                z: targetPosition.z }, animationDuration)
-                .easing(TWEEN.Easing.Quadratic.Out).start();
+            this.codeUnits = {};
 
-            new TWEEN.Tween(rotationObject.rotation).to({
-                x: -0.5 * Math.PI,
-                y: 0,
-                z: 0 }, animationDuration)
-                .easing(TWEEN.Easing.Quadratic.Out).start();
+            document.addEventListener('keydown', onKeyDown, false);
         }
 
-    };
+        var onKeyDown = function (event)
+        {
+            switch (event.keyCode)
+            {
+                case 76: // l
+                    shouldMove = true;
+                    break;
+
+            }
+        };
+
+        CameraMover.prototype.update = function update()
+        {
+            if (shouldMove)
+            {
+                var sideOffset = 25;
+                var chosenUnit = this.codeUnits['unit: 10'];
+
+                controls.lookAt(chosenUnit.getFocusPoint());
+                shouldMove = false;
+            }
+        };
+
+
+        CameraMover.prototype.onCityLoaded = function onCityLoaded(codeUnits)
+        {
+            this.codeUnits = codeUnits;
+        };
+
+        return CameraMover;
+    }();
+
 });

@@ -2,12 +2,11 @@
  * @author insano10
  */
 
-THREE.FPSControls = function (camera, initialPosition, initialPitchXRotationRad, initialYawYRotationRad, cameraMover)
+THREE.FPSControls = function (camera, initialPosition, initialPitchXRotationRad, initialYawYRotationRad)
 {
     var pointerLockControls = new THREE.PointerLockControls(camera);
     var clock = new THREE.Clock();
     var velocity = new THREE.Vector3();
-    var lookHeight = 1500;
     var moveForward = false;
     var moveBackward = false;
     var moveLeft = false;
@@ -15,7 +14,6 @@ THREE.FPSControls = function (camera, initialPosition, initialPitchXRotationRad,
     var moveUp = false;
     var moveDown = false;
     var enabled = false;
-    var shouldLook = false;
     var initialPosition = initialPosition;
     var initialPitchXRotationRad = initialPitchXRotationRad;
     var initialYawYRotationRad = initialYawYRotationRad;
@@ -53,11 +51,6 @@ THREE.FPSControls = function (camera, initialPosition, initialPitchXRotationRad,
             case 70: // f
                 moveDown = true;
                 break;
-
-            case 76: //l
-                shouldLook = true;
-                break;
-
         }
     };
 
@@ -93,6 +86,21 @@ THREE.FPSControls = function (camera, initialPosition, initialPitchXRotationRad,
                 moveDown = false;
                 break;
         }
+    };
+
+    var lookAtFromAbove = function lookAtFromAbove(positionObject, rotationObject, targetPosition, animationDuration)
+    {
+        new TWEEN.Tween(positionObject.position).to({
+            x: targetPosition.x,
+            y: targetPosition.y,
+            z: targetPosition.z }, animationDuration)
+            .easing(TWEEN.Easing.Quadratic.Out).start();
+
+        new TWEEN.Tween(rotationObject.rotation).to({
+            x: -0.5 * Math.PI,
+            y: 0,
+            z: 0 }, animationDuration)
+            .easing(TWEEN.Easing.Quadratic.Out).start();
     };
 
     this.reset = function ()
@@ -152,19 +160,12 @@ THREE.FPSControls = function (camera, initialPosition, initialPitchXRotationRad,
         pointerLockControls.getObject().translateX(velocity.x * delta);
         pointerLockControls.getObject().translateY(velocity.y * delta);
         pointerLockControls.getObject().translateZ(velocity.z * delta);
-
-        if(shouldLook)
-        {
-            this.lookAt(500, 0);
-            shouldLook = false;
-        }
-
     };
 
-    this.lookAt = function (x,z)
+    this.lookAt = function (focusPoint)
     {
-        var targetPosition = new THREE.Vector3(x, lookHeight, z);
-        cameraMover.lookAtFromAbove(pointerLockControls.getObject(), pointerLockControls.getPitchObject(), targetPosition, 3000);
+        var targetPosition = new THREE.Vector3(focusPoint.x, focusPoint.y, focusPoint.z);
+        lookAtFromAbove(pointerLockControls.getObject(), pointerLockControls.getPitchObject(), targetPosition, 2000);
     };
 
 };
