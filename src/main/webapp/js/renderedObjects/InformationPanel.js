@@ -43,8 +43,6 @@ define(["three", "container"], function (THREE, container)
             context.fillText("Neighbourhood: " + this.target.getGroupName(), x, y + 30);
             context.fillText("Unit Name: " + this.target.getName(), x, y + 60);
             context.fillText("Line count: " + this.target.getLineCount(), x, y + 90);
-            context.fillText("Public Method count: " + this.target.getPublicMethodCount(), x, y + 120);
-            context.fillText("Total Method count: " + this.target.getTotalMethodCount(), x, y + 150);
         }
     };
 

@@ -31,9 +31,7 @@ define(["jquery"], function ($)
             return {
                 groupName: "group: " + groupId,
                 name:      "unit: " + unitId,
-                lineCount: Math.floor(Math.random() * 150) + 1,
-                publicMethodCount: 0,
-                totalMethodCount: 0
+                lineCount: Math.floor(Math.random() * 150) + 1
             };
         };
 

@@ -7,10 +7,11 @@ import com.insano10.codesprawl.source.Language;
 import org.apache.log4j.Logger;
 
 import java.io.IOException;
-import java.lang.reflect.Modifier;
 import java.nio.charset.Charset;
 import java.nio.file.*;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 
 import static java.util.stream.Collectors.toList;
 
@@ -18,12 +19,10 @@ public class JavaFileInspector implements FileInspector
 {
     private static final Logger LOGGER = Logger.getLogger(JavaFileInspector.class);
     private final Path sourcePath;
-    private final ClassLoader classLoader;
 
-    public JavaFileInspector(Path sourcePath, ClassLoader classLoader)
+    public JavaFileInspector(Path sourcePath)
     {
         this.sourcePath = sourcePath;
-        this.classLoader = classLoader;
     }
 
     @Override
@@ -47,7 +46,7 @@ public class JavaFileInspector implements FileInspector
 
         return matchingJavaPaths.
                 stream().
-                map(p -> convert(p, sourceRoot, classLoader)).
+                map(p -> convert(p, sourceRoot)).
                 collect(toList());
     }
 
@@ -88,14 +87,13 @@ public class JavaFileInspector implements FileInspector
         return matchingPaths;
     }
 
-    private CodeUnit convert(final Path codeUnitPath, Path languageRoot, ClassLoader classLoader)
+    private CodeUnit convert(final Path codeUnitPath, Path languageRoot)
     {
         final CodeUnitBuilder codeUnitBuilder = new CodeUnitBuilder().language(Language.JAVA);
 
         codeUnitBuilder.groupName(languageRoot.relativize(codeUnitPath.getParent()).toString());
         codeUnitBuilder.name(getCodeUnitName(codeUnitPath));
         codeUnitBuilder.lineCount(getLineCount(codeUnitPath));
-        populateMethodCounts(codeUnitPath, classLoader, codeUnitBuilder);
 
         return codeUnitBuilder.createCodeUnit();
     }
@@ -113,34 +111,9 @@ public class JavaFileInspector implements FileInspector
         return 0;
     }
 
-    private void populateMethodCounts(final Path codeUnitPath, final ClassLoader classLoader, CodeUnitBuilder codeUnitBuilder)
-    {
-        final String className = getCodeUnitFullyQualifiedClassName(codeUnitPath);
-        try
-        {
-            Class<?> codeUnitClass = classLoader.loadClass(className);
-
-            long publicMethodCount = Arrays.asList(codeUnitClass.getDeclaredMethods()).stream().filter(m -> Modifier.isPublic(m.getModifiers())).count();
-            long totalMethodCount = codeUnitClass.getDeclaredMethods().length;
-
-            codeUnitBuilder.publicMethodCount(publicMethodCount);
-            codeUnitBuilder.totalMethodCount(totalMethodCount);
-        }
-        catch (ClassNotFoundException e)
-        {
-            LOGGER.error("Cannot find class: " + className);
-        }
-    }
-
     private String getCodeUnitName(Path codeUnitPath)
     {
         return codeUnitPath.getFileName().toString().split(".java")[0];
     }
 
-    private String getCodeUnitFullyQualifiedClassName(Path codeUnitPath)
-    {
-        final String classWithSlashesAndFileExtension = codeUnitPath.toAbsolutePath().toString().split("/src/main/java/")[1];
-        String classWithFileExtension = classWithSlashesAndFileExtension.replace("/", ".");
-        return classWithFileExtension.replace(".java", "");
-    }
 }

@@ -29,7 +29,7 @@ public class JavaFileInspectorTest
     public void setUp() throws Exception
     {
         final ClassLoader classLoader = new URLClassLoader(new URL[]{PROJECT_CLASS_ROOT.toUri().toURL()});
-        inspector = new JavaFileInspector(PROJECT_SOURCE_ROOT, classLoader);
+        inspector = new JavaFileInspector(PROJECT_SOURCE_ROOT);
     }
 
     @Ignore("Used to regenerate the class directory")
@@ -60,8 +60,6 @@ public class JavaFileInspectorTest
                 groupName("com/insano10/codesprawl/shoppingApp/service/shopping/domain").
                 name("Item").
                 lineCount(19).
-                totalMethodCount(3).
-                publicMethodCount(1).
                 language(Language.JAVA).
                 createCodeUnit();
 
@@ -69,8 +67,6 @@ public class JavaFileInspectorTest
                 groupName("com/insano10/codesprawl/discoveryApp/objects").
                 name("Discoverer").
                 lineCount(21).
-                totalMethodCount(2).
-                publicMethodCount(1).
                 language(Language.JAVA).
                 createCodeUnit();
 

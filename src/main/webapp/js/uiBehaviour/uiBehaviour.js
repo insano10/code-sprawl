@@ -9,29 +9,26 @@ define(['jquery', 'LoadedCityBlueprint', 'controls', 'jqueryui'], function ($, L
         {
             this.cameraMover = cameraMover;
 
-            var setDirectoriesBtn = $('#set-directories-btn');
-            setDirectoriesBtn.bind({
+            var setDirectoryBtn = $('#set-directory-btn');
+            setDirectoryBtn.bind({
                 click: function (event)
                 {
                     var sourceDirectory = $('#source-directory-input').val();
-                    var classDirectory = $('#class-directory-input').val();
 
                     $.ajax({
                         type:     'POST',
                         url:      window.location.href.split("#")[0] + "definition/location",
                         dataType: "json",
                         data:     {
-                            sourceLocation: sourceDirectory,
-                            classLocation:  classDirectory
+                            sourceLocation: sourceDirectory
                         },
                         success:  function (response)
                         {
-                            console.log('set source directory to ' + sourceDirectory);
-                            console.log('set class directory to ' + classDirectory);
+                            console.log('set directory to ' + sourceDirectory);
                         },
                         error:    function (e)
                         {
-                            console.log("failed to set source directory to " + sourceDirectory + " and class directory to " + classDirectory + ". " + JSON.stringify(e));
+                            console.log("failed to set source directory to " + sourceDirectory + ". " + JSON.stringify(e));
                         }
                     });
 
