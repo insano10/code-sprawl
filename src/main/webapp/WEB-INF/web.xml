@@ -6,12 +6,12 @@
         version="2.5">
 
     <servlet>
-        <servlet-name>SourceServlet</servlet-name>
-        <servlet-class>com.insano10.codesprawl.servlets.SourceServlet</servlet-class>
+        <servlet-name>ProjectServlet</servlet-name>
+        <servlet-class>com.insano10.codesprawl.servlets.ProjectServlet</servlet-class>
     </servlet>
 
     <servlet-mapping>
-        <servlet-name>SourceServlet</servlet-name>
+        <servlet-name>ProjectServlet</servlet-name>
         <url-pattern>/codesprawl/project/definition/*</url-pattern>
     </servlet-mapping>
 

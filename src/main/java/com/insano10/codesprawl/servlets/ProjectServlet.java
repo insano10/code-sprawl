@@ -1,9 +1,8 @@
 package com.insano10.codesprawl.servlets;
 
 import com.google.gson.Gson;
-import com.insano10.codesprawl.source.CodeUnit;
-import com.insano10.codesprawl.source.SourceInspector;
-import com.insano10.codesprawl.source.language.JavaFileInspector;
+import com.insano10.codesprawl.source.ProjectFile;
+import com.insano10.codesprawl.source.FileInspector;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -14,18 +13,18 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Collection;
 
-public class SourceServlet extends HttpServlet
+public class ProjectServlet extends HttpServlet
 {
     private static final Gson GSON = new Gson();
-    private static final SourceInspector SOURCE_INSPECTOR = new SourceInspector();
+    private static final FileInspector FILE_INSPECTOR = new FileInspector();
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
     {
         if(request.getRequestURI().endsWith("/definition"))
         {
-            Collection<CodeUnit> inspectionResponse = SOURCE_INSPECTOR.inspect();
-            response.getWriter().print(GSON.toJson(inspectionResponse));
+            Collection<ProjectFile> files = FILE_INSPECTOR.getFiles();
+            response.getWriter().print(GSON.toJson(files));
             response.setStatus(HttpServletResponse.SC_OK);
         }
         else
@@ -42,8 +41,7 @@ public class SourceServlet extends HttpServlet
             final String sourceLocation = request.getParameter("sourceLocation");
             final Path sourcePath = Paths.get(sourceLocation);
 
-            SOURCE_INSPECTOR.reset();
-            SOURCE_INSPECTOR.addFileInspector(new JavaFileInspector(sourcePath));
+            FILE_INSPECTOR.setSourcePath(sourcePath);
 
             response.getWriter().print(GSON.toJson(""));
             response.setStatus(HttpServletResponse.SC_OK);
