@@ -6,6 +6,7 @@ define( ["jquery"], function ($) {
         {
             this.objectArray = [];
             this.objectMap = {};
+            this.mergedSceneObjects = null;
         }
 
         SceneObjects.prototype.add = function add(object)
@@ -52,6 +53,8 @@ define( ["jquery"], function ($) {
 
                 var total = new THREE.Mesh(totalGeometry, new THREE.MeshLambertMaterial({ color: 0x0aeedf, wrapAround: true }));
                 scene.add(total);
+
+                this.mergedSceneObjects = total;
             }
             else
             {
@@ -67,6 +70,11 @@ define( ["jquery"], function ($) {
             $.each(this.getObjectArray(), function(idx, object) {
                 object.removeFromScene(scene);
             });
+
+            if(this.mergedSceneObjects)
+            {
+                scene.remove(this.mergedSceneObjects);
+            }
 
             this.objectArray = [];
             this.objectMap = {};
