@@ -28,6 +28,32 @@ define(["three", "camera", "scene", "InformationPanel"], function (THREE, camera
         return (intersections.length > 0) ? intersections[0] : null;
     };
 
+    var restoreSelectedObject = function (object)
+    {
+        if (object)
+        {
+            scene.remove(object);
+        }
+    };
+
+    var createSelectedObject = function (object)
+    {
+        var parameters = object.geometry.parameters;
+        var newWidth = parameters.width + 10;
+        var newHeight = parameters.height + 2;
+        var newDepth = parameters.depth + 10;
+
+        var selectedMesh = new THREE.Mesh(
+            new THREE.BoxGeometry(newWidth, newHeight, newDepth),
+            new THREE.MeshLambertMaterial({ color: 0x0aeedf, emissive: 0xff0000, wrapAround: true }));
+
+        selectedMesh.position.x = object.position.x;
+        selectedMesh.position.y = object.position.y;
+        selectedMesh.position.z = object.position.z;
+
+        return selectedMesh;
+    };
+
     return {
 
         update: function (controls, sceneObjects)
@@ -38,17 +64,13 @@ define(["three", "camera", "scene", "InformationPanel"], function (THREE, camera
             {
                 if (currentIntersectedObject != target.object)
                 {
+                    restoreSelectedObject(currentIntersectedObject);
 
-                    if (currentIntersectedObject)
-                    {
-                        currentIntersectedObject.material.emissive.setHex(currentIntersectedObject.currentHex);
-                    }
+                    //select new object
+                    currentIntersectedObject = createSelectedObject(target.object);
+                    scene.add(currentIntersectedObject);
 
-                    currentIntersectedObject = target.object;
-                    currentIntersectedObject.currentHex = currentIntersectedObject.material.emissive.getHex();
-                    currentIntersectedObject.material.emissive.setHex(0xff0000);
-
-                    var codeBarUnit = sceneObjects.getObjectById(currentIntersectedObject.id);
+                    var codeBarUnit = sceneObjects.getObjectById(target.object.id);
                     InformationPanel.updateTarget(codeBarUnit);
                 }
 
@@ -59,7 +81,7 @@ define(["three", "camera", "scene", "InformationPanel"], function (THREE, camera
             }
             else
             {
-                if (currentIntersectedObject) currentIntersectedObject.material.emissive.setHex(currentIntersectedObject.currentHex);
+                restoreSelectedObject(currentIntersectedObject);
 
                 currentIntersectedObject = null;
                 InformationPanel.clearTarget();

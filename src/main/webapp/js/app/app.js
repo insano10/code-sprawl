@@ -29,6 +29,7 @@ define(["jquery", "three", "tween", "camera", "controls", "light", "renderer", "
                     crossHair.update(controls, this.cityPlanner.getSceneObjects());
                     renderer.render(scene, camera);
                     InformationPanel.draw();
+                    this.cityPlanner.update();
                 }
             };
 

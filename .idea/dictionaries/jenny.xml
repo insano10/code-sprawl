@@ -2,6 +2,7 @@
   <dictionary name="jenny">
     <words>
       <w>deps</w>
+      <w>emissive</w>
       <w>shaders</w>
     </words>
   </dictionary>

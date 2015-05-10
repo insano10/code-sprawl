@@ -19,7 +19,7 @@ define( ["jquery", "three", "scene", "sceneObjects"], function ($, THREE, scene,
 
         CodeNeighbourhood.prototype.addToScene = function addToScene(scene)
         {
-            this.sceneObjects.addToScene(scene);
+            this.sceneObjects.addToScene(scene, true);
             scene.add(this.ground);
         };
 

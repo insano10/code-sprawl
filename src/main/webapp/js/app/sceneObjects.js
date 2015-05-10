@@ -38,11 +38,28 @@ define( ["jquery"], function ($) {
             return objectToReturn;
         };
 
-        SceneObjects.prototype.addToScene = function addToScene(scene)
+        SceneObjects.prototype.addToScene = function addToScene(scene, merge)
         {
-            $.each(this.getObjectArray(), function(idx, object) {
-               object.addToScene(scene);
-            });
+            if(merge)
+            {
+                //merge all the units into a single geometry to help performance
+                var totalGeometry = new THREE.Geometry();
+
+                $.each(this.getObjectArray(), function(idx, object) {
+
+                    object.mergeIntoGeometry(totalGeometry);
+                });
+
+                var total = new THREE.Mesh(totalGeometry, new THREE.MeshLambertMaterial({ color: 0x0aeedf, wrapAround: true }));
+                scene.add(total);
+            }
+            else
+            {
+                $.each(this.getObjectArray(), function (idx, object)
+                {
+                    object.addToScene(scene);
+                });
+            }
         };
 
         SceneObjects.prototype.clear = function clear(scene)

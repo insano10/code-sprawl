@@ -41,6 +41,13 @@ define(["jquery", "TestCityBlueprint", "CodeNeighbourhood", "CodeUnit", "sceneOb
                 return this.codeUnits;
             };
 
+            CityPlanner.prototype.update = function update()
+            {
+                $.each(this.codeUnits, function(key, unit) {
+                    unit.update();
+                });
+            };
+
             var loadInhabitants = function loadInhabitants(cityPlanner, bluePrint)
             {
                 var data = bluePrint.getInhabitants();

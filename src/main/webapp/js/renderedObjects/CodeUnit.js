@@ -18,6 +18,7 @@ define( ["three"], function (THREE) {
             this.mesh = new THREE.Mesh(
                 new THREE.BoxGeometry(this.width, this.height, this.depth),
                 new THREE.MeshLambertMaterial({ color: DEFAULT_COLOUR, wrapAround: true }));
+            this.mesh.name = this.getFullyQualifiedName();
             this.mesh.castShadow = true;
         }
 
@@ -26,6 +27,17 @@ define( ["three"], function (THREE) {
             this.mesh.position.x = position3D.x;
             this.mesh.position.y = position3D.y;
             this.mesh.position.z = position3D.z;
+        };
+
+        CodeUnit.prototype.update = function update()
+        {
+            this.mesh.updateMatrixWorld(true);
+        };
+
+        CodeUnit.prototype.mergeIntoGeometry = function mergeIntoGeometry(geometry)
+        {
+            this.mesh.updateMatrix();
+            geometry.merge( this.mesh.geometry, this.mesh.matrix );
         };
 
         CodeUnit.prototype.addToScene = function addToScene(scene)
