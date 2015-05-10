@@ -28,7 +28,7 @@ define(["three", "camera", "scene", "InformationPanel"], function (THREE, camera
         return (intersections.length > 0) ? intersections[0] : null;
     };
 
-    var restoreSelectedObject = function (object)
+    var deselectObject = function (object)
     {
         if (object)
         {
@@ -64,7 +64,7 @@ define(["three", "camera", "scene", "InformationPanel"], function (THREE, camera
             {
                 if (currentIntersectedObject != target.object)
                 {
-                    restoreSelectedObject(currentIntersectedObject);
+                    deselectObject(currentIntersectedObject);
 
                     //select new object
                     currentIntersectedObject = createSelectedObject(target.object);
@@ -81,12 +81,16 @@ define(["three", "camera", "scene", "InformationPanel"], function (THREE, camera
             }
             else
             {
-                restoreSelectedObject(currentIntersectedObject);
+                deselectObject(currentIntersectedObject);
 
                 currentIntersectedObject = null;
                 InformationPanel.clearTarget();
             }
 
+        },
+        clear: function() {
+
+            deselectObject(currentIntersectedObject);
         }
     };
 });

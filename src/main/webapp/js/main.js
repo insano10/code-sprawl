@@ -1,5 +1,5 @@
-define(['detector', 'app', 'container', 'uiBehaviour', 'CityPlanner', 'controls', 'renderer', 'scene', 'camera', 'cameraMover'],
-    function (Detector, Application, container, UiBehaviour, CityPlanner, controls, renderer, scene, camera, CameraMover)
+define(['detector', 'app', 'container', 'uiBehaviour', 'CityPlanner', 'controls', 'renderer', 'scene', 'camera', 'cameraMover', 'crossHair'],
+    function (Detector, Application, container, UiBehaviour, CityPlanner, controls, renderer, scene, camera, CameraMover, crossHair)
     {
         var start = function ()
         {
@@ -11,6 +11,7 @@ define(['detector', 'app', 'container', 'uiBehaviour', 'CityPlanner', 'controls'
 
                 var loadCityCallback = function (bluePrint)
                 {
+                    crossHair.clear();
                     cityPlanner.loadCity(bluePrint);
                     cameraMover.onCityLoaded(cityPlanner.getCodeUnits());
                     uiBehaviour.onCityLoaded(cityPlanner.getCodeUnits());
