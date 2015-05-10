@@ -1,4 +1,4 @@
-define(['jquery', 'LoadedCityBlueprint', 'controls'], function ($, LoadedCityBlueprint, controls)
+define(['jquery', 'LoadedCityBlueprint', 'controls', 'jqueryui'], function ($, LoadedCityBlueprint, controls)
 {
 
     return function ()
@@ -108,6 +108,19 @@ define(['jquery', 'LoadedCityBlueprint', 'controls'], function ($, LoadedCityBlu
                     });
 
                 }
+            });
+        };
+
+        UiBehaviour.prototype.onCityLoaded = function onCityLoaded(codeUnits)
+        {
+            var fullyQualifiedCodeUnitNames = [];
+
+            $.each(codeUnits, function(idx, codeUnit) {
+               fullyQualifiedCodeUnitNames.push(codeUnit.getFullyQualifiedName());
+            });
+
+            $('#code-unit-search').autocomplete({
+                source: fullyQualifiedCodeUnitNames
             });
         };
 

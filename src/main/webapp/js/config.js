@@ -12,6 +12,7 @@ require(
         paths: {
             bootstrap: "lib/bootstrap-3.3.0/js/bootstrap.min",
             jquery:    'lib/jquery-2.1.0.min',
+            jqueryui:  'lib/jquery-ui-1.11.4.custom/jquery-ui.min',
             three:     'lib/threeWrapper',
             threeCore: 'lib/three',
             tween:     'lib/tween.min',

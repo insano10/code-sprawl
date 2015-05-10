@@ -3,12 +3,11 @@ define(["jquery", "three", "tween", "camera", "controls", "light", "renderer", "
     {
         return function ()
         {
-            function Application(cityPlanner, cameraMover)
+            function Application(cityPlanner)
             {
                 this.isAnimating = false;
                 this.currentAnimationFrame = null;
                 this.cityPlanner = cityPlanner;
-                this.cameraMover = cameraMover;
             }
 
             Application.prototype.initialise = function initialise()
@@ -16,8 +15,6 @@ define(["jquery", "three", "tween", "camera", "controls", "light", "renderer", "
                 grabPointer(this);
 
                 var app = this;
-                this.cityPlanner.loadTestCity();
-                this.cameraMover.onCityLoaded(this.cityPlanner.getCodeUnits());
 
                 this.isAnimating = true;
             };

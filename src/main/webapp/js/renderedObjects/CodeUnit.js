@@ -58,6 +58,11 @@ define( ["three"], function (THREE) {
             return this.groupName;
         };
 
+        CodeUnit.prototype.getFullyQualifiedName = function getFullyQualifiedName()
+        {
+            return this.groupName + "/" + this.name;
+        };
+
         CodeUnit.prototype.getLineCount = function getLineCount()
         {
             return this.lineCount;

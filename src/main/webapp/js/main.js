@@ -13,6 +13,7 @@ define(['detector', 'app', 'container', 'uiBehaviour', 'CityPlanner', 'controls'
                 {
                     cityPlanner.loadCity(bluePrint);
                     cameraMover.onCityLoaded(cityPlanner.getCodeUnits());
+                    uiBehaviour.onCityLoaded(cityPlanner.getCodeUnits());
                     controls.reset();
                     renderer.render(scene, camera);
                 };
@@ -29,6 +30,11 @@ define(['detector', 'app', 'container', 'uiBehaviour', 'CityPlanner', 'controls'
 
                 var app = new Application(cityPlanner, cameraMover);
                 app.initialise();
+
+                //load test data
+                cityPlanner.loadTestCity();
+                cameraMover.onCityLoaded(cityPlanner.getCodeUnits());
+                uiBehaviour.onCityLoaded(cityPlanner.getCodeUnits());
             })
         };
 

@@ -115,7 +115,7 @@ define(["jquery", "TestCityBlueprint", "CodeNeighbourhood", "CodeUnit", "sceneOb
                         unit.publicMethodCount, unit.totalMethodCount);
                     codeUnit.setPosition(position);
                     neighbourhoodUnits.push(codeUnit);
-                    cityPlanner.codeUnits[codeUnit.name] = codeUnit
+                    cityPlanner.codeUnits[codeUnit.getFullyQualifiedName()] = codeUnit
                     ;
                     column++;
 
