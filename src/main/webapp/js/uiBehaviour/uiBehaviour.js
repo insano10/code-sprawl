@@ -78,8 +78,8 @@ define(['jquery', 'LoadedCityBlueprint', 'controls', 'jqueryui'], function ($, L
 
         UiBehaviour.prototype.setLoadCityCallback = function setLoadCityCallback(loadCityCallback)
         {
-            var sourceInspectBtn = $('#source-inspect-btn');
-            sourceInspectBtn.bind({
+            var visualiseBtn = $('#visualise-btn');
+            visualiseBtn.bind({
                 click: function (event)
                 {
 
@@ -90,7 +90,7 @@ define(['jquery', 'LoadedCityBlueprint', 'controls', 'jqueryui'], function ($, L
                         url:     window.location.href.split("#")[0] + 'definition',
                         success: function (response)
                         {
-                            console.log('finished inspecting. Response is ' + response);
+                            console.log('finished visualising. Response is ' + response);
 
                             var codeUnits = JSON.parse(response);
                             loadCityCallback(new LoadedCityBlueprint(codeUnits));
@@ -99,7 +99,7 @@ define(['jquery', 'LoadedCityBlueprint', 'controls', 'jqueryui'], function ($, L
                         },
                         error:   function (e)
                         {
-                            console.log("failed to inspect. " + JSON.stringify(e));
+                            console.log("failed to visualise. " + JSON.stringify(e));
                             loadingIcon.hide();
                         }
                     });
