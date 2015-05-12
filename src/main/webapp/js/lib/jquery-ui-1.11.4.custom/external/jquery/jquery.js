@@ -4118,7 +4118,6 @@ jQuery.fn.extend({
 		return this;
 	},
 
-	removeClass: function( value ) {
 		var classes, elem, cur, clazz, j,
 			i = 0,
 			len = this.length,

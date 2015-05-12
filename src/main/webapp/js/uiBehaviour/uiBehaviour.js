@@ -9,31 +9,52 @@ define(['jquery', 'LoadedCityBlueprint', 'controls', 'jqueryui'], function ($, L
         {
             this.cameraMover = cameraMover;
 
-            var setDirectoryBtn = $('#set-directory-btn');
-            setDirectoryBtn.bind({
-                click: function (event)
-                {
-                    var sourceDirectory = $('#source-directory-input').val();
+            //construct configuration dialog
+            var dialog;
 
-                    $.ajax({
-                        type:     'POST',
-                        url:      window.location.href.split("#")[0] + "definition/location",
-                        dataType: "json",
-                        data:     {
-                            sourceLocation: sourceDirectory
-                        },
-                        success:  function (response)
-                        {
-                            console.log('set directory to ' + sourceDirectory);
-                        },
-                        error:    function (e)
-                        {
-                            console.log("failed to set source directory to " + sourceDirectory + ". " + JSON.stringify(e));
-                        }
-                    });
+            function configureProject()
+            {
+                var sourceDirectory = $('#source-directory-input').val();
 
+                $.ajax({
+                    type:     'POST',
+                    url:      window.location.href.split("#")[0] + "definition/location",
+                    dataType: "json",
+                    data:     {
+                        sourceLocation: sourceDirectory
+                    },
+                    success:  function (response)
+                    {
+                        console.log('set directory to ' + sourceDirectory);
+                        dialog.dialog("close");
+
+                    },
+                    error:    function (e)
+                    {
+                        console.log("failed to set source directory to " + sourceDirectory + ". " + JSON.stringify(e));
+                    }
+                });
+            }
+
+            dialog = $("#configure-dialog-form").dialog({
+                autoOpen: false,
+                height:   300,
+                width:    700,
+                modal:    true,
+                buttons:  {
+                    "Save": configureProject,
+                    Cancel: function ()
+                    {
+                        dialog.dialog("close");
+                    }
                 }
             });
+
+            $("#configure-btn").button().on("click", function ()
+            {
+                dialog.dialog("open");
+            });
+
 
             var onKeyDownWrapper = function (event)
             {
@@ -112,8 +133,9 @@ define(['jquery', 'LoadedCityBlueprint', 'controls', 'jqueryui'], function ($, L
         {
             var fullyQualifiedCodeUnitNames = [];
 
-            $.each(codeUnits, function(idx, codeUnit) {
-               fullyQualifiedCodeUnitNames.push(codeUnit.getFullyQualifiedName());
+            $.each(codeUnits, function (idx, codeUnit)
+            {
+                fullyQualifiedCodeUnitNames.push(codeUnit.getFullyQualifiedName());
             });
 
             $('#code-unit-search').autocomplete({

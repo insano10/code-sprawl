@@ -15,19 +15,15 @@
 <body class="body">
 
 <div class="menu-bar">
-    <div id="blocker" class="col-lg-5 menu-buttons-container">
+    <div id="blocker" class="col-lg-10 menu-buttons-container">
         <div id="instructions" class="col-md-12">
             <button class="btn btn-default start-button">Start</button>
             (W, A, S, D = Move, R, F = Up/Down, MOUSE = Look around)
         </div>
         <input id="code-unit-search" type="text" size="50"/>
     </div>
-    <div class="col-lg-6 directory-container">
-        <label class="directory-label" for="source-directory-input">Choose source root:</label>
-        <input id="source-directory-input" type="text" size="100" value="/home/jenny/IdeaProjects/code-sprawl/src/testProject"/>
-    </div>
-    <div class="col-lg-1 menu-buttons-container">
-        <button id="set-directory-btn" class="btn btn-default">Ok</button>
+    <div class="col-lg-2 menu-buttons-container">
+        <button id="configure-btn" class="btn btn-default"><span class="glyphicon glyphicon-wrench"></span></button>
         <button id="visualise-btn" class="btn btn-default">Visualise</button>
     </div>
 </div>
@@ -37,6 +33,11 @@
 
 <div class="loading">
     <img src="../../images/loading.gif" width="100px">
+</div>
+
+<div id="configure-dialog-form" title="Configure Project Parameters">
+    <label class="directory-label" for="source-directory-input">Choose source root:</label>
+    <input id="source-directory-input" type="text" size="80" value="/home/jenny/IdeaProjects/code-sprawl/src/testProject"/>
 </div>
 
 </body>
