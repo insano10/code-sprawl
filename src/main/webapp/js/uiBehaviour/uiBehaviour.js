@@ -70,7 +70,7 @@ define(['jquery', 'LoadedCityBlueprint', 'controls', 'jqueryui'], function ($, L
 
             switch (event.keyCode)
             {
-                case 17: // Ctrl
+                case 32: // space
 
                     if (isSearching)
                     {
@@ -84,6 +84,7 @@ define(['jquery', 'LoadedCityBlueprint', 'controls', 'jqueryui'], function ($, L
                         controls.setEnabled(false);
                     }
                     isSearching = !isSearching;
+                    event.preventDefault();
 
                     break;
 
