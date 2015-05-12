@@ -38,7 +38,7 @@ body {
     text-align: right;
 }
 
-.menu-buttons-container {
+.menu-container {
     padding-top: 10px;
 }
 
@@ -49,6 +49,10 @@ body {
     -moz-border-radius: 5px;
     border-radius: 5px;
     outline: none;
+}
+
+.search-container {
+    text-align: left;
 }
 
 .ui-autocomplete {

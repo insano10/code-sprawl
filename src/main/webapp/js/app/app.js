@@ -14,8 +14,6 @@ define(["jquery", "three", "tween", "camera", "controls", "light", "renderer", "
             {
                 grabPointer(this);
 
-                var app = this;
-
                 this.isAnimating = true;
             };
 

@@ -6,8 +6,9 @@ define(['detector', 'app', 'container', 'uiBehaviour', 'CityPlanner', 'controls'
             $(document).ready(function ()
             {
                 var cameraMover = new CameraMover();
-                var uiBehaviour = new UiBehaviour(cameraMover);
                 var cityPlanner = new CityPlanner();
+                var app = new Application(cityPlanner, cameraMover);
+                var uiBehaviour = new UiBehaviour(cameraMover, app);
 
                 var loadCityCallback = function (bluePrint)
                 {
@@ -29,7 +30,6 @@ define(['detector', 'app', 'container', 'uiBehaviour', 'CityPlanner', 'controls'
                     container.innerHTML = "";
                 }
 
-                var app = new Application(cityPlanner, cameraMover);
                 app.initialise();
 
                 //load test data
