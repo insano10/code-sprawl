@@ -1,5 +1,5 @@
-define(["jquery", "TestCityBlueprint", "CodeNeighbourhood", "CodeUnit", "sceneObjects", "scene"],
-    function ($, TestCityBlueprint, CodeNeighbourhood, CodeUnit, SceneObjects, scene)
+define(["jquery", "TestCityBlueprint", "FileNeighbourhood", "FileUnit", "sceneObjects", "scene"],
+    function ($, TestCityBlueprint, FileNeighbourhood, FileUnit, SceneObjects, scene)
     {
         return function ()
         {
@@ -12,7 +12,7 @@ define(["jquery", "TestCityBlueprint", "CodeNeighbourhood", "CodeUnit", "sceneOb
             {
                 this.neighbourhoodToUnitArrayMap = {};
                 this.sceneObjects = new SceneObjects();
-                this.codeUnits = {};
+                this.fileUnits = {};
             }
 
             CityPlanner.prototype.loadTestCity = function loadTestCity()
@@ -36,14 +36,14 @@ define(["jquery", "TestCityBlueprint", "CodeNeighbourhood", "CodeUnit", "sceneOb
                 return this.sceneObjects;
             };
 
-            CityPlanner.prototype.getCodeUnits = function getCodeUnits()
+            CityPlanner.prototype.getFileUnits = function getFileUnits()
             {
-                return this.codeUnits;
+                return this.fileUnits;
             };
 
             CityPlanner.prototype.update = function update()
             {
-                $.each(this.codeUnits, function(key, unit) {
+                $.each(this.fileUnits, function(key, unit) {
                     unit.update();
                 });
             };
@@ -110,7 +110,7 @@ define(["jquery", "TestCityBlueprint", "CodeNeighbourhood", "CodeUnit", "sceneOb
                 var cubeOffset = GAP_BETWEEN_UNITS + UNIT_SIDE_LENGTH;
                 var neighbourhoodUnits = [];
 
-                // Arrange the code units as close to a square as possible
+                // Arrange the file units as close to a square as possible
                 $.each(unitArray, function (idx, unit)
                 {
                     var position = new THREE.Vector3();
@@ -118,10 +118,10 @@ define(["jquery", "TestCityBlueprint", "CodeNeighbourhood", "CodeUnit", "sceneOb
                     position.y = DISTANCE_FROM_GROUND + (unit.lineCount / 2);
                     position.z = zBoundary + cubeOffset * row;
 
-                    var codeUnit = new CodeUnit(UNIT_SIDE_LENGTH, unit.lineCount, UNIT_SIDE_LENGTH, unit.name, unit.groupName, unit.lineCount, unit.fileExtension);
-                    codeUnit.setPosition(position);
-                    neighbourhoodUnits.push(codeUnit);
-                    cityPlanner.codeUnits[codeUnit.getFullyQualifiedName()] = codeUnit
+                    var fileUnit = new FileUnit(UNIT_SIDE_LENGTH, unit.lineCount, UNIT_SIDE_LENGTH, unit.name, unit.groupName, unit.lineCount, unit.fileExtension);
+                    fileUnit.setPosition(position);
+                    neighbourhoodUnits.push(fileUnit);
+                    cityPlanner.fileUnits[fileUnit.getFullyQualifiedName()] = fileUnit
                     ;
                     column++;
 
@@ -144,14 +144,14 @@ define(["jquery", "TestCityBlueprint", "CodeNeighbourhood", "CodeUnit", "sceneOb
                 ground.rotation.x = -Math.PI / 2;
                 ground.receiveShadow = true;
 
-                return new CodeNeighbourhood(id, name, neighbourhoodUnits, ground, groundSideXLength, groundSideZLength);
+                return new FileNeighbourhood(id, name, neighbourhoodUnits, ground, groundSideXLength, groundSideZLength);
             };
 
             var clearCity = function clearCity(cityPlanner)
             {
                 cityPlanner.sceneObjects.clear(scene);
                 cityPlanner.neighbourhoodToUnitArrayMap = {};
-                cityPlanner.codeUnits = {};
+                cityPlanner.fileUnits = {};
             };
 
             return CityPlanner;

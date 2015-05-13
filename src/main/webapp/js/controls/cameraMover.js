@@ -4,18 +4,18 @@ define(["controls"], function (controls)
     {
         function CameraMover()
         {
-            this.codeUnits = {};
+            this.fileUnits = {};
         }
 
-        CameraMover.prototype.lookAt = function lookAt(codeUnitName)
+        CameraMover.prototype.lookAt = function lookAt(fileUnitName)
         {
-            var chosenUnit = this.codeUnits[codeUnitName];
+            var chosenUnit = this.fileUnits[fileUnitName];
             controls.lookAt(chosenUnit.getFocusPoint());
         };
 
-        CameraMover.prototype.onCityLoaded = function onCityLoaded(codeUnits)
+        CameraMover.prototype.onCityLoaded = function onCityLoaded(fileUnits)
         {
-            this.codeUnits = codeUnits;
+            this.fileUnits = fileUnits;
         };
 
         return CameraMover;

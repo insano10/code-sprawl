@@ -39,8 +39,8 @@ require(
             CityPlanner:         'data/CityPlanner',
             TestCityBlueprint:   'data/TestCityBlueprint',
             LoadedCityBlueprint: 'data/LoadedCityBlueprint',
-            CodeUnit:            'renderedObjects/CodeUnit',
-            CodeNeighbourhood:   'renderedObjects/CodeNeighbourhood',
+            FileUnit:            'renderedObjects/FileUnit',
+            FileNeighbourhood:   'renderedObjects/FileNeighbourhood',
             InformationPanel:    'renderedObjects/InformationPanel',
             uiBehaviour:         'uiBehaviour/uiBehaviour'
         }

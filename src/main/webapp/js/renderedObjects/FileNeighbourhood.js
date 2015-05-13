@@ -2,7 +2,7 @@ define( ["jquery", "three", "scene", "sceneObjects"], function ($, THREE, scene,
 
     return function()
     {
-        function CodeNeighbourhood(id, name, codeUnitArray, ground, xLength, zLength)
+        function FileNeighbourhood(id, name, fileUnitArray, ground, xLength, zLength)
         {
             this.id = "Neighbourhood-" + id;
             this.name = name;
@@ -11,54 +11,54 @@ define( ["jquery", "three", "scene", "sceneObjects"], function ($, THREE, scene,
             this.zLength = zLength;
             this.sceneObjects = new SceneObjects();
 
-            var codeNeighbourhood = this;
-            $.each(codeUnitArray, function(idx, codeUnit) {
-               codeNeighbourhood.sceneObjects.add(codeUnit);
+            var fileNeighbourhood = this;
+            $.each(fileUnitArray, function(idx, fileUnit) {
+               fileNeighbourhood.sceneObjects.add(fileUnit);
             });
         }
 
-        CodeNeighbourhood.prototype.addToScene = function addToScene(scene)
+        FileNeighbourhood.prototype.addToScene = function addToScene(scene)
         {
             this.sceneObjects.addToScene(scene, true);
             scene.add(this.ground);
         };
 
-        CodeNeighbourhood.prototype.removeFromScene = function removeFromScene(scene)
+        FileNeighbourhood.prototype.removeFromScene = function removeFromScene(scene)
         {
             this.sceneObjects.clear(scene);
             scene.remove(this.ground);
         };
 
-        CodeNeighbourhood.prototype.raycast = function raycast(raycaster, intersects)
+        FileNeighbourhood.prototype.raycast = function raycast(raycaster, intersects)
         {
             this.sceneObjects.raycast(raycaster, intersects);
         };
 
-        CodeNeighbourhood.prototype.getName = function getName()
+        FileNeighbourhood.prototype.getName = function getName()
         {
             return this.name;
         };
 
-        CodeNeighbourhood.prototype.getObjectById = function getObjectById(objectId)
+        FileNeighbourhood.prototype.getObjectById = function getObjectById(objectId)
         {
             return this.sceneObjects.getObjectById(objectId);
         };
 
-        CodeNeighbourhood.prototype.getId = function getId()
+        FileNeighbourhood.prototype.getId = function getId()
         {
             return this.id;
         };
 
-        CodeNeighbourhood.prototype.getXLength = function getXLength()
+        FileNeighbourhood.prototype.getXLength = function getXLength()
         {
             return this.xLength;
         };
 
-        CodeNeighbourhood.prototype.getZLength = function getZLength()
+        FileNeighbourhood.prototype.getZLength = function getZLength()
         {
             return this.zLength;
         };
 
-        return CodeNeighbourhood;
+        return FileNeighbourhood;
     }();
 } );

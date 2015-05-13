@@ -15,9 +15,9 @@ define(["three", "container"], function (THREE, container)
         container.appendChild(this.canvas);
     }
 
-    InformationPanel.prototype.updateTarget = function updateTarget(codeUnitBar)
+    InformationPanel.prototype.updateTarget = function updateTarget(fileUnitBar)
     {
-        this.target = codeUnitBar;
+        this.target = fileUnitBar;
     };
 
     InformationPanel.prototype.clearTarget = function clearTarget()

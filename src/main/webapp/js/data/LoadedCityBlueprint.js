@@ -2,9 +2,9 @@ define(["jquery"], function ($)
 {
     return function ()
     {
-        function LoadedCityBluePrint(codeUnitArray)
+        function LoadedCityBluePrint(fileUnitArray)
         {
-            this.data = codeUnitArray;
+            this.data = fileUnitArray;
         }
 
         LoadedCityBluePrint.prototype.getInhabitants = function getInhabitants()

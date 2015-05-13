@@ -14,8 +14,8 @@ define(['detector', 'app', 'container', 'uiBehaviour', 'CityPlanner', 'controls'
                 {
                     crossHair.clear();
                     cityPlanner.loadCity(bluePrint);
-                    cameraMover.onCityLoaded(cityPlanner.getCodeUnits());
-                    uiBehaviour.onCityLoaded(cityPlanner.getCodeUnits());
+                    cameraMover.onCityLoaded(cityPlanner.getFileUnits());
+                    uiBehaviour.onCityLoaded(cityPlanner.getFileUnits());
                     controls.reset();
                     renderer.render(scene, camera);
                 };
@@ -34,8 +34,8 @@ define(['detector', 'app', 'container', 'uiBehaviour', 'CityPlanner', 'controls'
 
                 //load test data
                 cityPlanner.loadTestCity();
-                cameraMover.onCityLoaded(cityPlanner.getCodeUnits());
-                uiBehaviour.onCityLoaded(cityPlanner.getCodeUnits());
+                cameraMover.onCityLoaded(cityPlanner.getFileUnits());
+                uiBehaviour.onCityLoaded(cityPlanner.getFileUnits());
             })
         };
 

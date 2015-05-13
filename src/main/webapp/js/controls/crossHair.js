@@ -70,8 +70,8 @@ define(["three", "camera", "scene", "InformationPanel"], function (THREE, camera
                     currentIntersectedObject = createSelectedObject(target.object);
                     scene.add(currentIntersectedObject);
 
-                    var codeBarUnit = sceneObjects.getObjectById(target.object.id);
-                    InformationPanel.updateTarget(codeBarUnit);
+                    var fileUnitBar = sceneObjects.getObjectById(target.object.id);
+                    InformationPanel.updateTarget(fileUnitBar);
                 }
 
                 if (showDebugPickingLine)

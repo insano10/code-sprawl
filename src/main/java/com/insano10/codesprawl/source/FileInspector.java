@@ -86,15 +86,15 @@ public class FileInspector
         return projectFileBuilder.createProjectFile();
     }
 
-    private int getLineCount(final Path codeUnitPath)
+    private int getLineCount(final Path file)
     {
         try
         {
-            return Files.readAllLines(codeUnitPath, Charset.forName("UTF-8")).size();
+            return Files.readAllLines(file, Charset.forName("UTF-8")).size();
         }
         catch (IOException e)
         {
-            LOGGER.error("Failed to read lines from " + codeUnitPath.getFileName(), e);
+            LOGGER.error("Failed to read lines from " + file.getFileName(), e);
         }
         return 0;
     }

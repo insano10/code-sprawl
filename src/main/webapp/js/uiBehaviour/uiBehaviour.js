@@ -82,7 +82,7 @@ define(['jquery', 'LoadedCityBlueprint', 'controls', 'jqueryui'], function ($, L
         {
             if(searchEnabled)
             {
-                var searchBar = $("#code-unit-search");
+                var searchBar = $("#file-unit-search");
 
                 switch (event.keyCode)
                 {
@@ -108,8 +108,8 @@ define(['jquery', 'LoadedCityBlueprint', 'controls', 'jqueryui'], function ($, L
 
                         if (isSearching)
                         {
-                            var codeUnitName = searchBar.val();
-                            cameraMover.lookAt(codeUnitName);
+                            var fileUnitName = searchBar.val();
+                            cameraMover.lookAt(fileUnitName);
                         }
                 }
             }
@@ -131,8 +131,8 @@ define(['jquery', 'LoadedCityBlueprint', 'controls', 'jqueryui'], function ($, L
                         {
                             console.log('finished visualising. Response is ' + response);
 
-                            var codeUnits = JSON.parse(response);
-                            loadCityCallback(new LoadedCityBlueprint(codeUnits));
+                            var fileUnits = JSON.parse(response);
+                            loadCityCallback(new LoadedCityBlueprint(fileUnits));
 
                             loadingIcon.hide();
                         },
@@ -147,17 +147,17 @@ define(['jquery', 'LoadedCityBlueprint', 'controls', 'jqueryui'], function ($, L
             });
         };
 
-        UiBehaviour.prototype.onCityLoaded = function onCityLoaded(codeUnits)
+        UiBehaviour.prototype.onCityLoaded = function onCityLoaded(fileUnits)
         {
-            var fullyQualifiedCodeUnitNames = [];
+            var fullyQualifiedFileUnitNames = [];
 
-            $.each(codeUnits, function (idx, codeUnit)
+            $.each(fileUnits, function (idx, fileUnit)
             {
-                fullyQualifiedCodeUnitNames.push(codeUnit.getFullyQualifiedName());
+                fullyQualifiedFileUnitNames.push(fileUnit.getFullyQualifiedName());
             });
 
-            $('#code-unit-search').autocomplete({
-                source: fullyQualifiedCodeUnitNames
+            $('#file-unit-search').autocomplete({
+                source: fullyQualifiedFileUnitNames
             });
         };
 
