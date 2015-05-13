@@ -1,9 +1,8 @@
 package com.insano10.codesprawl.source.language;
 
 import com.insano10.codesprawl.source.FileInspector;
-import com.insano10.codesprawl.source.ProjectFileBuilder;
-import com.insano10.codesprawl.source.Language;
 import com.insano10.codesprawl.source.ProjectFile;
+import com.insano10.codesprawl.source.ProjectFileBuilder;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -16,6 +15,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class FileInspectorTest
 {
     private static final Path PROJECT_SOURCE_ROOT = Paths.get("src/testProject/");
+    private static final Path PROJECT_MODULE_A_SOURCE_ROOT = Paths.get("src/testProject/moduleA");
 
     private FileInspector inspector;
 
@@ -24,25 +24,55 @@ public class FileInspectorTest
     {
         inspector = new FileInspector();
         inspector.setSourcePath(PROJECT_SOURCE_ROOT);
+        inspector.setFileExtensions(new String[]{"java"});
     }
 
     @Test
-    public void shouldFindCodeUnitsAcrossMultipleSourceRoots() throws Exception
+    public void shouldFindMultipleFileTypes() throws Exception
+    {
+        //given
+        inspector.setSourcePath(PROJECT_MODULE_A_SOURCE_ROOT);
+        inspector.setFileExtensions(new String[] {"java", "properties"});
+
+        final ProjectFile anExpectedJavaProjectFile = new ProjectFileBuilder().
+                groupName("src/main/java/com/insano10/codesprawl/shoppingApp/service/shopping/domain").
+                name("Item").
+                lineCount(19).
+                fileExtension("java").
+                createProjectFile();
+
+        final ProjectFile anExpectedPropertiesProjectFile = new ProjectFileBuilder().
+                groupName("src/main/resources").
+                name("project").
+                lineCount(2).
+                fileExtension("properties").
+                createProjectFile();
+
+        //when
+        Collection<ProjectFile> projectFiles = inspector.getFiles();
+
+        //then
+        assertThat(projectFiles).contains(anExpectedJavaProjectFile);
+        assertThat(projectFiles).contains(anExpectedPropertiesProjectFile);
+    }
+
+    @Test
+    public void shouldFindFilesAcrossMultipleSourceRoots() throws Exception
     {
         //given
         final ProjectFile anExpectedProjectFileFromModuleA = new ProjectFileBuilder().
-                groupName("com/insano10/codesprawl/shoppingApp/service/shopping/domain").
+                groupName("moduleA/src/main/java/com/insano10/codesprawl/shoppingApp/service/shopping/domain").
                 name("Item").
                 lineCount(19).
-                language(Language.JAVA).
-                createCodeUnit();
+                fileExtension("java").
+                createProjectFile();
 
         final ProjectFile anExpectedProjectFileFromModuleB = new ProjectFileBuilder().
-                groupName("com/insano10/codesprawl/discoveryApp/objects").
+                groupName("moduleB/src/main/java/com/insano10/codesprawl/discoveryApp/objects").
                 name("Discoverer").
                 lineCount(21).
-                language(Language.JAVA).
-                createCodeUnit();
+                fileExtension("java").
+                createProjectFile();
 
         //when
         Collection<ProjectFile> projectFiles = inspector.getFiles();

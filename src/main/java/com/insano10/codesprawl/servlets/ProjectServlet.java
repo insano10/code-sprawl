@@ -1,8 +1,8 @@
 package com.insano10.codesprawl.servlets;
 
 import com.google.gson.Gson;
-import com.insano10.codesprawl.source.ProjectFile;
 import com.insano10.codesprawl.source.FileInspector;
+import com.insano10.codesprawl.source.ProjectFile;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -11,7 +11,6 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.Arrays;
 import java.util.Collection;
 
 public class ProjectServlet extends HttpServlet
@@ -43,9 +42,8 @@ public class ProjectServlet extends HttpServlet
             final String[] fileExtensions = request.getParameterValues("fileExtensions[]");
             final Path sourcePath = Paths.get(sourceLocation);
 
-            System.out.println(Arrays.toString(fileExtensions));
-
             FILE_INSPECTOR.setSourcePath(sourcePath);
+            FILE_INSPECTOR.setFileExtensions(fileExtensions);
 
             response.getWriter().print(GSON.toJson(""));
             response.setStatus(HttpServletResponse.SC_OK);

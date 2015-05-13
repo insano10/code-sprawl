@@ -15,28 +15,27 @@ public class FileInspector
 {
     private static final Logger LOGGER = Logger.getLogger(FileInspector.class);
     private Path sourcePath;
+    private String[] fileExtensions;
 
     public void setSourcePath(final Path sourcePath)
     {
         this.sourcePath = sourcePath;
     }
 
-    public Collection<ProjectFile> getFiles()
+    public void setFileExtensions(String[] fileExtensions)
     {
-        final Collection<Path> languageRoots = getRootDirectoriesIn(sourcePath);
-
-        //todo: get files other than .java
-        final PathMatcher pathMatcher = FileSystems.getDefault().getPathMatcher("glob:***.java");
-
-        List<ProjectFile> files = languageRoots.stream().
-                map(r -> getCodeUnitsIn(r, pathMatcher)).
-                flatMap(Collection::stream).
-                collect(toList());
-
-        return files;
+        this.fileExtensions = fileExtensions;
     }
 
-    private List<ProjectFile> getCodeUnitsIn(Path sourceRoot, PathMatcher pathMatcher)
+    public Collection<ProjectFile> getFiles()
+    {
+        String fileExtensionPattern = fileExtensions != null ? String.join(",", fileExtensions) : "";
+        final PathMatcher pathMatcher = FileSystems.getDefault().getPathMatcher(String.format("glob:***.{%s}", fileExtensionPattern));
+
+        return getFilesIn(sourcePath, pathMatcher);
+    }
+
+    private List<ProjectFile> getFilesIn(Path sourceRoot, PathMatcher pathMatcher)
     {
         final List<Path> matchingJavaPaths = getMatchingPathsIn(sourceRoot, pathMatcher);
 
@@ -44,13 +43,6 @@ public class FileInspector
                 stream().
                 map(p -> convert(p, sourceRoot)).
                 collect(toList());
-    }
-
-    private Collection<Path> getRootDirectoriesIn(Path projectPath)
-    {
-        final PathMatcher pathMatcher = FileSystems.getDefault().getPathMatcher("glob:**/src/main/java");
-
-        return getMatchingPathsIn(projectPath, pathMatcher);
     }
 
     private List<Path> getMatchingPathsIn(final Path rootPath, final PathMatcher pathMatcher)
@@ -83,15 +75,15 @@ public class FileInspector
         return matchingPaths;
     }
 
-    private ProjectFile convert(final Path codeUnitPath, Path languageRoot)
+    private ProjectFile convert(final Path file, Path sourceDirectory)
     {
-        final ProjectFileBuilder projectFileBuilder = new ProjectFileBuilder().language(Language.JAVA);
+        final ProjectFileBuilder projectFileBuilder = new ProjectFileBuilder().fileExtension(getFileType(file));
 
-        projectFileBuilder.groupName(languageRoot.relativize(codeUnitPath.getParent()).toString());
-        projectFileBuilder.name(getCodeUnitName(codeUnitPath));
-        projectFileBuilder.lineCount(getLineCount(codeUnitPath));
+        projectFileBuilder.groupName(sourceDirectory.relativize(file.getParent()).toString());
+        projectFileBuilder.name(getFileName(file));
+        projectFileBuilder.lineCount(getLineCount(file));
 
-        return projectFileBuilder.createCodeUnit();
+        return projectFileBuilder.createProjectFile();
     }
 
     private int getLineCount(final Path codeUnitPath)
@@ -107,9 +99,13 @@ public class FileInspector
         return 0;
     }
 
-    private String getCodeUnitName(Path codeUnitPath)
+    private String getFileName(Path file)
     {
-        return codeUnitPath.getFileName().toString().split(".java")[0];
+        return file.getFileName().toString().split("\\.")[0];
     }
 
+    private String getFileType(Path file)
+    {
+        return file.getFileName().toString().split("\\.")[1];
+    }
 }

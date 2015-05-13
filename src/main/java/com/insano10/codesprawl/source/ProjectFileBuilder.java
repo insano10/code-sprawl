@@ -2,10 +2,12 @@ package com.insano10.codesprawl.source;
 
 public class ProjectFileBuilder
 {
-    private String groupName = "Unknown";
-    private String name = "Unknown";
+    private static final String UNKNOWN = "Unknown";
+
+    private String fileExtension = UNKNOWN;
+    private String groupName = UNKNOWN;
+    private String name = UNKNOWN;
     private long lineCount = 0;
-    private Language language = null;
 
     public ProjectFileBuilder groupName(String groupName)
     {
@@ -25,14 +27,14 @@ public class ProjectFileBuilder
         return this;
     }
 
-    public ProjectFileBuilder language(Language language)
+    public ProjectFileBuilder fileExtension(String extension)
     {
-        this.language = language;
+        this.fileExtension = extension;
         return this;
     }
 
-    public ProjectFile createCodeUnit()
+    public ProjectFile createProjectFile()
     {
-        return new ProjectFile(groupName, name, lineCount, language);
+        return new ProjectFile(groupName, name, lineCount, fileExtension);
     }
 }
