@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Arrays;
 import java.util.Collection;
 
 public class ProjectServlet extends HttpServlet
@@ -36,10 +37,13 @@ public class ProjectServlet extends HttpServlet
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
     {
-        if(request.getRequestURI().endsWith("/definition/location"))
+        if(request.getRequestURI().endsWith("/definition/configuration"))
         {
             final String sourceLocation = request.getParameter("sourceLocation");
+            final String[] fileExtensions = request.getParameterValues("fileExtensions[]");
             final Path sourcePath = Paths.get(sourceLocation);
+
+            System.out.println(Arrays.toString(fileExtensions));
 
             FILE_INSPECTOR.setSourcePath(sourcePath);
 

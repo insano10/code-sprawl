@@ -3,6 +3,7 @@ define(['jquery', 'LoadedCityBlueprint', 'controls', 'jqueryui'], function ($, L
 
     return function ()
     {
+        var searchEnabled = true;
         var isSearching = false;
 
         function UiBehaviour(cameraMover)
@@ -15,25 +16,38 @@ define(['jquery', 'LoadedCityBlueprint', 'controls', 'jqueryui'], function ($, L
             function configureProject()
             {
                 var sourceDirectory = $('#source-directory-input').val();
+                var fileExtensions = $('#file-type-input').val().split(/[\s,]+/);
 
                 $.ajax({
                     type:     'POST',
-                    url:      window.location.href.split("#")[0] + "definition/location",
+                    url:      window.location.href.split("#")[0] + "definition/configuration",
                     dataType: "json",
                     data:     {
-                        sourceLocation: sourceDirectory
+                        sourceLocation: sourceDirectory,
+                        fileExtensions: fileExtensions
                     },
                     success:  function (response)
                     {
-                        console.log('set directory to ' + sourceDirectory);
-                        dialog.dialog("close");
+                        closeConfigurationDialog();
 
                     },
                     error:    function (e)
                     {
-                        console.log("failed to set source directory to " + sourceDirectory + ". " + JSON.stringify(e));
+                        console.log("failed to set configuration: directory: " + sourceDirectory + ", fileExtensions: " + fileExtensions + ". " + JSON.stringify(e));
                     }
                 });
+            }
+
+            function openConfigurationDialog()
+            {
+                dialog.dialog("open");
+                searchEnabled = false;
+            }
+
+            function closeConfigurationDialog()
+            {
+                dialog.dialog("close");
+                searchEnabled = true;
             }
 
             dialog = $("#configure-dialog-form").dialog({
@@ -45,14 +59,14 @@ define(['jquery', 'LoadedCityBlueprint', 'controls', 'jqueryui'], function ($, L
                     "Save": configureProject,
                     Cancel: function ()
                     {
-                        dialog.dialog("close");
+                        closeConfigurationDialog();
                     }
                 }
             });
 
             $("#configure-btn").button().on("click", function ()
             {
-                dialog.dialog("open");
+                openConfigurationDialog();
             });
 
 
@@ -66,35 +80,38 @@ define(['jquery', 'LoadedCityBlueprint', 'controls', 'jqueryui'], function ($, L
 
         var onKeyDown = function (event, cameraMover)
         {
-            var searchBar = $("#code-unit-search");
-
-            switch (event.keyCode)
+            if(searchEnabled)
             {
-                case 32: // space
+                var searchBar = $("#code-unit-search");
 
-                    if (isSearching)
-                    {
-                        searchBar.blur();
-                        searchBar.val('');
-                        controls.setEnabled(true);
-                    }
-                    else
-                    {
-                        searchBar.focus();
-                        controls.setEnabled(false);
-                    }
-                    isSearching = !isSearching;
-                    event.preventDefault();
+                switch (event.keyCode)
+                {
+                    case 32: // space
 
-                    break;
+                        if (isSearching)
+                        {
+                            searchBar.blur();
+                            searchBar.val('');
+                            controls.setEnabled(true);
+                        }
+                        else
+                        {
+                            searchBar.focus();
+                            controls.setEnabled(false);
+                        }
+                        isSearching = !isSearching;
+                        event.preventDefault();
 
-                case 13: // Return
+                        break;
 
-                    if (isSearching)
-                    {
-                        var codeUnitName = searchBar.val();
-                        cameraMover.lookAt(codeUnitName);
-                    }
+                    case 13: // Return
+
+                        if (isSearching)
+                        {
+                            var codeUnitName = searchBar.val();
+                            cameraMover.lookAt(codeUnitName);
+                        }
+                }
             }
         };
 
