@@ -52,7 +52,7 @@ define(['jquery', 'LoadedCityBlueprint', 'controls', 'jqueryui'], function ($, L
 
             dialog = $("#configure-dialog-form").dialog({
                 autoOpen: false,
-                height:   300,
+                height:   400,
                 width:    700,
                 modal:    true,
                 buttons:  {
