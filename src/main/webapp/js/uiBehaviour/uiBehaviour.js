@@ -17,6 +17,7 @@ define(['jquery', 'LoadedCityBlueprint', 'controls', 'jqueryui'], function ($, L
             {
                 var sourceDirectory = $('#source-directory-input').val();
                 var fileExtensions = $('#file-type-input').val().split(/[\s,]+/);
+                var vcsOption = $("input:radio[name ='vcs-radio']:checked").val();
 
                 $.ajax({
                     type:     'POST',
@@ -24,7 +25,8 @@ define(['jquery', 'LoadedCityBlueprint', 'controls', 'jqueryui'], function ($, L
                     dataType: "json",
                     data:     {
                         sourceLocation: sourceDirectory,
-                        fileExtensions: fileExtensions
+                        fileExtensions: fileExtensions,
+                        vcsOption: vcsOption
                     },
                     success:  function (response)
                     {
@@ -33,7 +35,10 @@ define(['jquery', 'LoadedCityBlueprint', 'controls', 'jqueryui'], function ($, L
                     },
                     error:    function (e)
                     {
-                        console.log("failed to set configuration: directory: " + sourceDirectory + ", fileExtensions: " + fileExtensions + ". " + JSON.stringify(e));
+                        console.log("failed to set configuration: directory: " + sourceDirectory +
+                            ", fileExtensions: " + fileExtensions +
+                            ", vcsOption: " + vcsOption +
+                            ". " + JSON.stringify(e));
                     }
                 });
             }

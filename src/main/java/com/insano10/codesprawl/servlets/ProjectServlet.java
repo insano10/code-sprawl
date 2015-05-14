@@ -3,6 +3,8 @@ package com.insano10.codesprawl.servlets;
 import com.google.gson.Gson;
 import com.insano10.codesprawl.source.FileInspector;
 import com.insano10.codesprawl.source.ProjectFile;
+import com.insano10.codesprawl.source.VcsInspector;
+import com.insano10.codesprawl.source.VcsSystem;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -17,6 +19,7 @@ public class ProjectServlet extends HttpServlet
 {
     private static final Gson GSON = new Gson();
     private static final FileInspector FILE_INSPECTOR = new FileInspector();
+    private static final VcsInspector VCS_INSPECTOR = new VcsInspector();
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
@@ -24,6 +27,8 @@ public class ProjectServlet extends HttpServlet
         if(request.getRequestURI().endsWith("/definition"))
         {
             Collection<ProjectFile> files = FILE_INSPECTOR.getFiles();
+            VCS_INSPECTOR.inspectVcs();
+
             response.getWriter().print(GSON.toJson(files));
             response.setStatus(HttpServletResponse.SC_OK);
         }
@@ -40,10 +45,12 @@ public class ProjectServlet extends HttpServlet
         {
             final String sourceLocation = request.getParameter("sourceLocation");
             final String[] fileExtensions = request.getParameterValues("fileExtensions[]");
+            final String vcsOption = request.getParameter("vcsOption");
             final Path sourcePath = Paths.get(sourceLocation);
 
             FILE_INSPECTOR.setSourcePath(sourcePath);
             FILE_INSPECTOR.setFileExtensions(fileExtensions);
+            VCS_INSPECTOR.setSystem(VcsSystem.valueOf(vcsOption));
 
             response.getWriter().print(GSON.toJson(""));
             response.setStatus(HttpServletResponse.SC_OK);
