@@ -43,14 +43,13 @@ public class ProjectServlet extends HttpServlet
     {
         if(request.getRequestURI().endsWith("/definition/configuration"))
         {
-            final String sourceLocation = request.getParameter("sourceLocation");
-            final String[] fileExtensions = request.getParameterValues("fileExtensions[]");
-            final String vcsOption = request.getParameter("vcsOption");
-            final Path sourcePath = Paths.get(sourceLocation);
+            ProjectDefinitionResponse projectResponse = GSON.fromJson(request.getParameter("configuration"), ProjectDefinitionResponse.class);
 
-            FILE_INSPECTOR.setSourcePath(sourcePath);
-            FILE_INSPECTOR.setFileExtensions(fileExtensions);
-            VCS_INSPECTOR.setSystem(VcsSystem.valueOf(vcsOption));
+            FILE_INSPECTOR.setSourcePath(projectResponse.getSourceDirectoryPath());
+            FILE_INSPECTOR.setFileExtensions(projectResponse.getFileExtensions());
+
+            VCS_INSPECTOR.setVcsRoot(projectResponse.getVcsRootPath());
+            VCS_INSPECTOR.setSystem(projectResponse.getVcsOption());
 
             response.getWriter().print(GSON.toJson(""));
             response.setStatus(HttpServletResponse.SC_OK);

@@ -39,16 +39,26 @@
 </div>
 
 <div id="configure-dialog-form" title="Configure Project Parameters">
-    <label class="directory-label" for="source-directory-input">Choose source root:</label>
-    <input id="source-directory-input" type="text" size="80" value="/home/jenny/IdeaProjects/code-sprawl/src/testProject"/>
-    <label class="file-type-label" for="file-type-input">File extensions to include (comma separated):</label>
-    <input id="file-type-input" type="text" size="80" value="java, js"/>
     <div>
-        <br/><br/><label>Version Control System</label><br/>
-        <label><input type="radio" name="vcs-radio" value="SVN">SVN</label><br/>
+        <label>Version Control</label>
+        <br/> <br/>
+        <label><input type="radio" name="vcs-radio" value="SVN">SVN</label>&NonBreakingSpace;&NonBreakingSpace;
         <label><input type="radio" name="vcs-radio" value="Git">Git</label>
+        <br/><br/>
+        <label for="vcs-root-input">VCS root:</label>
+        <br/>
+        <input id="vcs-root-input" type="text" size="80" value="/home/jenny/IdeaProjects/code-sprawl">
     </div>
-
+    <br/><br/>
+    <div>
+        <label>Visualisation Parameters</label>
+        <br/><br/>
+        <label for="source-directory-input">Relative visualisation root:</label>
+        <input id="source-directory-input" type="text" size="80" value="src/testProject"/>
+        <br/><br/>
+        <label for="file-type-input">File extensions to include (comma separated):</label>
+        <input id="file-type-input" type="text" size="80" value="java, js"/>
+    </div>
 </div>
 
 </body>

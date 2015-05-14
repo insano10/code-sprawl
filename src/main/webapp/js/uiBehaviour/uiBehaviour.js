@@ -15,7 +15,8 @@ define(['jquery', 'LoadedCityBlueprint', 'controls', 'jqueryui'], function ($, L
 
             function configureProject()
             {
-                var sourceDirectory = $('#source-directory-input').val();
+                var vcsRoot = $('#vcs-root-input').val();
+                var sourceDirectory = vcsRoot + "/" + $('#source-directory-input').val();
                 var fileExtensions = $('#file-type-input').val().split(/[\s,]+/);
                 var vcsOption = $("input:radio[name ='vcs-radio']:checked").val();
 
@@ -24,9 +25,12 @@ define(['jquery', 'LoadedCityBlueprint', 'controls', 'jqueryui'], function ($, L
                     url:      window.location.href.split("#")[0] + "definition/configuration",
                     dataType: "json",
                     data:     {
-                        sourceLocation: sourceDirectory,
-                        fileExtensions: fileExtensions,
-                        vcsOption: vcsOption
+                        configuration: JSON.stringify({
+                            vcsRoot:         vcsRoot,
+                            sourceDirectory: sourceDirectory,
+                            fileExtensions:  fileExtensions,
+                            vcsOption:       vcsOption
+                        })
                     },
                     success:  function (response)
                     {
@@ -35,7 +39,9 @@ define(['jquery', 'LoadedCityBlueprint', 'controls', 'jqueryui'], function ($, L
                     },
                     error:    function (e)
                     {
-                        console.log("failed to set configuration: directory: " + sourceDirectory +
+                        console.log("failed to set configuration: " +
+                            "  vcsRoot: " + vcsRoot +
+                            ", sourceDirectory: " + sourceDirectory +
                             ", fileExtensions: " + fileExtensions +
                             ", vcsOption: " + vcsOption +
                             ". " + JSON.stringify(e));
@@ -57,7 +63,7 @@ define(['jquery', 'LoadedCityBlueprint', 'controls', 'jqueryui'], function ($, L
 
             dialog = $("#configure-dialog-form").dialog({
                 autoOpen: false,
-                height:   400,
+                height:   500,
                 width:    700,
                 modal:    true,
                 buttons:  {
