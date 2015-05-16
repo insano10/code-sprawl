@@ -40,6 +40,13 @@ public class ProjectServlet extends HttpServlet
             response.getWriter().print(GSON.toJson(files));
             response.setStatus(HttpServletResponse.SC_OK);
         }
+        else if(request.getRequestURI().endsWith("/definition/configuration"))
+        {
+            final ProjectConfiguration configuration = CONFIG_MANAGER.getConfiguration();
+
+            response.getWriter().print(GSON.toJson(configuration));
+            response.setStatus(HttpServletResponse.SC_OK);
+        }
         else
         {
             response.setStatus(HttpServletResponse.SC_NOT_FOUND);

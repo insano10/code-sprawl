@@ -16,7 +16,7 @@ define(['jquery', 'LoadedCityBlueprint', 'controls', 'jqueryui'], function ($, L
             function configureProject()
             {
                 var vcsRoot = $('#vcs-root-input').val();
-                var sourceDirectory = vcsRoot + "/" + $('#source-directory-input').val();
+                var sourceDirectory = $('#source-directory-input').val();
                 var fileExtensions = $('#file-type-input').val().split(/[\s,]+/);
                 var vcsOption = $("input:radio[name ='vcs-radio']:checked").val();
 
@@ -156,6 +156,14 @@ define(['jquery', 'LoadedCityBlueprint', 'controls', 'jqueryui'], function ($, L
 
                 }
             });
+        };
+
+        UiBehaviour.prototype.displayConfiguration = function displayConfiguration(config)
+        {
+            $('#vcs-root-input').val(config.vcsRoot);
+            $('#source-directory-input').val(config.sourceDirectory);
+            $('#file-type-input').val(config.fileExtensions);
+            $("input[name=vcs-radio][value=" + config.vcsOption + "]").prop('checked', true);
         };
 
         UiBehaviour.prototype.onCityLoaded = function onCityLoaded(fileUnits)

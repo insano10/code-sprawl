@@ -41,8 +41,8 @@ public class ConfigurationManager
     public void saveConfiguration(ProjectConfiguration projectConfig)
     {
         properties.setProperty(VCS_OPTION_KEY, projectConfig.getVcsOption().name());
-        properties.setProperty(VCS_ROOT_DIR_KEY, projectConfig.getVcsRootPath().toFile().getAbsolutePath());
-        properties.setProperty(VISUALISATION_SOURCE_DIR_KEY, projectConfig.getSourceDirectoryPath().toFile().getAbsolutePath());
+        properties.setProperty(VCS_ROOT_DIR_KEY, projectConfig.getVcsRootPath().toString());
+        properties.setProperty(VISUALISATION_SOURCE_DIR_KEY, projectConfig.getRelativeSourceDirectory());
         properties.setProperty(VISUALISATION_FILE_EXTENSIONS_KEY, String.join(",", projectConfig.getFileExtensions()));
 
         try
@@ -84,5 +84,13 @@ public class ConfigurationManager
             LOGGER.info("Creating new config file: " + configFilePath);
             createConfigFile(configFilePath);
         }
+    }
+
+    public ProjectConfiguration getConfiguration()
+    {
+        return new ProjectConfiguration(properties.getProperty(VCS_ROOT_DIR_KEY),
+                                        properties.getProperty(VCS_OPTION_KEY),
+                                        properties.getProperty(VISUALISATION_SOURCE_DIR_KEY),
+                                        properties.getProperty(VISUALISATION_FILE_EXTENSIONS_KEY).split(","));
     }
 }

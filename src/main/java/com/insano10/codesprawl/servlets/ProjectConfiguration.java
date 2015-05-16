@@ -12,6 +12,14 @@ public class ProjectConfiguration
     private String sourceDirectory;
     private String[] fileExtensions;
 
+    public ProjectConfiguration(String vcsRoot, String vcsOption, String sourceDirectory, String[] fileExtensions)
+    {
+        this.vcsRoot = vcsRoot;
+        this.vcsOption = vcsOption;
+        this.sourceDirectory = sourceDirectory;
+        this.fileExtensions = fileExtensions;
+    }
+
     public VcsSystem getVcsOption()
     {
         return VcsSystem.valueOf(vcsOption);
@@ -29,6 +37,11 @@ public class ProjectConfiguration
 
     public Path getSourceDirectoryPath()
     {
-        return Paths.get(sourceDirectory);
+        return Paths.get(vcsRoot, sourceDirectory);
+    }
+
+    public String getRelativeSourceDirectory()
+    {
+        return sourceDirectory;
     }
 }

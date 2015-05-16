@@ -30,6 +30,7 @@ define(['detector', 'app', 'container', 'uiBehaviour', 'CityPlanner', 'controls'
                     container.innerHTML = "";
                 }
 
+                getConfiguration(uiBehaviour.displayConfiguration);
                 app.initialise();
 
                 //load test data
@@ -37,6 +38,23 @@ define(['detector', 'app', 'container', 'uiBehaviour', 'CityPlanner', 'controls'
                 cameraMover.onCityLoaded(cityPlanner.getFileUnits());
                 uiBehaviour.onCityLoaded(cityPlanner.getFileUnits());
             })
+        };
+
+
+        var getConfiguration = function getConfiguration(onConfigurationCallback)
+        {
+            $.ajax({
+                type:    'GET',
+                url:     window.location.href.split("#")[0] + 'definition/configuration',
+                success: function (response)
+                {
+                    onConfigurationCallback(JSON.parse(response));
+                },
+                error:   function (e)
+                {
+                    console.log("failed to retrieve project config " + JSON.stringify(e));
+                }
+            });
         };
 
         return {"start": start};
