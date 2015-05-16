@@ -63,11 +63,8 @@ public class ProjectServlet extends HttpServlet
 
             CONFIG_MANAGER.saveConfiguration(configuration);
 
-            FILE_INSPECTOR.setSourcePath(configuration.getSourceDirectoryPath());
-            FILE_INSPECTOR.setFileExtensions(configuration.getFileExtensions());
-
-            VCS_INSPECTOR.setVcsRoot(configuration.getVcsRootPath());
-            VCS_INSPECTOR.setSystem(configuration.getVcsOption());
+            FILE_INSPECTOR.updateFileConfiguration(configuration.getSourceDirectoryPath(), configuration.getFileExtensions());
+            VCS_INSPECTOR.updateVcsConfiguration(configuration.getVcsOption(), configuration.getVcsRootPath());
 
             response.getWriter().print(GSON.toJson(""));
             response.setStatus(HttpServletResponse.SC_OK);

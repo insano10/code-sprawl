@@ -17,13 +17,9 @@ public class FileInspector
     private Path sourcePath;
     private String[] fileExtensions;
 
-    public void setSourcePath(final Path sourcePath)
+    public void updateFileConfiguration(final Path sourcePath, final String[] fileExtensions)
     {
         this.sourcePath = sourcePath;
-    }
-
-    public void setFileExtensions(String[] fileExtensions)
-    {
         this.fileExtensions = fileExtensions;
     }
 

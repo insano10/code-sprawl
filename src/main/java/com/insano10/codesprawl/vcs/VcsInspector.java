@@ -18,7 +18,7 @@ public class VcsInspector
         this.vcsLogPath = dataDirectory.resolve("vcs.log");
     }
 
-    public void setSystem(final VcsSystem vcsSystem)
+    public void updateVcsConfiguration(final VcsSystem vcsSystem, final Path vcsRootPath)
     {
         switch(vcsSystem)
         {
@@ -26,11 +26,6 @@ public class VcsInspector
             case Git: vcsControl = new GitVcsControl(vcsRootPath, vcsLogPath); break;
             default: LOGGER.error("Unsupported VCS system: " + vcsSystem);
         }
-    }
-
-    public void setVcsRoot(Path vcsRootPath)
-    {
-        this.vcsRootPath = vcsRootPath;
     }
 
     public void inspectVcs()

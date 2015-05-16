@@ -23,7 +23,7 @@ public class FileInspectorTest
     public void setUp() throws Exception
     {
         inspector = new FileInspector();
-        inspector.setSourcePath(PROJECT_SOURCE_ROOT);
+        inspector.updateFileConfiguration(PROJECT_SOURCE_ROOT);
         inspector.setFileExtensions(new String[]{"java"});
     }
 
@@ -31,7 +31,7 @@ public class FileInspectorTest
     public void shouldFindMultipleFileTypes() throws Exception
     {
         //given
-        inspector.setSourcePath(PROJECT_MODULE_A_SOURCE_ROOT);
+        inspector.updateFileConfiguration(PROJECT_MODULE_A_SOURCE_ROOT);
         inspector.setFileExtensions(new String[] {"java", "properties"});
 
         final ProjectFile anExpectedJavaProjectFile = new ProjectFileBuilder().
