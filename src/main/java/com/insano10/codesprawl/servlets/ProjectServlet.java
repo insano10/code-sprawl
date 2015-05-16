@@ -27,6 +27,9 @@ public class ProjectServlet extends HttpServlet
     public void init() throws ServletException
     {
         super.init();
+
+        CONFIG_MANAGER.addChangeListener(FILE_INSPECTOR);
+        CONFIG_MANAGER.addChangeListener(VCS_INSPECTOR);
         CONFIG_MANAGER.loadConfiguration();
     }
 
@@ -62,9 +65,6 @@ public class ProjectServlet extends HttpServlet
             ProjectConfiguration configuration = GSON.fromJson(request.getParameter("configuration"), ProjectConfiguration.class);
 
             CONFIG_MANAGER.saveConfiguration(configuration);
-
-            FILE_INSPECTOR.updateFileConfiguration(configuration.getSourceDirectoryPath(), configuration.getFileExtensions());
-            VCS_INSPECTOR.updateVcsConfiguration(configuration.getVcsOption(), configuration.getVcsRootPath());
 
             response.getWriter().print(GSON.toJson(""));
             response.setStatus(HttpServletResponse.SC_OK);

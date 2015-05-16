@@ -8,6 +8,8 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Properties;
 
 public class ConfigurationManager
@@ -19,9 +21,15 @@ public class ConfigurationManager
     private static final String VISUALISATION_SOURCE_DIR_KEY = "visualisationSourceDir";
     private static final String VISUALISATION_FILE_EXTENSIONS_KEY = "visualisationFileExtensions";
 
+    private final List<ConfigurationChangeListener> changeListeners = new ArrayList<>();
     private final Properties properties = new Properties();
     private Path saveDataDirPath;
     private Path configFilePath;
+
+    public void addChangeListener(final ConfigurationChangeListener listener)
+    {
+        changeListeners.add(listener);
+    }
 
     public void loadConfiguration()
     {
@@ -49,6 +57,8 @@ public class ConfigurationManager
         try
         {
             properties.store(Files.newBufferedWriter(saveDataDirPath.resolve(CONFIG_FILE)), "Code Sprawl Properties");
+
+            changeListeners.stream().forEach(l -> l.onConfigurationUpdated(projectConfig));
         }
         catch (IOException e)
         {

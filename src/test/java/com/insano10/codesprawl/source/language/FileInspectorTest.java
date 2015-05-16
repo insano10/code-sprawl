@@ -1,5 +1,6 @@
 package com.insano10.codesprawl.source.language;
 
+import com.insano10.codesprawl.servlets.ProjectConfiguration;
 import com.insano10.codesprawl.source.FileInspector;
 import com.insano10.codesprawl.source.ProjectFile;
 import com.insano10.codesprawl.source.ProjectFileBuilder;
@@ -14,8 +15,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class FileInspectorTest
 {
-    private static final Path PROJECT_SOURCE_ROOT = Paths.get("src/testProject/");
-    private static final Path PROJECT_MODULE_A_SOURCE_ROOT = Paths.get("src/testProject/moduleA");
+    private static final Path PROJECT_VCS_ROOT = Paths.get("src/testProject/");
 
     private FileInspector inspector;
 
@@ -23,16 +23,14 @@ public class FileInspectorTest
     public void setUp() throws Exception
     {
         inspector = new FileInspector();
-        inspector.updateFileConfiguration(PROJECT_SOURCE_ROOT);
-        inspector.setFileExtensions(new String[]{"java"});
+        inspector.onConfigurationUpdated(new ProjectConfiguration(PROJECT_VCS_ROOT.toAbsolutePath().toString(), "SVN", "", new String[]{"java"}));
     }
 
     @Test
     public void shouldFindMultipleFileTypes() throws Exception
     {
         //given
-        inspector.updateFileConfiguration(PROJECT_MODULE_A_SOURCE_ROOT);
-        inspector.setFileExtensions(new String[] {"java", "properties"});
+        inspector.onConfigurationUpdated(new ProjectConfiguration(PROJECT_VCS_ROOT.toAbsolutePath().toString(), "SVN", "moduleA", new String[]{"java", "properties"}));
 
         final ProjectFile anExpectedJavaProjectFile = new ProjectFileBuilder().
                 groupName("src/main/java/com/insano10/codesprawl/shoppingApp/service/shopping/domain").

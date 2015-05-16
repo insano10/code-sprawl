@@ -1,15 +1,16 @@
 package com.insano10.codesprawl.vcs;
 
+import com.insano10.codesprawl.configuration.ConfigurationChangeListener;
+import com.insano10.codesprawl.servlets.ProjectConfiguration;
 import org.apache.log4j.Logger;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
 
-public class VcsInspector
+public class VcsInspector implements ConfigurationChangeListener
 {
     private static final Logger LOGGER = Logger.getLogger(VcsInspector.class);
 
-    private Path vcsRootPath;
     private VcsControl vcsControl;
     private Path vcsLogPath;
 
@@ -18,13 +19,16 @@ public class VcsInspector
         this.vcsLogPath = dataDirectory.resolve("vcs.log");
     }
 
-    public void updateVcsConfiguration(final VcsSystem vcsSystem, final Path vcsRootPath)
+    @Override
+    public void onConfigurationUpdated(ProjectConfiguration configuration)
     {
-        switch(vcsSystem)
+        Path vcsRootPath = configuration.getVcsRootPath();
+
+        switch(configuration.getVcsOption())
         {
             case SVN: vcsControl = new SVNVcsControl(vcsRootPath, vcsLogPath); break;
             case Git: vcsControl = new GitVcsControl(vcsRootPath, vcsLogPath); break;
-            default: LOGGER.error("Unsupported VCS system: " + vcsSystem);
+            default: LOGGER.error("Unsupported VCS system: " + configuration.getVcsOption());
         }
     }
 

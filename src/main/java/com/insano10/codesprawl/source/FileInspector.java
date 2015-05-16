@@ -1,5 +1,7 @@
 package com.insano10.codesprawl.source;
 
+import com.insano10.codesprawl.configuration.ConfigurationChangeListener;
+import com.insano10.codesprawl.servlets.ProjectConfiguration;
 import org.apache.log4j.Logger;
 
 import java.io.IOException;
@@ -11,16 +13,17 @@ import java.util.List;
 
 import static java.util.stream.Collectors.toList;
 
-public class FileInspector
+public class FileInspector implements ConfigurationChangeListener
 {
     private static final Logger LOGGER = Logger.getLogger(FileInspector.class);
     private Path sourcePath;
     private String[] fileExtensions;
 
-    public void updateFileConfiguration(final Path sourcePath, final String[] fileExtensions)
+    @Override
+    public void onConfigurationUpdated(ProjectConfiguration configuration)
     {
-        this.sourcePath = sourcePath;
-        this.fileExtensions = fileExtensions;
+        this.sourcePath = configuration.getSourceDirectoryPath();
+        this.fileExtensions = configuration.getFileExtensions();
     }
 
     public Collection<ProjectFile> getFiles()
