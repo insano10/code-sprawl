@@ -1,18 +1,17 @@
 package com.insano10.codesprawl.servlets;
 
 import com.google.gson.Gson;
+import com.insano10.codesprawl.configuration.ConfigurationManager;
 import com.insano10.codesprawl.source.FileInspector;
 import com.insano10.codesprawl.source.ProjectFile;
 import com.insano10.codesprawl.source.VcsInspector;
-import com.insano10.codesprawl.source.VcsSystem;
 
+import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.Collection;
 
 public class ProjectServlet extends HttpServlet
@@ -20,6 +19,15 @@ public class ProjectServlet extends HttpServlet
     private static final Gson GSON = new Gson();
     private static final FileInspector FILE_INSPECTOR = new FileInspector();
     private static final VcsInspector VCS_INSPECTOR = new VcsInspector();
+    private static final ConfigurationManager CONFIG_MANAGER = new ConfigurationManager();
+
+    @Override
+    public void init() throws ServletException
+    {
+        super.init();
+
+        CONFIG_MANAGER.loadConfiguration();
+    }
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
@@ -43,13 +51,15 @@ public class ProjectServlet extends HttpServlet
     {
         if(request.getRequestURI().endsWith("/definition/configuration"))
         {
-            ProjectDefinitionResponse projectResponse = GSON.fromJson(request.getParameter("configuration"), ProjectDefinitionResponse.class);
+            ProjectConfiguration configuration = GSON.fromJson(request.getParameter("configuration"), ProjectConfiguration.class);
 
-            FILE_INSPECTOR.setSourcePath(projectResponse.getSourceDirectoryPath());
-            FILE_INSPECTOR.setFileExtensions(projectResponse.getFileExtensions());
+            CONFIG_MANAGER.saveConfiguration(configuration);
 
-            VCS_INSPECTOR.setVcsRoot(projectResponse.getVcsRootPath());
-            VCS_INSPECTOR.setSystem(projectResponse.getVcsOption());
+            FILE_INSPECTOR.setSourcePath(configuration.getSourceDirectoryPath());
+            FILE_INSPECTOR.setFileExtensions(configuration.getFileExtensions());
+
+            VCS_INSPECTOR.setVcsRoot(configuration.getVcsRootPath());
+            VCS_INSPECTOR.setSystem(configuration.getVcsOption());
 
             response.getWriter().print(GSON.toJson(""));
             response.setStatus(HttpServletResponse.SC_OK);
