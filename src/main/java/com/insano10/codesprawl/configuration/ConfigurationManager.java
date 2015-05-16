@@ -13,29 +13,45 @@ public class ConfigurationManager
 {
     private static final Logger LOGGER = Logger.getLogger(ConfigurationManager.class);
     private static final String CONFIG_FILE = "config.properties";
+    private static final String VCS_OPTION_KEY = "vcsOption";
+    private static final String VCS_ROOT_DIR_KEY = "vcsRootDir";
+    private static final String VISUALISATION_SOURCE_DIR_KEY = "visualisationSourceDir";
+    private static final String VISUALISATION_FILE_EXTENSIONS_KEY = "visualisationFileExtensions";
 
     private final Properties properties = new Properties();
-    private Path saveDataPath;
+    private Path saveDataDirPath;
+    private Path configFilePath;
 
     public void loadConfiguration()
     {
-        initialiseSaveDataPath();
+        initialiseDataDirectory();
 
-        final Path configFile = saveDataPath.resolve(CONFIG_FILE);
-        if(Files.exists(configFile))
+        try
         {
-            try
-            {
-                properties.load(Files.newBufferedReader(configFile));
-            }
-            catch(IOException e)
-            {
-                LOGGER.error("Failed to read: " + configFile);
-            }
+            properties.load(Files.newBufferedReader(configFilePath));
+
+            LOGGER.info("Loaded properties: " + properties);
         }
-        else
+        catch (IOException e)
         {
-            createConfigFile(configFile);
+            LOGGER.error("Failed to read: " + configFilePath);
+        }
+    }
+
+    public void saveConfiguration(ProjectConfiguration projectConfig)
+    {
+        properties.setProperty(VCS_OPTION_KEY, projectConfig.getVcsOption().name());
+        properties.setProperty(VCS_ROOT_DIR_KEY, projectConfig.getVcsRootPath().toFile().getAbsolutePath());
+        properties.setProperty(VISUALISATION_SOURCE_DIR_KEY, projectConfig.getSourceDirectoryPath().toFile().getAbsolutePath());
+        properties.setProperty(VISUALISATION_FILE_EXTENSIONS_KEY, String.join(",", projectConfig.getFileExtensions()));
+
+        try
+        {
+            properties.store(Files.newBufferedWriter(saveDataDirPath.resolve(CONFIG_FILE)), "Code Sprawl Properties");
+        }
+        catch (IOException e)
+        {
+            LOGGER.error("Failed to save properties to: " + configFilePath);
         }
     }
 
@@ -43,9 +59,9 @@ public class ConfigurationManager
     {
         try
         {
-            if(!Files.exists(saveDataPath))
+            if (!Files.exists(saveDataDirPath))
             {
-                Files.createDirectories(saveDataPath);
+                Files.createDirectories(saveDataDirPath);
             }
             Files.createFile(configFile);
         }
@@ -55,15 +71,18 @@ public class ConfigurationManager
         }
     }
 
-    public void saveConfiguration(ProjectConfiguration projectDefinition)
-    {
-    }
-
-    private void initialiseSaveDataPath()
+    private void initialiseDataDirectory()
     {
         final String userHome = System.getProperty("user.home");
-        saveDataPath = Paths.get(userHome, ".code-sprawl", "config");
+        saveDataDirPath = Paths.get(userHome, ".code-sprawl", "config");
+        configFilePath = saveDataDirPath.resolve(CONFIG_FILE);
 
-        LOGGER.info("Save data directory is: " + saveDataPath);
+        LOGGER.info("Save data directory is: " + saveDataDirPath);
+
+        if (!Files.exists(configFilePath))
+        {
+            LOGGER.info("Creating new config file: " + configFilePath);
+            createConfigFile(configFilePath);
+        }
     }
 }
