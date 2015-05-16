@@ -1,6 +1,6 @@
 package com.insano10.codesprawl.servlets;
 
-import com.insano10.codesprawl.source.VcsSystem;
+import com.insano10.codesprawl.vcs.VcsSystem;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;

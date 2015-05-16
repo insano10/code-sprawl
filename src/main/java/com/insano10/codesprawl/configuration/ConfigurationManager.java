@@ -1,6 +1,7 @@
 package com.insano10.codesprawl.configuration;
 
 import com.insano10.codesprawl.servlets.ProjectConfiguration;
+import com.insano10.codesprawl.vcs.VcsSystem;
 import org.apache.log4j.Logger;
 
 import java.io.IOException;
@@ -73,8 +74,8 @@ public class ConfigurationManager
 
     private void initialiseDataDirectory()
     {
-        final String userHome = System.getProperty("user.home");
-        saveDataDirPath = Paths.get(userHome, ".code-sprawl", "config");
+        Path dataDirectory = getDataDirectory();
+        saveDataDirPath = dataDirectory.resolve("config");
         configFilePath = saveDataDirPath.resolve(CONFIG_FILE);
 
         LOGGER.info("Save data directory is: " + saveDataDirPath);
@@ -92,5 +93,11 @@ public class ConfigurationManager
                                         properties.getProperty(VCS_OPTION_KEY),
                                         properties.getProperty(VISUALISATION_SOURCE_DIR_KEY),
                                         properties.getProperty(VISUALISATION_FILE_EXTENSIONS_KEY).split(","));
+    }
+
+    public Path getDataDirectory()
+    {
+        final String userHome = System.getProperty("user.home");
+        return Paths.get(userHome, ".code-sprawl");
     }
 }

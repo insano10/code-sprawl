@@ -1,4 +1,4 @@
-package com.insano10.codesprawl.source;
+package com.insano10.codesprawl.vcs;
 
 public enum VcsSystem
 {
