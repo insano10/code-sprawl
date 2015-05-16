@@ -38,6 +38,7 @@ public class ConfigurationManager
         try
         {
             properties.load(Files.newBufferedReader(configFilePath));
+            changeListeners.stream().forEach(l -> l.onConfigurationUpdated(getConfiguration()));
 
             LOGGER.info("Loaded properties: " + properties);
         }

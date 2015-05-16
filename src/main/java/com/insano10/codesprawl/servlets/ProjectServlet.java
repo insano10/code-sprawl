@@ -38,8 +38,8 @@ public class ProjectServlet extends HttpServlet
     {
         if(request.getRequestURI().endsWith("/definition"))
         {
-            Collection<ProjectFile> files = FILE_INSPECTOR.getFiles();
             VCS_INSPECTOR.inspectVcs();
+            Collection<ProjectFile> files = FILE_INSPECTOR.getFiles();
 
             response.getWriter().print(GSON.toJson(files));
             response.setStatus(HttpServletResponse.SC_OK);

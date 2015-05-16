@@ -64,7 +64,6 @@ public class FileInspector implements ConfigurationChangeListener
                     }
                 }
             });
-
         }
         catch (IOException e)
         {
