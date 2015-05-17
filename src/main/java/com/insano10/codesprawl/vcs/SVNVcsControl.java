@@ -2,8 +2,14 @@ package com.insano10.codesprawl.vcs;
 
 import org.apache.log4j.Logger;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.Reader;
 import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class SVNVcsControl implements VcsControl
 {
@@ -37,6 +43,24 @@ public class SVNVcsControl implements VcsControl
     @Override
     public String getCurrentVcsRevision()
     {
+        try
+        {
+            Process process = Runtime.getRuntime().exec(new String[]{"sh", "-c", "cd " + vcsRootPath + "; svn info"});
+            process.waitFor();
+
+            BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
+            Stream<String> processOutput = reader.lines();
+
+            return processOutput.
+                    filter(l -> l.startsWith("Revision:")).
+                    map(l -> l.split(" ")[1]).
+                    collect(Collectors.toList()).get(0);
+        }
+        catch (IOException | InterruptedException e)
+        {
+            LOGGER.error("Failed to generate SVN log from: " + vcsRootPath + " to: " + vcsLogPath);
+        }
+
         return "";
     }
 
