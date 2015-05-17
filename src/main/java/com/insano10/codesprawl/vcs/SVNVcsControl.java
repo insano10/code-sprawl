@@ -5,9 +5,7 @@ import org.apache.log4j.Logger;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.io.Reader;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -58,10 +56,8 @@ public class SVNVcsControl implements VcsControl
         }
         catch (IOException | InterruptedException e)
         {
-            LOGGER.error("Failed to generate SVN log from: " + vcsRootPath + " to: " + vcsLogPath);
+            throw new RuntimeException("Failed to get current SVN revision", e);
         }
-
-        return "";
     }
 
     @Override
