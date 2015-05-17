@@ -2,12 +2,8 @@ package com.insano10.codesprawl.vcs;
 
 import org.apache.log4j.Logger;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.nio.file.Path;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 public class GitVcsControl implements VcsControl
 {
@@ -46,8 +42,7 @@ public class GitVcsControl implements VcsControl
             Process process = Runtime.getRuntime().exec(new String[]{"sh", "-c", "cd " + vcsRootPath + "; git log -1 | grep 'commit ' | cut -d' ' -f2"});
             process.waitFor();
 
-            BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
-            return reader.readLine();
+            return ProcessUtils.getSingleLineProcessOutput(process);
         }
         catch (IOException | InterruptedException e)
         {
@@ -56,8 +51,18 @@ public class GitVcsControl implements VcsControl
     }
 
     @Override
-    public String getLatestVcsLogRevision()
+    public String getLatestVcsLogRevision(Path vcsLogPath)
     {
-        return "";
+        try
+        {
+            Process process = Runtime.getRuntime().exec(new String[]{"sh", "-c", "head -n1 " + this.vcsLogPath + " | cut -d' ' -f2"});
+            process.waitFor();
+
+            return ProcessUtils.getSingleLineProcessOutput(process);
+        }
+        catch (IOException | InterruptedException e)
+        {
+            throw new RuntimeException("Failed to get current Git revision", e);
+        }
     }
 }

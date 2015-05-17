@@ -26,7 +26,7 @@ public class VcsInspector implements ConfigurationChangeListener
 
         switch(configuration.getVcsOption())
         {
-            case SVN: vcsControl = new SVNVcsControl(vcsRootPath, vcsLogPath); break;
+            case SVN: vcsControl = new SVNVcsControl(vcsRootPath); break;
             case Git: vcsControl = new GitVcsControl(vcsRootPath, vcsLogPath); break;
             default: LOGGER.error("Unsupported VCS system: " + configuration.getVcsOption());
         }
@@ -40,7 +40,7 @@ public class VcsInspector implements ConfigurationChangeListener
         }
         else
         {
-            String latestVcsLogRevision = vcsControl.getLatestVcsLogRevision();
+            String latestVcsLogRevision = vcsControl.getLatestVcsLogRevision(vcsLogPath);
             String currentVcsRevision = vcsControl.getCurrentVcsRevision();
 
             if(!currentVcsRevision.equals(latestVcsLogRevision))

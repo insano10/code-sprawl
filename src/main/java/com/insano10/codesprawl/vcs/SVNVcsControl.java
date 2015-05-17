@@ -6,25 +6,22 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.nio.file.Path;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
+import java.nio.file.Paths;
 
 public class SVNVcsControl implements VcsControl
 {
     private static final Logger LOGGER = Logger.getLogger(SVNVcsControl.class);
     private final Path vcsRootPath;
-    private final Path vcsLogPath;
 
-    public SVNVcsControl(Path vcsRootPath, Path vcsLogPath)
+    public SVNVcsControl(Path vcsRootPath)
     {
         this.vcsRootPath = vcsRootPath;
-        this.vcsLogPath = vcsLogPath;
     }
 
     @Override
-    public void generateVcsLog(Path logPath)
+    public void generateVcsLog(Path vcsLogPath)
     {
-        LOGGER.info("generating SVN log at: " + logPath);
+        LOGGER.info("generating SVN log at: " + vcsLogPath);
 
         try
         {
@@ -46,8 +43,7 @@ public class SVNVcsControl implements VcsControl
             Process process = Runtime.getRuntime().exec(new String[]{"sh", "-c", "cd " + vcsRootPath + "; svn info | grep 'Revision: ' | cut -d' ' -f2"});
             process.waitFor();
 
-            BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
-            return reader.readLine();
+            return ProcessUtils.getSingleLineProcessOutput(process);
         }
         catch (IOException | InterruptedException e)
         {
@@ -56,8 +52,18 @@ public class SVNVcsControl implements VcsControl
     }
 
     @Override
-    public String getLatestVcsLogRevision()
+    public String getLatestVcsLogRevision(Path vcsLogPath)
     {
-        return "";
+        try
+        {
+            Process process = Runtime.getRuntime().exec(new String[]{"sh", "-c", "head -n2 " + vcsLogPath + " | grep -v '^\\-' | cut -d' ' -f1 | cut -c 2-"});
+            process.waitFor();
+
+            return ProcessUtils.getSingleLineProcessOutput(process);
+        }
+        catch (IOException | InterruptedException e)
+        {
+            throw new RuntimeException("Failed to get current Git revision", e);
+        }
     }
 }

@@ -8,5 +8,5 @@ public interface VcsControl
 
     String getCurrentVcsRevision();
 
-    String getLatestVcsLogRevision();
+    String getLatestVcsLogRevision(Path vcsLogPath);
 }
