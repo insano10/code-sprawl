@@ -43,16 +43,11 @@ public class GitVcsControl implements VcsControl
     {
         try
         {
-            Process process = Runtime.getRuntime().exec(new String[]{"sh", "-c", "cd " + vcsRootPath + "; git log -1"});
+            Process process = Runtime.getRuntime().exec(new String[]{"sh", "-c", "cd " + vcsRootPath + "; git log -1 | grep 'commit ' | cut -d' ' -f2"});
             process.waitFor();
 
             BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
-            Stream<String> processOutput = reader.lines();
-
-            return processOutput.
-                    filter(l -> l.startsWith("commit ")).
-                    map(l -> l.split(" ")[1]).
-                    collect(Collectors.toList()).get(0);
+            return reader.readLine();
         }
         catch (IOException | InterruptedException e)
         {

@@ -43,16 +43,11 @@ public class SVNVcsControl implements VcsControl
     {
         try
         {
-            Process process = Runtime.getRuntime().exec(new String[]{"sh", "-c", "cd " + vcsRootPath + "; svn info"});
+            Process process = Runtime.getRuntime().exec(new String[]{"sh", "-c", "cd " + vcsRootPath + "; svn info | grep 'Revision: ' | cut -d' ' -f2"});
             process.waitFor();
 
             BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
-            Stream<String> processOutput = reader.lines();
-
-            return processOutput.
-                    filter(l -> l.startsWith("Revision:")).
-                    map(l -> l.split(" ")[1]).
-                    collect(Collectors.toList()).get(0);
+            return reader.readLine();
         }
         catch (IOException | InterruptedException e)
         {
