@@ -8,19 +8,11 @@ import java.nio.file.Path;
 public class GitVcsControl implements VcsControl
 {
     private static final Logger LOGGER = Logger.getLogger(GitVcsControl.class);
-    private final Path vcsRootPath;
-    private final Path vcsLogPath;
-
-    public GitVcsControl(Path vcsRootPath, Path vcsLogPath)
-    {
-        this.vcsRootPath = vcsRootPath;
-        this.vcsLogPath = vcsLogPath;
-    }
 
     @Override
-    public void generateVcsLog(Path logPath)
+    public void generateVcsLog(Path vcsRootPath, Path vcsLogPath)
     {
-        LOGGER.info("generating Git log at: " + logPath);
+        LOGGER.info("generating Git log at: " + vcsLogPath);
 
         try
         {
@@ -35,7 +27,7 @@ public class GitVcsControl implements VcsControl
     }
 
     @Override
-    public String getCurrentVcsRevision()
+    public String getCurrentVcsRevision(Path vcsRootPath)
     {
         try
         {
@@ -55,7 +47,7 @@ public class GitVcsControl implements VcsControl
     {
         try
         {
-            Process process = Runtime.getRuntime().exec(new String[]{"sh", "-c", "head -n1 " + this.vcsLogPath + " | cut -d' ' -f2"});
+            Process process = Runtime.getRuntime().exec(new String[]{"sh", "-c", "head -n1 " + vcsLogPath + " | cut -d' ' -f2"});
             process.waitFor();
 
             return ProcessUtils.getSingleLineProcessOutput(process);

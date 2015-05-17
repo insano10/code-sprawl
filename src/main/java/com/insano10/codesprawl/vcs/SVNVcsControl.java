@@ -2,24 +2,15 @@ package com.insano10.codesprawl.vcs;
 
 import org.apache.log4j.Logger;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 
 public class SVNVcsControl implements VcsControl
 {
     private static final Logger LOGGER = Logger.getLogger(SVNVcsControl.class);
-    private final Path vcsRootPath;
-
-    public SVNVcsControl(Path vcsRootPath)
-    {
-        this.vcsRootPath = vcsRootPath;
-    }
 
     @Override
-    public void generateVcsLog(Path vcsLogPath)
+    public void generateVcsLog(Path vcsRootPath, Path vcsLogPath)
     {
         LOGGER.info("generating SVN log at: " + vcsLogPath);
 
@@ -36,7 +27,7 @@ public class SVNVcsControl implements VcsControl
     }
 
     @Override
-    public String getCurrentVcsRevision()
+    public String getCurrentVcsRevision(Path vcsRootPath)
     {
         try
         {

@@ -12,6 +12,7 @@ public class VcsInspector implements ConfigurationChangeListener
     private static final Logger LOGGER = Logger.getLogger(VcsInspector.class);
 
     private VcsControl vcsControl;
+    private Path vcsRootPath;
     private Path vcsLogPath;
 
     public VcsInspector(Path dataDirectory)
@@ -22,12 +23,12 @@ public class VcsInspector implements ConfigurationChangeListener
     @Override
     public void onConfigurationUpdated(ProjectConfiguration configuration)
     {
-        Path vcsRootPath = configuration.getVcsRootPath();
+        this.vcsRootPath = configuration.getVcsRootPath();
 
         switch(configuration.getVcsOption())
         {
-            case SVN: vcsControl = new SVNVcsControl(vcsRootPath); break;
-            case Git: vcsControl = new GitVcsControl(vcsRootPath, vcsLogPath); break;
+            case SVN: vcsControl = new SVNVcsControl(); break;
+            case Git: vcsControl = new GitVcsControl(); break;
             default: LOGGER.error("Unsupported VCS system: " + configuration.getVcsOption());
         }
     }
@@ -36,16 +37,16 @@ public class VcsInspector implements ConfigurationChangeListener
     {
         if(!Files.exists(vcsLogPath))
         {
-            vcsControl.generateVcsLog(vcsLogPath);
+            vcsControl.generateVcsLog(vcsRootPath, vcsLogPath);
         }
         else
         {
             String latestVcsLogRevision = vcsControl.getLatestVcsLogRevision(vcsLogPath);
-            String currentVcsRevision = vcsControl.getCurrentVcsRevision();
+            String currentVcsRevision = vcsControl.getCurrentVcsRevision(vcsRootPath);
 
             if(!currentVcsRevision.equals(latestVcsLogRevision))
             {
-                vcsControl.generateVcsLog(vcsLogPath);
+                vcsControl.generateVcsLog(vcsRootPath, vcsLogPath);
             }
         }
     }

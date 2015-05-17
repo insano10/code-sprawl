@@ -4,9 +4,9 @@ import java.nio.file.Path;
 
 public interface VcsControl
 {
-    void generateVcsLog(Path logPath);
+    void generateVcsLog(Path vcsRootPath, Path logPath);
 
-    String getCurrentVcsRevision();
+    String getCurrentVcsRevision(Path vcsRootPath);
 
     String getLatestVcsLogRevision(Path vcsLogPath);
 }
