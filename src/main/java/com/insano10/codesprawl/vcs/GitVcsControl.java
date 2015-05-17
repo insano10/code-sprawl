@@ -57,4 +57,10 @@ public class GitVcsControl implements VcsControl
             throw new RuntimeException("Failed to get current Git revision", e);
         }
     }
+
+    @Override
+    public void updateVcsLog(Path vcsRootPath, Path vcsLogPath, String latestVcsLogRevision, String currentVcsRevision)
+    {
+
+    }
 }

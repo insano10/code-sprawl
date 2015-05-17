@@ -3,7 +3,11 @@ package com.insano10.codesprawl.vcs;
 import org.apache.log4j.Logger;
 
 import java.io.IOException;
+import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.StandardOpenOption;
+import java.util.ArrayList;
+import java.util.List;
 
 public class SVNVcsControl implements VcsControl
 {
@@ -56,5 +60,54 @@ public class SVNVcsControl implements VcsControl
         {
             throw new RuntimeException("Failed to get current Git revision", e);
         }
+    }
+
+    @Override
+    public void updateVcsLog(Path vcsRootPath, Path vcsLogPath, String latestVcsLogRevision, String currentVcsRevision)
+    {
+        LOGGER.info("generating SVN log between revisions: " + latestVcsLogRevision + " and " + currentVcsRevision);
+
+        try
+        {
+            String historyDelta = "cd " + vcsRootPath + "; svn log --verbose -r " + currentVcsRevision + ":" + latestVcsLogRevision;
+            Process process = Runtime.getRuntime().exec(new String[]{"sh", "-c", historyDelta});
+            process.waitFor();
+
+            final List<String> processOutput = ProcessUtils.getMultiLineProcessOutput(process);
+            final List<String> missingLogLines = getMissingLogLines(latestVcsLogRevision, processOutput);
+
+            mergeDeltaIntoLogFile(missingLogLines, vcsLogPath);
+        }
+        catch (IOException | InterruptedException e)
+        {
+            LOGGER.error("Failed to generate SVN log from: " + vcsRootPath + " to: " + vcsLogPath);
+        }
+    }
+
+    private void mergeDeltaIntoLogFile(List<String> missingLogLines, Path vcsLogPath) throws IOException
+    {
+        Path tmpPath = vcsLogPath.getParent().resolve("vcs.log.tmp");
+
+        Files.write(tmpPath, missingLogLines, StandardOpenOption.TRUNCATE_EXISTING);
+        Files.write(tmpPath, Files.readAllLines(vcsLogPath), StandardOpenOption.APPEND);
+        Files.delete(vcsLogPath);
+        Files.move(tmpPath, vcsLogPath);
+    }
+
+    private List<String> getMissingLogLines(String latestVcsLogRevision, List<String> logDeltaLines)
+    {
+        //strip off last entry (as we already have this in the log), svn -rA:B is inclusive
+        List<String> trimmedLogDelta = new ArrayList<>();
+        for(String line : logDeltaLines)
+        {
+            if(line.matches("r" + latestVcsLogRevision + ".*"))
+            {
+                break;
+            }
+            trimmedLogDelta.add(line);
+        }
+        //trim off the trailing dashed line
+        trimmedLogDelta.remove(trimmedLogDelta.size()-1);
+        return trimmedLogDelta;
     }
 }

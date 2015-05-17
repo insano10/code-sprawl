@@ -46,7 +46,7 @@ public class VcsInspector implements ConfigurationChangeListener
 
             if(!currentVcsRevision.equals(latestVcsLogRevision))
             {
-                vcsControl.generateVcsLog(vcsRootPath, vcsLogPath);
+                vcsControl.updateVcsLog(vcsRootPath, vcsLogPath, latestVcsLogRevision, currentVcsRevision);
             }
         }
     }

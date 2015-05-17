@@ -9,4 +9,6 @@ public interface VcsControl
     String getCurrentVcsRevision(Path vcsRootPath);
 
     String getLatestVcsLogRevision(Path vcsLogPath);
+
+    void updateVcsLog(Path vcsRootPath, Path vcsLogPath, String latestVcsLogRevision, String currentVcsRevision);
 }
