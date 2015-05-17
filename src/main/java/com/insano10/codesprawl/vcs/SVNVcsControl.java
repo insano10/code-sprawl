@@ -3,9 +3,7 @@ package com.insano10.codesprawl.vcs;
 import org.apache.log4j.Logger;
 
 import java.io.IOException;
-import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -38,7 +36,7 @@ public class SVNVcsControl implements VcsControl
             Process process = Runtime.getRuntime().exec(new String[]{"sh", "-c", "cd " + vcsRootPath + "; svn info | grep 'Revision: ' | cut -d' ' -f2"});
             process.waitFor();
 
-            return ProcessUtils.getSingleLineProcessOutput(process);
+            return VcsUtils.getSingleLineProcessOutput(process);
         }
         catch (IOException | InterruptedException e)
         {
@@ -54,7 +52,7 @@ public class SVNVcsControl implements VcsControl
             Process process = Runtime.getRuntime().exec(new String[]{"sh", "-c", "head -n2 " + vcsLogPath + " | grep -v '^\\-' | cut -d' ' -f1 | cut -c 2-"});
             process.waitFor();
 
-            return ProcessUtils.getSingleLineProcessOutput(process);
+            return VcsUtils.getSingleLineProcessOutput(process);
         }
         catch (IOException | InterruptedException e)
         {
@@ -73,25 +71,15 @@ public class SVNVcsControl implements VcsControl
             Process process = Runtime.getRuntime().exec(new String[]{"sh", "-c", historyDelta});
             process.waitFor();
 
-            final List<String> processOutput = ProcessUtils.getMultiLineProcessOutput(process);
+            final List<String> processOutput = VcsUtils.getMultiLineProcessOutput(process);
             final List<String> missingLogLines = getMissingLogLines(latestVcsLogRevision, processOutput);
 
-            mergeDeltaIntoLogFile(missingLogLines, vcsLogPath);
+            VcsUtils.prependLinesIntoFile(missingLogLines, vcsLogPath);
         }
         catch (IOException | InterruptedException e)
         {
-            LOGGER.error("Failed to generate SVN log from: " + vcsRootPath + " to: " + vcsLogPath);
+            LOGGER.error("Failed to generate SVN log from: " + latestVcsLogRevision + " to: " + currentVcsRevision, e);
         }
-    }
-
-    private void mergeDeltaIntoLogFile(List<String> missingLogLines, Path vcsLogPath) throws IOException
-    {
-        Path tmpPath = vcsLogPath.getParent().resolve("vcs.log.tmp");
-
-        Files.write(tmpPath, missingLogLines, StandardOpenOption.TRUNCATE_EXISTING);
-        Files.write(tmpPath, Files.readAllLines(vcsLogPath), StandardOpenOption.APPEND);
-        Files.delete(vcsLogPath);
-        Files.move(tmpPath, vcsLogPath);
     }
 
     private List<String> getMissingLogLines(String latestVcsLogRevision, List<String> logDeltaLines)

@@ -4,6 +4,8 @@ import org.apache.log4j.Logger;
 
 import java.io.IOException;
 import java.nio.file.Path;
+import java.util.ArrayList;
+import java.util.List;
 
 public class GitVcsControl implements VcsControl
 {
@@ -34,7 +36,7 @@ public class GitVcsControl implements VcsControl
             Process process = Runtime.getRuntime().exec(new String[]{"sh", "-c", "cd " + vcsRootPath + "; git log -1 | grep 'commit ' | cut -d' ' -f2"});
             process.waitFor();
 
-            return ProcessUtils.getSingleLineProcessOutput(process);
+            return VcsUtils.getSingleLineProcessOutput(process);
         }
         catch (IOException | InterruptedException e)
         {
@@ -50,7 +52,7 @@ public class GitVcsControl implements VcsControl
             Process process = Runtime.getRuntime().exec(new String[]{"sh", "-c", "head -n1 " + vcsLogPath + " | cut -d' ' -f2"});
             process.waitFor();
 
-            return ProcessUtils.getSingleLineProcessOutput(process);
+            return VcsUtils.getSingleLineProcessOutput(process);
         }
         catch (IOException | InterruptedException e)
         {
@@ -61,6 +63,30 @@ public class GitVcsControl implements VcsControl
     @Override
     public void updateVcsLog(Path vcsRootPath, Path vcsLogPath, String latestVcsLogRevision, String currentVcsRevision)
     {
+        LOGGER.info("generating Git log between revisions: " + latestVcsLogRevision + " and " + currentVcsRevision);
 
+        try
+        {
+            String historyDelta = "cd " + vcsRootPath + "; git log --name-only  " + latestVcsLogRevision + ".." + currentVcsRevision;
+            Process process = Runtime.getRuntime().exec(new String[]{"sh", "-c", historyDelta});
+            process.waitFor();
+
+            final List<String> processOutput = VcsUtils.getMultiLineProcessOutput(process);
+            final List<String> missingLogLines = getMissingLogLines(processOutput);
+
+            VcsUtils.prependLinesIntoFile(missingLogLines, vcsLogPath);
+        }
+        catch (IOException | InterruptedException e)
+        {
+            LOGGER.error("Failed to generate Git log from: " + latestVcsLogRevision + " to: " + currentVcsRevision, e);
+        }
+    }
+
+    private List<String> getMissingLogLines(List<String> logDeltaLines)
+    {
+        //just add a trailing line of whitespace to keep the log consistent
+        ArrayList<String> missingLogLines = new ArrayList<>(logDeltaLines);
+        missingLogLines.add("");
+        return missingLogLines;
     }
 }
