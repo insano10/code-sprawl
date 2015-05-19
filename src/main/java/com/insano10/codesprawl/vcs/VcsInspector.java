@@ -2,6 +2,10 @@ package com.insano10.codesprawl.vcs;
 
 import com.insano10.codesprawl.configuration.ConfigurationChangeListener;
 import com.insano10.codesprawl.servlets.ProjectConfiguration;
+import com.insano10.codesprawl.vcs.control.GitVcsControl;
+import com.insano10.codesprawl.vcs.control.SVNVcsControl;
+import com.insano10.codesprawl.vcs.control.VcsControl;
+import com.insano10.codesprawl.vcs.history.VcsTimeLine;
 import org.apache.log4j.Logger;
 
 import java.nio.file.Files;
@@ -33,7 +37,13 @@ public class VcsInspector implements ConfigurationChangeListener
         }
     }
 
-    public void inspectVcs()
+    public VcsTimeLine getVcsTimeLine()
+    {
+        updateVcsLog();
+        return vcsControl.buildVcsTimeLine();
+    }
+
+    private void updateVcsLog()
     {
         if(!Files.exists(vcsLogPath))
         {
@@ -50,4 +60,5 @@ public class VcsInspector implements ConfigurationChangeListener
             }
         }
     }
+
 }

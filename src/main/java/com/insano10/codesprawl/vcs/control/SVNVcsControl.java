@@ -1,5 +1,7 @@
-package com.insano10.codesprawl.vcs;
+package com.insano10.codesprawl.vcs.control;
 
+import com.insano10.codesprawl.vcs.VcsUtils;
+import com.insano10.codesprawl.vcs.history.VcsTimeLine;
 import org.apache.log4j.Logger;
 
 import java.io.IOException;
@@ -80,6 +82,12 @@ public class SVNVcsControl implements VcsControl
         {
             LOGGER.error("Failed to generate SVN log from: " + latestVcsLogRevision + " to: " + currentVcsRevision, e);
         }
+    }
+
+    @Override
+    public VcsTimeLine buildVcsTimeLine()
+    {
+        return new VcsTimeLine();
     }
 
     private List<String> getMissingLogLines(String latestVcsLogRevision, List<String> logDeltaLines)

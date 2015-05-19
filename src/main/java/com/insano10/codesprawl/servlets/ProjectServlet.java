@@ -5,6 +5,7 @@ import com.insano10.codesprawl.configuration.ConfigurationManager;
 import com.insano10.codesprawl.source.FileInspector;
 import com.insano10.codesprawl.source.ProjectFile;
 import com.insano10.codesprawl.vcs.VcsInspector;
+import com.insano10.codesprawl.vcs.history.VcsTimeLine;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -14,6 +15,8 @@ import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
 
 public class ProjectServlet extends HttpServlet
 {
@@ -38,10 +41,11 @@ public class ProjectServlet extends HttpServlet
     {
         if(request.getRequestURI().endsWith("/definition"))
         {
-            VCS_INSPECTOR.inspectVcs();
-            Collection<ProjectFile> files = FILE_INSPECTOR.getFiles();
+            Map<String, Object> responseData = new HashMap<>();
+            responseData.put("files", FILE_INSPECTOR.getFiles());
+            responseData.put("vcsTimeLine", VCS_INSPECTOR.getVcsTimeLine());
 
-            response.getWriter().print(GSON.toJson(files));
+            response.getWriter().print(GSON.toJson(responseData));
             response.setStatus(HttpServletResponse.SC_OK);
         }
         else if(request.getRequestURI().endsWith("/definition/configuration"))
