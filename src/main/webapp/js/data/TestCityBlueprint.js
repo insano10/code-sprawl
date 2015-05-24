@@ -7,6 +7,11 @@ define(["jquery"], function ($)
             this.data = createTestData();
         }
 
+        TestCityBluePrint.prototype.getVisualisationSourceDir = function getVisualisationSourceDir()
+        {
+            return "";
+        };
+
         TestCityBluePrint.prototype.getInhabitants = function getInhabitants()
         {
             return this.data;

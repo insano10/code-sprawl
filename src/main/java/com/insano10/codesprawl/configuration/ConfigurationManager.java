@@ -1,7 +1,6 @@
 package com.insano10.codesprawl.configuration;
 
 import com.insano10.codesprawl.servlets.ProjectConfiguration;
-import com.insano10.codesprawl.vcs.VcsSystem;
 import org.apache.log4j.Logger;
 
 import java.io.IOException;
@@ -110,5 +109,10 @@ public class ConfigurationManager
     {
         final String userHome = System.getProperty("user.home");
         return Paths.get(userHome, ".code-sprawl");
+    }
+
+    public String getVisualisationDirectoryRoot()
+    {
+        return properties.getProperty(VISUALISATION_SOURCE_DIR_KEY);
     }
 }

@@ -42,6 +42,7 @@ public class ProjectServlet extends HttpServlet
         if(request.getRequestURI().endsWith("/definition"))
         {
             Map<String, Object> responseData = new HashMap<>();
+            responseData.put("visualisationSourceDir", CONFIG_MANAGER.getVisualisationDirectoryRoot());
             responseData.put("files", FILE_INSPECTOR.getFiles());
             responseData.put("vcsTimeLine", VCS_INSPECTOR.getVcsTimeLine());
 

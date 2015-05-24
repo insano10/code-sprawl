@@ -13,6 +13,7 @@ define(["jquery", "TestCityBlueprint", "FileNeighbourhood", "FileUnit", "sceneOb
                 this.neighbourhoodToUnitArrayMap = {};
                 this.sceneObjects = new SceneObjects();
                 this.fileUnits = {};
+                this.visualisationSourceDir = "";
             }
 
             CityPlanner.prototype.loadTestCity = function loadTestCity()
@@ -23,6 +24,8 @@ define(["jquery", "TestCityBlueprint", "FileNeighbourhood", "FileUnit", "sceneOb
             CityPlanner.prototype.loadCity = function loadCity(bluePrint)
             {
                 clearCity(this);
+
+                this.visualisationSourceDir = bluePrint.getVisualisationSourceDir();
 
                 console.log("Loading city inhabitants");
                 loadInhabitants(this, bluePrint);
@@ -121,8 +124,7 @@ define(["jquery", "TestCityBlueprint", "FileNeighbourhood", "FileUnit", "sceneOb
                     var fileUnit = new FileUnit(UNIT_SIDE_LENGTH, unit.lineCount, UNIT_SIDE_LENGTH, unit.name, unit.groupName, unit.lineCount, unit.fileExtension);
                     fileUnit.setPosition(position);
                     neighbourhoodUnits.push(fileUnit);
-                    cityPlanner.fileUnits[fileUnit.getFullyQualifiedName()] = fileUnit
-                    ;
+                    cityPlanner.fileUnits[fileUnit.getFullyQualifiedName()] = fileUnit;
                     column++;
 
                     if (column == width)
