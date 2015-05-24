@@ -2,6 +2,7 @@ package com.insano10.codesprawl.vcs.control;
 
 import com.insano10.codesprawl.vcs.VcsUtils;
 import com.insano10.codesprawl.vcs.history.FileVcsHistory;
+import com.insano10.codesprawl.vcs.history.GitLogParser;
 import com.insano10.codesprawl.vcs.history.VcsTimeLine;
 import org.apache.log4j.Logger;
 
@@ -89,7 +90,7 @@ public class GitVcsControl implements VcsControl
     @Override
     public VcsTimeLine buildVcsTimeLine(Path vcsLogPath)
     {
-        ArrayList<FileVcsHistory> history = new ArrayList<>();
+        List<FileVcsHistory> history = GitLogParser.parse(vcsLogPath);
         return new VcsTimeLine(history);
     }
 

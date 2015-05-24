@@ -13,10 +13,10 @@ import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class SVNLogParser
+public class GitLogParser
 {
-    private static final Logger LOGGER = Logger.getLogger(SVNLogParser.class);
-    private static final SimpleDateFormat TIMESTAMP_DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss Z");
+    private static final Logger LOGGER = Logger.getLogger(GitLogParser.class);
+    private static final SimpleDateFormat TIMESTAMP_DATE_FORMAT = new SimpleDateFormat("EEE MMM d HH:mm:ss yyyy Z");
 
     public static List<FileVcsHistory> parse(Path vcsLogFile)
     {
@@ -28,20 +28,30 @@ public class SVNLogParser
         {
             while ((line = reader.readLine()) != null)
             {
-                if (line.trim().matches("^[-]+$") && currentGroup.isComplete())
+                if (line.matches("^commit.*") && !currentGroup.isMissingRevision())
                 {
                     currentGroup.mergeIntoHistory(history);
                     currentGroup.reset();
+
+                    parseRevisionLineIntoGroup(line, currentGroup);
                 }
-                else if (line.matches("^r.*") && currentGroup.isMissingRevision())
+                else if (line.matches("^commit.*") && currentGroup.isMissingRevision())
                 {
                     parseRevisionLineIntoGroup(line, currentGroup);
                 }
-                else if (line.matches("Changed paths:"))
+                else if (line.matches("^Author:.*"))
+                {
+                    parseAuthorLineIntoGroup(line, currentGroup);
+                }
+                else if (line.matches("^Date:.*"))
+                {
+                    parseDateLineIntoGroup(line, currentGroup);
+                }
+                else if (line.trim().isEmpty() && !currentGroup.isMissingTimestamp() && !currentGroup.isReadingModifiedFiles())
                 {
                     currentGroup.modifiedFilesIncoming();
                 }
-                else if (line.trim().isEmpty())
+                else if (line.trim().isEmpty() && currentGroup.hasSeenModifiedFiles())
                 {
                     currentGroup.modifiedFilesComplete();
                 }
@@ -62,16 +72,33 @@ public class SVNLogParser
 
     private static void parseRevisionLineIntoGroup(final String line, final CommitGroup group)
     {
-        final Pattern pattern = Pattern.compile("^r(.*) \\|(.*)\\|(.*) \\(.*\\|.*");
+        final Pattern pattern = Pattern.compile("^commit (.*)");
         final Matcher matcher = pattern.matcher(line);
         if (matcher.matches())
         {
             String revision = matcher.group(1).trim();
-            String user = matcher.group(2).trim();
-            String timestamp = matcher.group(3).trim();
-
             group.setRevision(revision);
+        }
+    }
+
+    private static void parseAuthorLineIntoGroup(final String line, final CommitGroup group)
+    {
+        final Pattern pattern = Pattern.compile("^Author: (.*) <.*");
+        final Matcher matcher = pattern.matcher(line);
+        if (matcher.matches())
+        {
+            String user = matcher.group(1).trim();
             group.setUser(user);
+        }
+    }
+
+    private static void parseDateLineIntoGroup(final String line, final CommitGroup group)
+    {
+        final Pattern pattern = Pattern.compile("^Date:(.*)");
+        final Matcher matcher = pattern.matcher(line);
+        if (matcher.matches())
+        {
+            String timestamp = matcher.group(1).trim();
 
             try
             {
@@ -87,7 +114,7 @@ public class SVNLogParser
 
     private static void parseModifiedFileIntoGroup(final String line, final CommitGroup group)
     {
-        final Pattern pattern = Pattern.compile("^.*?/(.*)/(.*?)$");
+        final Pattern pattern = Pattern.compile("^(.*)/(.*?)$");
         final Matcher matcher = pattern.matcher(line);
         if (matcher.matches())
         {
@@ -121,4 +148,5 @@ public class SVNLogParser
             return fileNameWithExtension;
         }
     }
+
 }
