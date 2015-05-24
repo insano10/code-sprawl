@@ -143,7 +143,9 @@ define(['jquery', 'LoadedCityBlueprint', 'controls', 'jqueryui'], function ($, L
                             console.log('finished visualising. Response is ' + response);
 
                             var responseObj = JSON.parse(response);
-                            loadCityCallback(new LoadedCityBlueprint(responseObj.files, responseObj.visualisationSourceDir));
+                            loadCityCallback(new LoadedCityBlueprint(responseObj.files, 
+                                responseObj.visualisationSourceDir, 
+                                responseObj.vcsTimeLine.history));
 
                             loadingIcon.hide();
                         },

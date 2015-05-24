@@ -2,10 +2,11 @@ define(["jquery"], function ($)
 {
     return function ()
     {
-        function LoadedCityBluePrint(fileUnitArray, visualisationSourceDir)
+        function LoadedCityBluePrint(fileUnitArray, visualisationSourceDir, vcsHistoryMap)
         {
-            this.data = fileUnitArray;
+            this.inhabitants = fileUnitArray;
             this.visualisationSourceDir = visualisationSourceDir;
+            this.vcsHistoryMap = vcsHistoryMap;
         }
 
         LoadedCityBluePrint.prototype.getVisualisationSourceDir = function getVisualisationSourceDir()
@@ -15,7 +16,12 @@ define(["jquery"], function ($)
 
         LoadedCityBluePrint.prototype.getInhabitants = function getInhabitants()
         {
-            return this.data;
+            return this.inhabitants;
+        };
+
+        LoadedCityBluePrint.prototype.getVcsHistoryMap = function getVcsHistoryMap()
+        {
+            return this.vcsHistoryMap;
         };
 
         return LoadedCityBluePrint;

@@ -4,7 +4,8 @@ define(["jquery"], function ($)
     {
         function TestCityBluePrint()
         {
-            this.data = createTestData();
+            this.inhabitants = createTestInhabitants();
+            this.vcsHistoryMap = createTestVcsHistory(this.inhabitants);
         }
 
         TestCityBluePrint.prototype.getVisualisationSourceDir = function getVisualisationSourceDir()
@@ -14,10 +15,15 @@ define(["jquery"], function ($)
 
         TestCityBluePrint.prototype.getInhabitants = function getInhabitants()
         {
-            return this.data;
+            return this.inhabitants;
         };
 
-        var createTestData = function createTestData()
+        TestCityBluePrint.prototype.getVcsHistoryMap = function getVcsHistoryMap()
+        {
+            return this.vcsHistoryMap;
+        };
+
+        var createTestInhabitants = function createTestInhabitants()
         {
             var cubeData = [];
 
@@ -25,13 +31,30 @@ define(["jquery"], function ($)
             {
                 for (var unitId = 0; unitId < Math.floor(Math.random() * 150) + 1; unitId++)
                 {
-                    cubeData.push(createTestUnit(groupId, unitId));
+                    cubeData.push(createTestFileUnit(groupId, unitId));
                 }
             }
             return cubeData;
         };
 
-        var createTestUnit = function createTestUnit(groupId, unitId)
+        var createTestVcsHistory = function createTestVcsHistory(fileUnits)
+        {
+            var history = {};
+            $.each(fileUnits, function(idx, fileUnit) {
+
+                history[fileUnit.groupName + ":" + fileUnit.name + "." + fileUnit.fileExtension] = {
+                    groupName: fileUnit.groupName,
+                    fileName: fileUnit.name,
+                    fileExtension: fileUnit.fileExtension,
+                    lastModifiedByUser: "Bob",
+                    lastModifiedTimeMillis: 1432494925000
+                };
+            });
+
+            return history;
+        };
+
+        var createTestFileUnit = function createTestFileUnit(groupId, unitId)
         {
             return {
                 groupName: "group: " + groupId,

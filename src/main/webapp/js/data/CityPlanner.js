@@ -14,6 +14,7 @@ define(["jquery", "TestCityBlueprint", "FileNeighbourhood", "FileUnit", "sceneOb
                 this.sceneObjects = new SceneObjects();
                 this.fileUnits = {};
                 this.visualisationSourceDir = "";
+                this.vcsHistory = {};
             }
 
             CityPlanner.prototype.loadTestCity = function loadTestCity()
@@ -26,6 +27,7 @@ define(["jquery", "TestCityBlueprint", "FileNeighbourhood", "FileUnit", "sceneOb
                 clearCity(this);
 
                 this.visualisationSourceDir = bluePrint.getVisualisationSourceDir();
+                this.vcsHistory = bluePrint.getVcsHistoryMap();
 
                 console.log("Loading city inhabitants");
                 loadInhabitants(this, bluePrint);
@@ -132,6 +134,10 @@ define(["jquery", "TestCityBlueprint", "FileNeighbourhood", "FileUnit", "sceneOb
                         column = 0;
                         row++;
                     }
+
+                    var historyKey = getVcsHistoryKey(cityPlanner, fileUnit);
+
+                    fileUnit.setVcsInfo(cityPlanner.vcsHistory[historyKey]);
                 });
 
                 var groundSideXLengthForData = (width * UNIT_SIDE_LENGTH) + ((width - 1) * GAP_BETWEEN_UNITS);
@@ -154,6 +160,23 @@ define(["jquery", "TestCityBlueprint", "FileNeighbourhood", "FileUnit", "sceneOb
                 cityPlanner.sceneObjects.clear(scene);
                 cityPlanner.neighbourhoodToUnitArrayMap = {};
                 cityPlanner.fileUnits = {};
+            };
+
+            var getVcsHistoryKey = function(cityPlanner, fileUnit)
+            {
+                if(cityPlanner.visualisationSourceDir.length > 0)
+                {
+                    var delimiter = "";
+                    if(!/\/$/.test(cityPlanner.visualisationSourceDir))
+                    {
+                        delimiter = "/";
+                    }
+                    return cityPlanner.visualisationSourceDir + delimiter + fileUnit.getVcsHistoryId();
+                }
+                else
+                {
+                    return fileUnit.getVcsHistoryId();
+                }
             };
 
             return CityPlanner;

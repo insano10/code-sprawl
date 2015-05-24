@@ -19,7 +19,13 @@ define( ["three"], function (THREE) {
                 new THREE.MeshLambertMaterial({ color: DEFAULT_COLOUR, wrapAround: true }));
             this.mesh.name = this.getFullyQualifiedName();
             this.mesh.castShadow = true;
+            this.vcsInfo = null;
         }
+
+        FileUnit.prototype.setVcsInfo = function setVcsInfo(vcsInfo)
+        {
+            this.vcsInfo = vcsInfo;
+        };
 
         FileUnit.prototype.setPosition = function setPosition(position3D)
         {
@@ -74,6 +80,11 @@ define( ["three"], function (THREE) {
             return this.groupName + "/" + this.name;
         };
 
+        FileUnit.prototype.getVcsHistoryId = function getVcsHistoryId()
+        {
+            return this.groupName + ":" + this.name + "." + this.fileExtension;
+        };
+
         FileUnit.prototype.getLineCount = function getLineCount()
         {
             return this.lineCount;
@@ -82,6 +93,11 @@ define( ["three"], function (THREE) {
         FileUnit.prototype.getFileExtension = function getFileExtension()
         {
             return this.fileExtension;
+        };
+
+        FileUnit.prototype.getVcsInfo = function getVcsInfo()
+        {
+            return this.vcsInfo;
         };
 
         FileUnit.prototype.getObjectById = function getObjectById(objectId)

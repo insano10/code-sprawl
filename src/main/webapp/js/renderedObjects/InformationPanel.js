@@ -44,6 +44,20 @@ define(["three", "container"], function (THREE, container)
             context.fillText("Unit Name: " + this.target.getName(), x, y + 60);
             context.fillText("File Extension: " + this.target.getFileExtension(), x, y + 90);
             context.fillText("Line count: " + this.target.getLineCount(), x, y + 120);
+
+            if(this.target.getVcsInfo() != null)
+            {
+                var vcsInfo = this.target.getVcsInfo();
+
+                var lastModifiedDate = new Date(vcsInfo.lastModifiedTimeMillis);
+
+                context.fillText("Last Modified Time: " + lastModifiedDate.toLocaleString(), x, y + 180);
+                context.fillText("Last Modified by User: " + vcsInfo.lastModifiedByUser, x, y + 210);
+            }
+            else
+            {
+                context.fillText("No VCS history found", x, y + 180);
+            }
         }
     };
 
