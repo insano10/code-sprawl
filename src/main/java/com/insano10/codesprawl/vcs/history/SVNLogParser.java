@@ -11,7 +11,9 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+
+import static com.insano10.codesprawl.vcs.history.LogParserUtils.extractFileExtension;
+import static com.insano10.codesprawl.vcs.history.LogParserUtils.extractFileName;
 
 public class SVNLogParser
 {
@@ -49,6 +51,10 @@ public class SVNLogParser
                 {
                     parseModifiedFileIntoGroup(line, currentGroup);
                 }
+                else
+                {
+                    //commit message
+                }
             }
         }
         catch (IOException e)
@@ -62,63 +68,31 @@ public class SVNLogParser
 
     private static void parseRevisionLineIntoGroup(final String line, final CommitGroup group)
     {
-        final Pattern pattern = Pattern.compile("^r(.*) \\|(.*)\\|(.*) \\(.*\\|.*");
-        final Matcher matcher = pattern.matcher(line);
-        if (matcher.matches())
+        final Matcher matcher = LogParserUtils.getMatcherFor("^r(.*) \\|(.*)\\|(.*) \\(.*\\|.*", line);
+        final String revision = matcher.group(1).trim();
+        final String user = matcher.group(2).trim();
+        final String timestamp = matcher.group(3).trim();
+
+        group.setRevision(revision);
+        group.setUser(user);
+
+        try
         {
-            String revision = matcher.group(1).trim();
-            String user = matcher.group(2).trim();
-            String timestamp = matcher.group(3).trim();
-
-            group.setRevision(revision);
-            group.setUser(user);
-
-            try
-            {
-                Date date = TIMESTAMP_DATE_FORMAT.parse(timestamp);
-                group.setTimestampMillis(date.getTime());
-            }
-            catch (ParseException e)
-            {
-                LOGGER.error("Failed to parse timestamp: " + timestamp, e);
-            }
+            Date date = TIMESTAMP_DATE_FORMAT.parse(timestamp);
+            group.setTimestampMillis(date.getTime());
+        }
+        catch (ParseException e)
+        {
+            LOGGER.error("Failed to parse timestamp: " + timestamp, e);
         }
     }
 
     private static void parseModifiedFileIntoGroup(final String line, final CommitGroup group)
     {
-        final Pattern pattern = Pattern.compile("^.*?/(.*)/(.*?)$");
-        final Matcher matcher = pattern.matcher(line);
-        if (matcher.matches())
-        {
-            final String groupName = matcher.group(1);
-            final String fileNameAndExtension = matcher.group(2);
+        final Matcher matcher = LogParserUtils.getMatcherFor("^.*?/(.*)/(.*?)$", line);
+        final String groupName = matcher.group(1);
+        final String fileNameAndExtension = matcher.group(2);
 
-            group.addModifiedFile(groupName, getFileName(fileNameAndExtension), getFileExtension(fileNameAndExtension));
-        }
-    }
-
-    private static String getFileExtension(final String fileNameWithExtension)
-    {
-        if(fileNameWithExtension.contains("."))
-        {
-            return fileNameWithExtension.split("\\.")[1];
-        }
-        else
-        {
-            return "UNKNOWN";
-        }
-    }
-
-    private static String getFileName(final String fileNameWithExtension)
-    {
-        if(fileNameWithExtension.contains("."))
-        {
-            return fileNameWithExtension.split("\\.")[0];
-        }
-        else
-        {
-            return fileNameWithExtension;
-        }
+        group.addModifiedFile(groupName, extractFileName(fileNameAndExtension), extractFileExtension(fileNameAndExtension));
     }
 }

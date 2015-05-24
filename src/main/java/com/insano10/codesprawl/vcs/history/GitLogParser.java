@@ -11,7 +11,8 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+
+import static com.insano10.codesprawl.vcs.history.LogParserUtils.*;
 
 public class GitLogParser
 {
@@ -47,13 +48,17 @@ public class GitLogParser
                 {
                     parseDateLineIntoGroup(line, currentGroup);
                 }
-                else if (line.trim().isEmpty() && !currentGroup.isMissingTimestamp() && !currentGroup.isReadingModifiedFiles())
+                else if (line.trim().isEmpty() && !currentGroup.isMissingTimestamp() && !currentGroup.hasSeenModifiedFiles())
                 {
                     currentGroup.modifiedFilesIncoming();
                 }
                 else if (line.trim().isEmpty() && currentGroup.hasSeenModifiedFiles())
                 {
                     currentGroup.modifiedFilesComplete();
+                }
+                else if(line.matches("^ +.*"))
+                {
+                    //commit message
                 }
                 else if (currentGroup.isReadingModifiedFiles())
                 {
@@ -72,81 +77,46 @@ public class GitLogParser
 
     private static void parseRevisionLineIntoGroup(final String line, final CommitGroup group)
     {
-        final Pattern pattern = Pattern.compile("^commit (.*)");
-        final Matcher matcher = pattern.matcher(line);
-        if (matcher.matches())
-        {
-            String revision = matcher.group(1).trim();
-            group.setRevision(revision);
-        }
+        final Matcher matcher = getMatcherFor("^commit (.*)", line);
+        final String revision = matcher.group(1).trim();
+        group.setRevision(revision);
     }
 
     private static void parseAuthorLineIntoGroup(final String line, final CommitGroup group)
     {
-        final Pattern pattern = Pattern.compile("^Author: (.*) <.*");
-        final Matcher matcher = pattern.matcher(line);
-        if (matcher.matches())
-        {
-            String user = matcher.group(1).trim();
-            group.setUser(user);
-        }
+        final Matcher matcher = getMatcherFor("^Author: (.*) <.*", line);
+        final String user = matcher.group(1).trim();
+        group.setUser(user);
     }
 
     private static void parseDateLineIntoGroup(final String line, final CommitGroup group)
     {
-        final Pattern pattern = Pattern.compile("^Date:(.*)");
-        final Matcher matcher = pattern.matcher(line);
-        if (matcher.matches())
-        {
-            String timestamp = matcher.group(1).trim();
+        final Matcher matcher = getMatcherFor("^Date:(.*)", line);
+        final String timestamp = matcher.group(1).trim();
 
-            try
-            {
-                Date date = TIMESTAMP_DATE_FORMAT.parse(timestamp);
-                group.setTimestampMillis(date.getTime());
-            }
-            catch (ParseException e)
-            {
-                LOGGER.error("Failed to parse timestamp: " + timestamp, e);
-            }
+        try
+        {
+            Date date = TIMESTAMP_DATE_FORMAT.parse(timestamp);
+            group.setTimestampMillis(date.getTime());
+        }
+        catch (ParseException e)
+        {
+            LOGGER.error("Failed to parse timestamp: " + timestamp, e);
         }
     }
 
     private static void parseModifiedFileIntoGroup(final String line, final CommitGroup group)
     {
-        final Pattern pattern = Pattern.compile("^(.*)/(.*?)$");
-        final Matcher matcher = pattern.matcher(line);
-        if (matcher.matches())
+        if(line.contains("/"))
         {
+            final Matcher matcher = getMatcherFor("^(.*)/(.*?)$", line);
             final String groupName = matcher.group(1);
             final String fileNameAndExtension = matcher.group(2);
-
-            group.addModifiedFile(groupName, getFileName(fileNameAndExtension), getFileExtension(fileNameAndExtension));
-        }
-    }
-
-    private static String getFileExtension(final String fileNameWithExtension)
-    {
-        if(fileNameWithExtension.contains("."))
-        {
-            return fileNameWithExtension.split("\\.")[1];
+            group.addModifiedFile(groupName, extractFileName(fileNameAndExtension), extractFileExtension(fileNameAndExtension));
         }
         else
         {
-            return "UNKNOWN";
+            group.addModifiedFile("", extractFileName(line), extractFileExtension(line));
         }
     }
-
-    private static String getFileName(final String fileNameWithExtension)
-    {
-        if(fileNameWithExtension.contains("."))
-        {
-            return fileNameWithExtension.split("\\.")[0];
-        }
-        else
-        {
-            return fileNameWithExtension;
-        }
-    }
-
 }

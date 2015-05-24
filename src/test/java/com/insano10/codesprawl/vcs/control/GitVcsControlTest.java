@@ -21,6 +21,7 @@ public class GitVcsControlTest
         //given
         ProjectFile projectFileWithExtension = new ProjectFile("src/main/java/com/insano10/codesprawl/vcs", "GitVcsControl", 0L, "java");
         ProjectFile projectFileWithoutExtension = new ProjectFile("node_modules/karma/node_modules/useragent", "LICENSE", 0L, "");
+        ProjectFile projectFileWithNoGroupName = new ProjectFile("", "code-sprawl", 0L, "iml");
 
         //when
         VcsTimeLine timeLine = control.buildVcsTimeLine(vcsLogPath);
@@ -31,6 +32,15 @@ public class GitVcsControlTest
 
         assertThat(timeLine.getUserWhoLastModified(projectFileWithoutExtension)).isEqualTo("insano10");
         assertThat(timeLine.getLastModifiedTimeMillis(projectFileWithoutExtension)).isEqualTo(1425690495000L);
+
+        assertThat(timeLine.getUserWhoLastModified(projectFileWithNoGroupName)).isEqualTo("insano10");
+        assertThat(timeLine.getLastModifiedTimeMillis(projectFileWithNoGroupName)).isEqualTo(1431800983000L);
+    }
+
+    @Test
+    public void should() throws Exception
+    {
+        System.out.println("    implement updateVcsLog for Git".matches("^ *.*"));
     }
 
 }
