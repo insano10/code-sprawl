@@ -1,5 +1,7 @@
 package com.insano10.codesprawl.vcs;
 
+import com.insano10.codesprawl.source.ProjectFile;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;

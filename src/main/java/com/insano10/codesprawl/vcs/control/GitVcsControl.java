@@ -1,12 +1,14 @@
 package com.insano10.codesprawl.vcs.control;
 
 import com.insano10.codesprawl.vcs.VcsUtils;
+import com.insano10.codesprawl.vcs.history.FileVcsHistory;
 import com.insano10.codesprawl.vcs.history.VcsTimeLine;
 import org.apache.log4j.Logger;
 
 import java.io.IOException;
 import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class GitVcsControl implements VcsControl
@@ -85,9 +87,10 @@ public class GitVcsControl implements VcsControl
     }
 
     @Override
-    public VcsTimeLine buildVcsTimeLine()
+    public VcsTimeLine buildVcsTimeLine(Path vcsLogPath)
     {
-        return new VcsTimeLine();
+        ArrayList<FileVcsHistory> history = new ArrayList<>();
+        return new VcsTimeLine(history);
     }
 
     private List<String> getMissingLogLines(List<String> logDeltaLines)

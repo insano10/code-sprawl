@@ -7,12 +7,27 @@ public class ProjectFile
     private final long lineCount;
     private final String fileExtension;
 
-    ProjectFile(String groupName, String name, long lineCount, String fileExtension)
+    public ProjectFile(String groupName, String name, long lineCount, String fileExtension)
     {
         this.groupName = groupName;
         this.name = name;
         this.lineCount = lineCount;
-        this.fileExtension = fileExtension;
+        this.fileExtension = (fileExtension == null || fileExtension.isEmpty()) ? "UNKNOWN" : fileExtension;
+    }
+
+    public String getGroupName()
+    {
+        return groupName;
+    }
+
+    public String getName()
+    {
+        return name;
+    }
+
+    public String getFileExtension()
+    {
+        return fileExtension;
     }
 
     @Override

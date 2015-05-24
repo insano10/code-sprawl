@@ -40,7 +40,7 @@ public class VcsInspector implements ConfigurationChangeListener
     public VcsTimeLine getVcsTimeLine()
     {
         updateVcsLog();
-        return vcsControl.buildVcsTimeLine();
+        return vcsControl.buildVcsTimeLine(vcsLogPath);
     }
 
     private void updateVcsLog()

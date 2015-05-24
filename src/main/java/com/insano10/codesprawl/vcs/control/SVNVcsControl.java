@@ -1,13 +1,17 @@
 package com.insano10.codesprawl.vcs.control;
 
 import com.insano10.codesprawl.vcs.VcsUtils;
+import com.insano10.codesprawl.vcs.history.FileVcsHistory;
+import com.insano10.codesprawl.vcs.history.SVNLogParser;
 import com.insano10.codesprawl.vcs.history.VcsTimeLine;
 import org.apache.log4j.Logger;
 
 import java.io.IOException;
 import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class SVNVcsControl implements VcsControl
 {
@@ -85,9 +89,10 @@ public class SVNVcsControl implements VcsControl
     }
 
     @Override
-    public VcsTimeLine buildVcsTimeLine()
+    public VcsTimeLine buildVcsTimeLine(Path vcsLogPath)
     {
-        return new VcsTimeLine();
+        List<FileVcsHistory> fileHistory = SVNLogParser.parse(vcsLogPath);
+        return new VcsTimeLine(fileHistory);
     }
 
     private List<String> getMissingLogLines(String latestVcsLogRevision, List<String> logDeltaLines)

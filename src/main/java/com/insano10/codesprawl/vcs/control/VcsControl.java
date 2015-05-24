@@ -14,5 +14,5 @@ public interface VcsControl
 
     void updateVcsLog(Path vcsRootPath, Path vcsLogPath, String latestVcsLogRevision, String currentVcsRevision);
 
-    VcsTimeLine buildVcsTimeLine();
+    VcsTimeLine buildVcsTimeLine(Path vcsLogPath);
 }

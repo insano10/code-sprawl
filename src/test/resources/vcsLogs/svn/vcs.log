@@ -121,20 +121,6 @@ Changed paths:
 
 Avoid warning about %d and long int
 
-------------------------------------------------------------------------
-r15251 | philippe | 2015-05-17 19:31:55 +0100 (Sun, 17 May 2015) | 3 lines
-Changed paths:
-   M /trunk/NEWS
-   M /trunk/coregrind/m_signals.c
-   M /trunk/drd/tests/tc22_exit_w_lock.stderr.exp-32bit
-   M /trunk/drd/tests/tc22_exit_w_lock.stderr.exp-64bit
-   M /trunk/drd/tests/tc22_exit_w_lock.vgtest
-   M /trunk/gdbserver_tests/nlgone_abrt.stderr.exp
-   M /trunk/gdbserver_tests/nlgone_abrt.vgtest
-   M /trunk/helgrind/tests/tc22_exit_w_lock.stderr.exp
-
-When process dies due to a signal, show the signal and the stacktrace
-at default verbosity
 
 ------------------------------------------------------------------------
 r15250 | philippe | 2015-05-17 17:34:04 +0100 (Sun, 17 May 2015) | 6 lines
