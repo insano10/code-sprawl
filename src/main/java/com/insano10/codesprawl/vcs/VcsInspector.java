@@ -62,7 +62,11 @@ public class VcsInspector implements ConfigurationChangeListener
             String latestVcsLogRevision = vcsControl.getLatestVcsLogRevision(vcsLogPath);
             String currentVcsRevision = vcsControl.getCurrentVcsRevision(vcsRootPath);
 
-            if(!currentVcsRevision.equals(latestVcsLogRevision))
+            if(latestVcsLogRevision == null)
+            {
+                vcsControl.generateVcsLog(vcsRootPath, vcsLogPath);
+            }
+            else if(!currentVcsRevision.equals(latestVcsLogRevision))
             {
                 vcsControl.updateVcsLog(vcsRootPath, vcsLogPath, latestVcsLogRevision, currentVcsRevision);
             }

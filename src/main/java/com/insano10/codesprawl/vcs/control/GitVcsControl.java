@@ -9,7 +9,6 @@ import org.apache.log4j.Logger;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 public class GitVcsControl implements VcsControl
@@ -25,6 +24,8 @@ public class GitVcsControl implements VcsControl
         {
             Process process = Runtime.getRuntime().exec(new String[]{"sh", "-c", "cd " + vcsRootPath + "; git log --name-only > " + vcsLogPath});
             process.waitFor();
+
+            VcsUtils.validateNoErrors(process);
 
         }
         catch (IOException | InterruptedException e)

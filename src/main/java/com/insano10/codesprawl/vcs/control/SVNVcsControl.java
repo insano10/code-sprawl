@@ -9,9 +9,7 @@ import org.apache.log4j.Logger;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class SVNVcsControl implements VcsControl
 {
@@ -26,6 +24,8 @@ public class SVNVcsControl implements VcsControl
         {
             Process process = Runtime.getRuntime().exec(new String[]{"sh", "-c", "cd " + vcsRootPath + "; svn log --verbose > " + vcsLogPath});
             process.waitFor();
+
+            VcsUtils.validateNoErrors(process);
 
         }
         catch (IOException | InterruptedException e)
