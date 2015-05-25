@@ -19,7 +19,7 @@ public class GitLogParser
     private static final Logger LOGGER = Logger.getLogger(GitLogParser.class);
     private static final SimpleDateFormat TIMESTAMP_DATE_FORMAT = new SimpleDateFormat("EEE MMM d HH:mm:ss yyyy Z");
 
-    public static List<FileVcsHistory> parse(Path vcsLogFile)
+    public static List<FileVcsHistory> parse(Path vcsLogFile, String relativeSourceDirectory)
     {
         final Map<String, FileVcsHistory> history = new HashMap<>();
         CommitGroup currentGroup = new CommitGroup();
@@ -62,7 +62,7 @@ public class GitLogParser
                 }
                 else if (currentGroup.isReadingModifiedFiles())
                 {
-                    parseModifiedFileIntoGroup(line, currentGroup);
+                    parseModifiedFileIntoGroup(line, currentGroup, relativeSourceDirectory);
                 }
             }
         }
@@ -105,14 +105,14 @@ public class GitLogParser
         }
     }
 
-    private static void parseModifiedFileIntoGroup(final String line, final CommitGroup group)
+    private static void parseModifiedFileIntoGroup(final String line, final CommitGroup group, String relativeSourceDirectory)
     {
         if(line.contains("/"))
         {
             final Matcher matcher = getMatcherFor("^(.*)/(.*?)$", line);
             final String groupName = matcher.group(1);
             final String fileNameAndExtension = matcher.group(2);
-            group.addModifiedFile(groupName, extractFileName(fileNameAndExtension), extractFileExtension(fileNameAndExtension));
+            group.addModifiedFile(extractGroupName(groupName, relativeSourceDirectory), extractFileName(fileNameAndExtension), extractFileExtension(fileNameAndExtension));
         }
         else
         {

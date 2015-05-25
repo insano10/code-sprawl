@@ -16,6 +16,28 @@ public class LogParserUtils
         throw new IllegalStateException("Matcher [" + patternRegex + "] does not match [" + lineToMatch + "]");
     }
 
+    public static String extractGroupName(final String fullGroupName, final String relativeSourceDirectory)
+    {
+        if(relativeSourceDirectory.isEmpty())
+        {
+            return fullGroupName;
+        }
+
+        final String[] tokens = fullGroupName.split(relativeSourceDirectory);
+
+        if(tokens.length == 1)
+        {
+            return relativeSourceDirectory;
+        }
+        else if(tokens.length >= 2)
+        {
+            return relativeSourceDirectory + tokens[1];
+        }
+        else
+        {
+            return fullGroupName;
+        }
+    }
 
     public static String extractFileName(final String fileNameWithExtension)
     {

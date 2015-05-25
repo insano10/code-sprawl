@@ -14,13 +14,14 @@ import java.util.regex.Matcher;
 
 import static com.insano10.codesprawl.vcs.history.LogParserUtils.extractFileExtension;
 import static com.insano10.codesprawl.vcs.history.LogParserUtils.extractFileName;
+import static com.insano10.codesprawl.vcs.history.LogParserUtils.extractGroupName;
 
 public class SVNLogParser
 {
     private static final Logger LOGGER = Logger.getLogger(SVNLogParser.class);
     private static final SimpleDateFormat TIMESTAMP_DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss Z");
 
-    public static List<FileVcsHistory> parse(Path vcsLogFile)
+    public static List<FileVcsHistory> parse(Path vcsLogFile, String relativeSourceDirectory)
     {
         final Map<String, FileVcsHistory> history = new HashMap<>();
         CommitGroup currentGroup = new CommitGroup();
@@ -49,7 +50,7 @@ public class SVNLogParser
                 }
                 else if (currentGroup.isReadingModifiedFiles())
                 {
-                    parseModifiedFileIntoGroup(line, currentGroup);
+                    parseModifiedFileIntoGroup(line, currentGroup, relativeSourceDirectory);
                 }
                 else
                 {
@@ -87,7 +88,7 @@ public class SVNLogParser
         }
     }
 
-    private static void parseModifiedFileIntoGroup(final String line, final CommitGroup group)
+    private static void parseModifiedFileIntoGroup(final String line, final CommitGroup group, String relativeSourceDirectory)
     {
         int numberOfSlashesInLine = countSlashesInLine(line);
         if(numberOfSlashesInLine > 1)
@@ -96,7 +97,7 @@ public class SVNLogParser
             final String groupName = matcher.group(1);
             final String fileNameAndExtension = matcher.group(2);
 
-            group.addModifiedFile(groupName, extractFileName(fileNameAndExtension), extractFileExtension(fileNameAndExtension));
+            group.addModifiedFile(extractGroupName(groupName, relativeSourceDirectory), extractFileName(fileNameAndExtension), extractFileExtension(fileNameAndExtension));
         }
         else
         {

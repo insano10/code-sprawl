@@ -16,6 +16,20 @@ public class GitVcsControlTest
     private final GitVcsControl control = new GitVcsControl();
 
     @Test
+    public void shouldStripOffWhateverIsInFrontOfTheRelativeSourcePathInGroupName() throws Exception
+    {
+        //given
+        ProjectFile projectFileWithExtension = new ProjectFile("com/insano10/codesprawl/vcs", "GitVcsControl", 0L, "java");
+
+        //when
+        VcsTimeLine timeLine = control.buildVcsTimeLine(vcsLogPath, "com/insano10");
+
+        //then
+        assertThat(timeLine.getUserWhoLastModified(projectFileWithExtension)).isEqualTo("insano10");
+        assertThat(timeLine.getLastModifiedTimeMillis(projectFileWithExtension)).isEqualTo(1431878979000L);
+    }
+
+    @Test
     public void shouldBuildVcsTimeLine() throws Exception
     {
         //given
@@ -24,7 +38,7 @@ public class GitVcsControlTest
         ProjectFile projectFileWithNoGroupName = new ProjectFile("", "code-sprawl", 0L, "iml");
 
         //when
-        VcsTimeLine timeLine = control.buildVcsTimeLine(vcsLogPath);
+        VcsTimeLine timeLine = control.buildVcsTimeLine(vcsLogPath, "");
 
         //then
         assertThat(timeLine.getUserWhoLastModified(projectFileWithExtension)).isEqualTo("insano10");
@@ -35,12 +49,6 @@ public class GitVcsControlTest
 
         assertThat(timeLine.getUserWhoLastModified(projectFileWithNoGroupName)).isEqualTo("insano10");
         assertThat(timeLine.getLastModifiedTimeMillis(projectFileWithNoGroupName)).isEqualTo(1431800983000L);
-    }
-
-    @Test
-    public void should() throws Exception
-    {
-        System.out.println("    implement updateVcsLog for Git".matches("^ *.*"));
     }
 
 }

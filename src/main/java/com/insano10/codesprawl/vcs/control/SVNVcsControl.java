@@ -89,9 +89,9 @@ public class SVNVcsControl implements VcsControl
     }
 
     @Override
-    public VcsTimeLine buildVcsTimeLine(Path vcsLogPath)
+    public VcsTimeLine buildVcsTimeLine(Path vcsLogPath, String relativeSourceDirectory)
     {
-        List<FileVcsHistory> fileHistory = SVNLogParser.parse(vcsLogPath);
+        List<FileVcsHistory> fileHistory = SVNLogParser.parse(vcsLogPath, relativeSourceDirectory);
         return new VcsTimeLine(fileHistory);
     }
 

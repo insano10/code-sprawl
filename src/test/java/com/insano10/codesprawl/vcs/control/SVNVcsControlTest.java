@@ -16,19 +16,43 @@ public class SVNVcsControlTest
     private final SVNVcsControl control = new SVNVcsControl();
 
     @Test
-    public void shouldBuildVcsTimeLine() throws Exception
+    public void shouldStripOffWhateverIsInFrontOfTheRelativeSourcePathInGroupName() throws Exception
     {
         //given
-        ProjectFile projectFileWithExtension = new ProjectFile("trunk/coregrind", "m_signals", 0L, "c");
-        ProjectFile projectFileWithoutExtension = new ProjectFile("trunk", "NEWS", 0L, null);
+        ProjectFile projectFileWithExtension = new ProjectFile("coregrind", "m_signals", 0L, "c");
 
         //when
-        VcsTimeLine timeLine = control.buildVcsTimeLine(vcsLogPath);
+        VcsTimeLine timeLine = control.buildVcsTimeLine(vcsLogPath, "coregrind");
 
         //then
         assertThat(timeLine.getUserWhoLastModified(projectFileWithExtension)).isEqualTo("philippe");
         assertThat(timeLine.getLastModifiedTimeMillis(projectFileWithExtension)).isEqualTo(1431869905000L);
+    }
 
+    @Test
+    public void shouldBuildVcsTimeLine() throws Exception
+    {
+        //given
+        ProjectFile projectFileWithExtension = new ProjectFile("trunk/coregrind", "m_signals", 0L, "c");
+
+        //when
+        VcsTimeLine timeLine = control.buildVcsTimeLine(vcsLogPath, "");
+
+        //then
+        assertThat(timeLine.getUserWhoLastModified(projectFileWithExtension)).isEqualTo("philippe");
+        assertThat(timeLine.getLastModifiedTimeMillis(projectFileWithExtension)).isEqualTo(1431869905000L);
+    }
+
+    @Test
+    public void shouldBuildVcsTimeLineWithFilesWithNoExtension() throws Exception
+    {
+        //given
+        ProjectFile projectFileWithoutExtension = new ProjectFile("trunk", "NEWS", 0L, null);
+
+        //when
+        VcsTimeLine timeLine = control.buildVcsTimeLine(vcsLogPath, "");
+
+        //then
         assertThat(timeLine.getUserWhoLastModified(projectFileWithoutExtension)).isEqualTo("rhyskidd");
         assertThat(timeLine.getLastModifiedTimeMillis(projectFileWithoutExtension)).isEqualTo(1431871354000L);
     }

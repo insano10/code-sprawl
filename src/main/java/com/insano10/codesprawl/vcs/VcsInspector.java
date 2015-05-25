@@ -25,6 +25,7 @@ public class VcsInspector implements ConfigurationChangeListener
     private Path vcsRootPath;
     private Path vcsLogPath;
     private Path metaDataPath;
+    private String relativeSourceDirectory;
 
     public VcsInspector(Path dataDirectory)
     {
@@ -36,6 +37,7 @@ public class VcsInspector implements ConfigurationChangeListener
     public void onConfigurationUpdated(ProjectConfiguration configuration)
     {
         this.vcsRootPath = configuration.getVcsRootPath();
+        this.relativeSourceDirectory = configuration.getRelativeSourceDirectory();
 
         switch(configuration.getVcsOption())
         {
@@ -48,7 +50,7 @@ public class VcsInspector implements ConfigurationChangeListener
     public VcsTimeLine getVcsTimeLine()
     {
         updateVcsLog();
-        return vcsControl.buildVcsTimeLine(vcsLogPath);
+        return vcsControl.buildVcsTimeLine(vcsLogPath, relativeSourceDirectory);
     }
 
     private void updateVcsLog()
