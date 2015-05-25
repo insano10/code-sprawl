@@ -8,6 +8,7 @@ import com.insano10.codesprawl.vcs.control.VcsControl;
 import com.insano10.codesprawl.vcs.history.VcsTimeLine;
 import org.apache.log4j.Logger;
 
+import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -18,6 +19,7 @@ import java.util.Properties;
 public class VcsInspector implements ConfigurationChangeListener
 {
     private static final Logger LOGGER = Logger.getLogger(VcsInspector.class);
+    private static final String PROJECT_ROOT_KEY = "project-root";
 
     private VcsControl vcsControl;
     private Path vcsRootPath;
@@ -51,7 +53,7 @@ public class VcsInspector implements ConfigurationChangeListener
 
     private void updateVcsLog()
     {
-        if(!Files.exists(vcsLogPath))
+        if(!Files.exists(vcsLogPath) || !currentVcsLogIsForCurrentVcsRoot())
         {
             vcsControl.generateVcsLog(vcsRootPath, vcsLogPath);
         }
@@ -74,7 +76,7 @@ public class VcsInspector implements ConfigurationChangeListener
         try(BufferedWriter writer = Files.newBufferedWriter(metaDataPath))
         {
             Properties properties = new Properties();
-            properties.setProperty("project-root", vcsRootPath.toAbsolutePath().toString());
+            properties.setProperty(PROJECT_ROOT_KEY, vcsRootPath.toAbsolutePath().toString());
             properties.setProperty("last-updated", LocalDateTime.now().toString());
             properties.store(writer, "vcs metadata");
         }
@@ -82,7 +84,23 @@ public class VcsInspector implements ConfigurationChangeListener
         {
             LOGGER.error("Failed to write metadata.properties", e);
         }
+    }
 
+    private boolean currentVcsLogIsForCurrentVcsRoot()
+    {
+        final Properties properties = new Properties();
+        try(BufferedReader reader = Files.newBufferedReader(metaDataPath))
+        {
+            properties.load(reader);
+
+            return vcsRootPath.toAbsolutePath().toString().equals(properties.getProperty(PROJECT_ROOT_KEY));
+        }
+        catch (IOException e)
+        {
+            LOGGER.error("Failed to read metadata.properties", e);
+        }
+
+        return false;
     }
 
 }
