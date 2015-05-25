@@ -33,7 +33,7 @@ public class LogParserUtils
     {
         if (fileNameWithExtension.contains("."))
         {
-            return fileNameWithExtension.split("\\.")[1];
+            return fileNameWithExtension.split("\\.")[1].split(" ")[0]; //remove anything trailing after the file extension
         }
         else
         {

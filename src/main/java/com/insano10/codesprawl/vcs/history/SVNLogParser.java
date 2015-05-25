@@ -89,10 +89,24 @@ public class SVNLogParser
 
     private static void parseModifiedFileIntoGroup(final String line, final CommitGroup group)
     {
-        final Matcher matcher = LogParserUtils.getMatcherFor("^.*?/(.*)/(.*?)$", line);
-        final String groupName = matcher.group(1);
-        final String fileNameAndExtension = matcher.group(2);
+        int numberOfSlashesInLine = countSlashesInLine(line);
+        if(numberOfSlashesInLine > 1)
+        {
+            final Matcher matcher = LogParserUtils.getMatcherFor("^.*?/(.*)/(.*?)$", line);
+            final String groupName = matcher.group(1);
+            final String fileNameAndExtension = matcher.group(2);
 
-        group.addModifiedFile(groupName, extractFileName(fileNameAndExtension), extractFileExtension(fileNameAndExtension));
+            group.addModifiedFile(groupName, extractFileName(fileNameAndExtension), extractFileExtension(fileNameAndExtension));
+        }
+        else
+        {
+            String fileNameAndExtension = line.substring(1);
+            group.addModifiedFile("", extractFileName(fileNameAndExtension), extractFileExtension(fileNameAndExtension));
+        }
+    }
+
+    private static int countSlashesInLine(String line)
+    {
+        return line.length() - line.replace("/", "").length();
     }
 }
