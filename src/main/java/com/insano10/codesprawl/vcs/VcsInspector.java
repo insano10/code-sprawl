@@ -8,8 +8,12 @@ import com.insano10.codesprawl.vcs.control.VcsControl;
 import com.insano10.codesprawl.vcs.history.VcsTimeLine;
 import org.apache.log4j.Logger;
 
+import java.io.BufferedWriter;
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.time.LocalDateTime;
+import java.util.Properties;
 
 public class VcsInspector implements ConfigurationChangeListener
 {
@@ -18,9 +22,11 @@ public class VcsInspector implements ConfigurationChangeListener
     private VcsControl vcsControl;
     private Path vcsRootPath;
     private Path vcsLogPath;
+    private Path metaDataPath;
 
     public VcsInspector(Path dataDirectory)
     {
+        this.metaDataPath = dataDirectory.resolve("metadata.properties");
         this.vcsLogPath = dataDirectory.resolve("vcs.log");
     }
 
@@ -59,6 +65,24 @@ public class VcsInspector implements ConfigurationChangeListener
                 vcsControl.updateVcsLog(vcsRootPath, vcsLogPath, latestVcsLogRevision, currentVcsRevision);
             }
         }
+
+        updateMetaData();
+    }
+
+    private void updateMetaData()
+    {
+        try(BufferedWriter writer = Files.newBufferedWriter(metaDataPath))
+        {
+            Properties properties = new Properties();
+            properties.setProperty("project-root", vcsRootPath.toAbsolutePath().toString());
+            properties.setProperty("last-updated", LocalDateTime.now().toString());
+            properties.store(writer, "vcs metadata");
+        }
+        catch(IOException e)
+        {
+            LOGGER.error("Failed to write metadata.properties", e);
+        }
+
     }
 
 }
