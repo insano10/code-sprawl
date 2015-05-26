@@ -34,6 +34,9 @@ define(["jquery", "TestCityBlueprint", "FileNeighbourhood", "FileUnit", "sceneOb
 
                 console.log("Building neighbourhoods");
                 buildNeighbourhoods(this);
+
+                //we don't need this any more
+                this.vcsHistory = {};
             };
 
             CityPlanner.prototype.getSceneObjects = function getSceneObjects()

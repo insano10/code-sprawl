@@ -39,11 +39,13 @@ define(["three", "container"], function (THREE, container)
 
         if(this.target != null)
         {
+            var properties = this.target.getProperties();
+
             context.font = "16px Helvetica Neue";
-            context.fillText("Neighbourhood: " + this.target.getGroupName(), x, y + 30);
-            context.fillText("Unit Name: " + this.target.getName(), x, y + 60);
-            context.fillText("File Extension: " + this.target.getFileExtension(), x, y + 90);
-            context.fillText("Line count: " + this.target.getLineCount(), x, y + 120);
+            context.fillText("Neighbourhood: " + properties.groupName, x, y + 30);
+            context.fillText("Unit Name: " + properties.name, x, y + 60);
+            context.fillText("File Extension: " + properties.fileExtension, x, y + 90);
+            context.fillText("Line count: " + properties.lineCount, x, y + 120);
 
             if(this.target.getVcsInfo() != null)
             {

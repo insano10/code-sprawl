@@ -4,24 +4,20 @@ import com.insano10.codesprawl.source.ProjectFile;
 
 public class FileVcsHistory
 {
-    private final String groupName;
-    private final String fileName;
-    private final String fileExtension;
+    private final String id;
     private final String lastModifiedByUser;
     private final long lastModifiedTimeMillis;
 
     public FileVcsHistory(String groupName, String fileName, String fileExtension, String lastModifiedByUser, long lastModifiedTimeMillis)
     {
-        this.groupName = groupName;
-        this.fileName = fileName;
-        this.fileExtension = fileExtension;
+        this.id = constructId(groupName, fileName, fileExtension);
         this.lastModifiedByUser = lastModifiedByUser;
         this.lastModifiedTimeMillis = lastModifiedTimeMillis;
     }
 
     public String getId()
     {
-        return constructId(groupName, fileName, fileExtension);
+        return id;
     }
 
     public String getLastUser()

@@ -140,7 +140,7 @@ define(['jquery', 'LoadedCityBlueprint', 'controls', 'jqueryui'], function ($, L
                         url:     window.location.href.split("#")[0] + 'definition',
                         success: function (response)
                         {
-                            console.log('finished visualising. Response is ' + response);
+                            console.log('finished visualising');
 
                             var responseObj = JSON.parse(response);
                             loadCityCallback(new LoadedCityBlueprint(responseObj.files, 

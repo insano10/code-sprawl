@@ -1,9 +1,11 @@
-define( ["three"], function (THREE) {
+define(["three"], function (THREE)
+{
 
-    return function()
+    var DEFAULT_COLOUR = 0x0aeedf;
+    var MATERIAL = new THREE.MeshLambertMaterial({ color: DEFAULT_COLOUR, wrapAround: true });
+
+    return function ()
     {
-        var DEFAULT_COLOUR = 0x0aeedf;
-
         function FileUnit(width, height, depth, name, groupName, lineCount, fileExtension)
         {
             this.width = width;
@@ -14,9 +16,7 @@ define( ["three"], function (THREE) {
             this.lineCount = lineCount;
             this.fileExtension = fileExtension;
 
-            this.mesh = new THREE.Mesh(
-                new THREE.BoxGeometry(this.width, this.height, this.depth),
-                new THREE.MeshLambertMaterial({ color: DEFAULT_COLOUR, wrapAround: true }));
+            this.mesh = new THREE.Mesh(new THREE.BoxGeometry(this.width, this.height, this.depth), MATERIAL);
             this.mesh.name = this.getFullyQualifiedName();
             this.mesh.castShadow = true;
             this.vcsInfo = null;
@@ -42,7 +42,7 @@ define( ["three"], function (THREE) {
         FileUnit.prototype.mergeIntoGeometry = function mergeIntoGeometry(geometry)
         {
             this.mesh.updateMatrix();
-            geometry.merge( this.mesh.geometry, this.mesh.matrix );
+            geometry.merge(this.mesh.geometry, this.mesh.matrix);
         };
 
         FileUnit.prototype.addToScene = function addToScene(scene)
@@ -65,14 +65,14 @@ define( ["three"], function (THREE) {
             return this.mesh.id;
         };
 
-        FileUnit.prototype.getName = function getName()
+        FileUnit.prototype.getProperties = function getProperties()
         {
-            return this.name;
-        };
-
-        FileUnit.prototype.getGroupName = function getGroupName()
-        {
-            return this.groupName;
+            return {
+                groupName:     this.groupName,
+                name:          this.name,
+                fileExtension: this.fileExtension,
+                lineCount:     this.lineCount
+            };
         };
 
         FileUnit.prototype.getFullyQualifiedName = function getFullyQualifiedName()
@@ -83,16 +83,6 @@ define( ["three"], function (THREE) {
         FileUnit.prototype.getVcsHistoryId = function getVcsHistoryId()
         {
             return this.groupName + ":" + this.name + "." + this.fileExtension;
-        };
-
-        FileUnit.prototype.getLineCount = function getLineCount()
-        {
-            return this.lineCount;
-        };
-
-        FileUnit.prototype.getFileExtension = function getFileExtension()
-        {
-            return this.fileExtension;
         };
 
         FileUnit.prototype.getVcsInfo = function getVcsInfo()
@@ -107,9 +97,9 @@ define( ["three"], function (THREE) {
 
         FileUnit.prototype.getFocusPoint = function getFocusPoint()
         {
-            return {x: this.mesh.position.x + (this.width/2), y: this.height + 1200, z: this.mesh.position.z + (this.depth/2)};
+            return {x: this.mesh.position.x + (this.width / 2), y: this.height + 1200, z: this.mesh.position.z + (this.depth / 2)};
         };
 
         return FileUnit;
     }();
-} );
+});
