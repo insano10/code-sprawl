@@ -38,8 +38,7 @@ public class FileInspector implements ConfigurationChangeListener
     {
         final List<Path> matchingJavaPaths = getMatchingPathsIn(sourceRoot, pathMatcher);
 
-        return matchingJavaPaths.
-                stream().
+        return matchingJavaPaths.parallelStream().
                 map(p -> convert(p, sourceRoot)).
                 collect(toList());
     }
