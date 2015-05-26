@@ -50,6 +50,11 @@ define(["three"], function (THREE)
             geometry.merge(this.mesh.geometry, this.mesh.matrix);
         };
 
+        FileUnit.prototype.addToOctree = function addToOctree(octree)
+        {
+            octree.add(this.mesh);
+        };
+
         FileUnit.prototype.removeFromScene = function removeFromScene(scene)
         {
             scene.remove(this.mesh);

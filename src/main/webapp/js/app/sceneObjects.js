@@ -53,7 +53,6 @@ define(["jquery"], function ($)
                 object.mergeIntoScene(scene, geometryCollection);
             });
 
-            console.log("creating mega mesh");
             var total = new THREE.Mesh(geometryCollection, new THREE.MeshLambertMaterial({ color: 0x0aeedf, wrapAround: true }));
             scene.add(total);
 

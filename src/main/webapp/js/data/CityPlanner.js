@@ -15,6 +15,13 @@ define(["jquery", "TestCityBlueprint", "FileNeighbourhood", "FileUnit", "sceneOb
                 this.fileUnits = {};
                 this.visualisationSourceDir = "";
                 this.vcsHistory = {};
+                this.octree = new THREE.Octree( {
+//                    scene: scene,
+                    undeferred: false,
+                    depthMax: Infinity,
+                    objectsThreshold: 8,
+                    overlapPct: 0.15
+                } );
             }
 
             CityPlanner.prototype.loadTestCity = function loadTestCity()
@@ -49,11 +56,17 @@ define(["jquery", "TestCityBlueprint", "FileNeighbourhood", "FileUnit", "sceneOb
                 return this.fileUnits;
             };
 
+            CityPlanner.prototype.getOctree = function getOctree()
+            {
+                return this.octree;
+            };
+
             CityPlanner.prototype.update = function update()
             {
                 $.each(this.fileUnits, function(key, unit) {
                     unit.update();
                 });
+                this.octree.update();
             };
 
             var loadInhabitants = function loadInhabitants(cityPlanner, bluePrint)
@@ -130,7 +143,8 @@ define(["jquery", "TestCityBlueprint", "FileNeighbourhood", "FileUnit", "sceneOb
                     var fileUnit = new FileUnit(UNIT_SIDE_LENGTH, unit.lineCount, UNIT_SIDE_LENGTH, unit.name, unit.groupName, unit.lineCount, unit.fileExtension);
                     fileUnit.setPosition(position);
                     neighbourhoodUnits.push(fileUnit);
-                    cityPlanner.fileUnits[fileUnit.getFullyQualifiedName()] = fileUnit;
+                    indexFileUnit(cityPlanner, fileUnit);
+
                     column++;
 
                     if (column == width)
@@ -181,6 +195,12 @@ define(["jquery", "TestCityBlueprint", "FileNeighbourhood", "FileUnit", "sceneOb
                 {
                     return fileUnit.getVcsHistoryId();
                 }
+            };
+
+            var indexFileUnit = function indexFileUnit(cityPlanner, fileUnit)
+            {
+                cityPlanner.fileUnits[fileUnit.getFullyQualifiedName()] = fileUnit;
+                fileUnit.addToOctree(cityPlanner.octree);
             };
 
             return CityPlanner;

@@ -6,6 +6,7 @@ require(
             'tween':               { exports: 'TWEEN' },
             'PointerLockControls': { deps: ['threeCore'], exports: 'THREE' },
             'FPSControls':         { deps: ['threeCore'], exports: 'THREE' },
+            'octree':              { deps: ['threeCore'], exports: 'THREE' },
             'detector':            { exports: 'Detector' },
             'stats':               { exports: 'Stats' }
         },
@@ -15,6 +16,7 @@ require(
             jqueryui:  'lib/jquery-ui-1.11.4.custom/jquery-ui.min',
             three:     'lib/threeWrapper',
             threeCore: 'lib/three',
+            octree:    'lib/Octree',
             tween:     'lib/tween.min',
             detector:  'lib/Detector',
             stats:     'lib/stats.min',

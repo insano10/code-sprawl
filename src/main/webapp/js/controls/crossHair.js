@@ -17,13 +17,17 @@ define(["three", "camera", "scene", "InformationPanel"], function (THREE, camera
         scene.add(debugPickingLine);
     };
 
-    var getTarget = function (controls, sceneObjects)
+    var getTarget = function (controls, octree)
     {
         var vectorDirection = new THREE.Vector3();
         controls.getDirection(vectorDirection);
 
         var rayCaster = new THREE.Raycaster(controls.getPosition(), vectorDirection);
-        var intersections = rayCaster.intersectObjects([sceneObjects]);
+
+
+        var octreeObjects = octree.search( rayCaster.ray.origin, rayCaster.ray.far, true, rayCaster.ray.direction );
+
+        var intersections = rayCaster.intersectOctreeObjects(octreeObjects);
 
         return (intersections.length > 0) ? intersections[0] : null;
     };
@@ -56,9 +60,9 @@ define(["three", "camera", "scene", "InformationPanel"], function (THREE, camera
 
     return {
 
-        update: function (controls, sceneObjects)
+        update: function (controls, sceneObjects, octree)
         {
-            var target = getTarget(controls, sceneObjects);
+            var target = getTarget(controls, octree);
 
             if (target != null)
             {
