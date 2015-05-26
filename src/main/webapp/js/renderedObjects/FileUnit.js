@@ -16,7 +16,12 @@ define(["three"], function (THREE)
             this.lineCount = lineCount;
             this.fileExtension = fileExtension;
 
-            this.mesh = new THREE.Mesh(new THREE.BoxGeometry(this.width, this.height, this.depth), MATERIAL);
+            var boxGeometry = new THREE.BoxGeometry(this.width, this.height, this.depth);
+
+            //remove the bottom face as it is never seen
+            boxGeometry.faces.splice(6, 2);
+
+            this.mesh = new THREE.Mesh(boxGeometry, MATERIAL);
             this.mesh.name = this.getFullyQualifiedName();
             this.mesh.castShadow = true;
             this.vcsInfo = null;
