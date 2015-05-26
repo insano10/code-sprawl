@@ -17,9 +17,11 @@ define( ["jquery", "three", "scene", "sceneObjects"], function ($, THREE, scene,
             });
         }
 
-        FileNeighbourhood.prototype.addToScene = function addToScene(scene)
+        FileNeighbourhood.prototype.mergeIntoScene = function mergeIntoScene(scene, geometryCollection)
         {
-            this.sceneObjects.addToScene(scene, true);
+            $.each(this.sceneObjects.getObjectArray(), function(idx, object) {
+               object.mergeIntoScene(scene, geometryCollection);
+            });
             scene.add(this.ground);
         };
 

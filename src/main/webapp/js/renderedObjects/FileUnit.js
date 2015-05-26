@@ -44,15 +44,10 @@ define(["three"], function (THREE)
             this.mesh.updateMatrixWorld(true);
         };
 
-        FileUnit.prototype.mergeIntoGeometry = function mergeIntoGeometry(geometry)
+        FileUnit.prototype.mergeIntoScene = function mergeIntoScene(scene, geometry)
         {
             this.mesh.updateMatrix();
             geometry.merge(this.mesh.geometry, this.mesh.matrix);
-        };
-
-        FileUnit.prototype.addToScene = function addToScene(scene)
-        {
-            scene.add(this.mesh);
         };
 
         FileUnit.prototype.removeFromScene = function removeFromScene(scene)

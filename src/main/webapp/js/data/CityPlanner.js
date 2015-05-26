@@ -104,7 +104,8 @@ define(["jquery", "TestCityBlueprint", "FileNeighbourhood", "FileUnit", "sceneOb
                     }
                 });
 
-                cityPlanner.sceneObjects.addToScene(scene);
+                var cityGeometry = new THREE.Geometry();
+                cityPlanner.sceneObjects.addToScene(scene, cityGeometry);
             };
 
             var buildNeighbourhood = function buildNeighbourhood(id, name, unitArray, xBoundary, zBoundary, cityPlanner)
