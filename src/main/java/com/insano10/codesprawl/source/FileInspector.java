@@ -16,8 +16,14 @@ import static java.util.stream.Collectors.toList;
 public class FileInspector implements ConfigurationChangeListener
 {
     private static final Logger LOGGER = Logger.getLogger(FileInspector.class);
+    private final ProjectFileLineCounts lineCounts;
     private Path sourcePath;
     private String[] fileExtensions;
+
+    public FileInspector()
+    {
+        this.lineCounts = new ProjectFileLineCounts();
+    }
 
     @Override
     public void onConfigurationUpdated(ProjectConfiguration configuration)
@@ -26,15 +32,21 @@ public class FileInspector implements ConfigurationChangeListener
         this.fileExtensions = configuration.getFileExtensions();
     }
 
-    public Collection<ProjectFile> getFiles()
+    public Collection<ProjectFile> inspectFiles()
     {
+        lineCounts.reset();
         String fileExtensionPattern = fileExtensions != null ? String.join(",", fileExtensions) : "";
         final PathMatcher pathMatcher = FileSystems.getDefault().getPathMatcher(String.format("glob:***.{%s}", fileExtensionPattern));
 
-        return getFilesIn(sourcePath, pathMatcher);
+        return collectProjectFiles(sourcePath, pathMatcher);
     }
 
-    private List<ProjectFile> getFilesIn(Path sourceRoot, PathMatcher pathMatcher)
+    public ProjectFileLineCounts getLineCounts()
+    {
+        return lineCounts;
+    }
+
+    private List<ProjectFile> collectProjectFiles(Path sourceRoot, PathMatcher pathMatcher)
     {
         final List<Path> matchingJavaPaths = getMatchingPathsIn(sourceRoot, pathMatcher);
 
@@ -83,11 +95,14 @@ public class FileInspector implements ConfigurationChangeListener
         return projectFileBuilder.createProjectFile();
     }
 
-    private int getLineCount(final Path file)
+    private long getLineCount(final Path file)
     {
         try
         {
-            return Files.readAllLines(file, Charset.forName("UTF-8")).size();
+            long lineCount = Files.readAllLines(file, Charset.forName("UTF-8")).size();
+            lineCounts.addLineCountForFileExtension(getFileType(file), lineCount);
+
+            return lineCount;
         }
         catch (IOException e)
         {

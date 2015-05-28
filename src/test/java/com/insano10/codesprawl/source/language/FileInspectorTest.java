@@ -4,6 +4,7 @@ import com.insano10.codesprawl.servlets.ProjectConfiguration;
 import com.insano10.codesprawl.source.FileInspector;
 import com.insano10.codesprawl.source.ProjectFile;
 import com.insano10.codesprawl.source.ProjectFileBuilder;
+import com.insano10.codesprawl.source.ProjectFileLineCounts;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -47,7 +48,7 @@ public class FileInspectorTest
                 createProjectFile();
 
         //when
-        Collection<ProjectFile> projectFiles = inspector.getFiles();
+        Collection<ProjectFile> projectFiles = inspector.inspectFiles();
 
         //then
         assertThat(projectFiles).contains(anExpectedJavaProjectFile);
@@ -73,7 +74,7 @@ public class FileInspectorTest
                 createProjectFile();
 
         //when
-        Collection<ProjectFile> projectFiles = inspector.getFiles();
+        Collection<ProjectFile> projectFiles = inspector.inspectFiles();
 
         //then
         assertThat(projectFiles).hasSize(10);
@@ -81,5 +82,25 @@ public class FileInspectorTest
         assertThat(projectFiles).contains(anExpectedProjectFileFromModuleB);
     }
 
+    @Test
+    public void shouldCountLinesForEachFileType() throws Exception
+    {
+        //given
+        inspector.onConfigurationUpdated(new ProjectConfiguration(PROJECT_VCS_ROOT.toAbsolutePath().toString(), "SVN", "", new String[]{"java", "properties"}));
+
+        //when
+        inspector.inspectFiles();
+
+        //then
+        final ProjectFileLineCounts lineCounts = inspector.getLineCounts();
+
+        final long javaLineCount = lineCounts.getCountForFileExtension("java");
+        final long propertiesLineCount = lineCounts.getCountForFileExtension("properties");
+        final long fortranLineCount = lineCounts.getCountForFileExtension("f90");
+
+        assertThat(javaLineCount).isEqualTo(80);
+        assertThat(propertiesLineCount).isEqualTo(2);
+        assertThat(fortranLineCount).isEqualTo(0);
+    }
 
 }

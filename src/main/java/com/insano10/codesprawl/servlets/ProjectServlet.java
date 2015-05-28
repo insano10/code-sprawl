@@ -3,9 +3,7 @@ package com.insano10.codesprawl.servlets;
 import com.google.gson.Gson;
 import com.insano10.codesprawl.configuration.ConfigurationManager;
 import com.insano10.codesprawl.source.FileInspector;
-import com.insano10.codesprawl.source.ProjectFile;
 import com.insano10.codesprawl.vcs.VcsInspector;
-import com.insano10.codesprawl.vcs.history.VcsTimeLine;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -14,7 +12,6 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -43,7 +40,7 @@ public class ProjectServlet extends HttpServlet
         {
             Map<String, Object> responseData = new HashMap<>();
             responseData.put("visualisationSourceDir", CONFIG_MANAGER.getVisualisationDirectoryRoot());
-            responseData.put("files", FILE_INSPECTOR.getFiles());
+            responseData.put("files", FILE_INSPECTOR.inspectFiles());
             responseData.put("vcsTimeLine", VCS_INSPECTOR.getVcsTimeLine());
 
             response.getWriter().print(GSON.toJson(responseData));
