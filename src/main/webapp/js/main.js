@@ -18,6 +18,10 @@ define(['detector', 'app', 'container', 'uiBehaviour', 'CityPlanner', 'controls'
                     uiBehaviour.onCityLoaded(cityPlanner.getFileUnits());
                     controls.reset();
                     renderer.render(scene, camera);
+
+                    // This needs to be called after the scene has been rendered and the world matrix has been created
+                    // As the file units are static, this method only needs to be called once
+                    cityPlanner.indexFileUnitsIntoScene();
                 };
 
                 uiBehaviour.setLoadCityCallback(loadCityCallback);

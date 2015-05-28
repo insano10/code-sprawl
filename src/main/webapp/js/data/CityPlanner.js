@@ -61,7 +61,7 @@ define(["jquery", "TestCityBlueprint", "FileNeighbourhood", "FileUnit", "sceneOb
                 return this.octree;
             };
 
-            CityPlanner.prototype.update = function update()
+            CityPlanner.prototype.indexFileUnitsIntoScene = function indexFileUnitsIntoScene()
             {
                 $.each(this.fileUnits, function(key, unit) {
                     unit.update();
