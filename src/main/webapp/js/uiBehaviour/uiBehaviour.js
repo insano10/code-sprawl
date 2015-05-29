@@ -126,6 +126,29 @@ define(['jquery', 'LoadedCityBlueprint', 'controls', 'jqueryui'], function ($, L
             }
         };
 
+        var updateProjectBreakdownBar = function updateProjectBreakdownBar(lineCounts)
+        {
+            //todo: handle when there are less than 5 file types available
+
+            console.log(JSON.stringify(lineCounts));
+
+            //add these 6 stacks to the progress bar
+
+            /*
+             <div class="progress">
+             <div class="progress-bar progress-bar-success" style="width: 55%">
+             <span class="sr-only">35% Complete (success)</span>
+             </div>
+             <div class="progress-bar progress-bar-warning progress-bar-striped" style="width: 30%">
+             <span class="sr-only">20% Complete (warning)</span>
+             </div>
+             <div class="progress-bar progress-bar-danger" style="width: 15%">
+             <span class="sr-only">10% Complete (danger)</span>
+             </div>
+             </div>
+             */
+        };
+
         UiBehaviour.prototype.setLoadCityCallback = function setLoadCityCallback(loadCityCallback)
         {
             var visualiseBtn = $('#visualise-btn');
@@ -143,9 +166,11 @@ define(['jquery', 'LoadedCityBlueprint', 'controls', 'jqueryui'], function ($, L
                             console.log('finished visualising');
 
                             var responseObj = JSON.parse(response);
-                            loadCityCallback(new LoadedCityBlueprint(responseObj.files, 
-                                responseObj.visualisationSourceDir, 
+                            loadCityCallback(new LoadedCityBlueprint(responseObj.files,
+                                responseObj.visualisationSourceDir,
                                 responseObj.vcsTimeLine.history));
+
+                            updateProjectBreakdownBar(responseObj.lineCounts);
 
                             loadingIcon.hide();
                         },

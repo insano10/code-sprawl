@@ -7,9 +7,7 @@ import org.apache.log4j.Logger;
 import java.io.IOException;
 import java.nio.charset.Charset;
 import java.nio.file.*;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
 
 import static java.util.stream.Collectors.toList;
 
@@ -41,9 +39,9 @@ public class FileInspector implements ConfigurationChangeListener
         return collectProjectFiles(sourcePath, pathMatcher);
     }
 
-    public ProjectFileLineCounts getLineCounts()
+    public Map<String, Long> getLineCounts()
     {
-        return lineCounts;
+        return lineCounts.getAggregateLineCounts();
     }
 
     private List<ProjectFile> collectProjectFiles(Path sourceRoot, PathMatcher pathMatcher)
@@ -113,11 +111,13 @@ public class FileInspector implements ConfigurationChangeListener
 
     private String getFileName(Path file)
     {
-        return file.getFileName().toString().split("\\.")[0];
+        String[] tokens = file.getFileName().toString().split("\\.");
+        return String.join(".", Arrays.copyOfRange(tokens, 0, tokens.length-1));
     }
 
     private String getFileType(Path file)
     {
-        return file.getFileName().toString().split("\\.")[1];
+        String[] tokens = file.getFileName().toString().split("\\.");
+        return tokens[tokens.length-1];
     }
 }
