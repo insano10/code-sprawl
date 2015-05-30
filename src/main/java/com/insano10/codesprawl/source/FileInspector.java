@@ -39,7 +39,7 @@ public class FileInspector implements ConfigurationChangeListener
         return collectProjectFiles(sourcePath, pathMatcher);
     }
 
-    public Map<String, Long> getLineCounts()
+    public List<ProjectExtensionLineCount> getAggregateLineCounts()
     {
         return lineCounts.getAggregateLineCounts();
     }

@@ -41,7 +41,7 @@ public class ProjectServlet extends HttpServlet
             Map<String, Object> responseData = new HashMap<>();
             responseData.put("visualisationSourceDir", CONFIG_MANAGER.getVisualisationDirectoryRoot());
             responseData.put("files", FILE_INSPECTOR.inspectFiles());
-            responseData.put("lineCounts", FILE_INSPECTOR.getLineCounts());
+            responseData.put("aggregateLineCounts", FILE_INSPECTOR.getAggregateLineCounts());
             responseData.put("vcsTimeLine", VCS_INSPECTOR.getVcsTimeLine());
 
             response.getWriter().print(GSON.toJson(responseData));

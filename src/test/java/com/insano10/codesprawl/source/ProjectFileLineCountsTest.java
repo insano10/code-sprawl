@@ -2,6 +2,7 @@ package com.insano10.codesprawl.source;
 
 import org.junit.Test;
 
+import java.util.List;
 import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -23,13 +24,13 @@ public class ProjectFileLineCountsTest
         counts.addLineCountForFileExtension("F", 60);
         counts.addLineCountForFileExtension("G", 70);
 
-        Map<String, Long> aggregateLineCounts = counts.getAggregateLineCounts();
+        List<ProjectExtensionLineCount> aggregateLineCounts = counts.getAggregateLineCounts();
 
-        assertThat(aggregateLineCounts).containsEntry("G", 70L);
-        assertThat(aggregateLineCounts).containsEntry("F", 60L);
-        assertThat(aggregateLineCounts).containsEntry("E", 50L);
-        assertThat(aggregateLineCounts).containsEntry("D", 40L);
-        assertThat(aggregateLineCounts).containsEntry("C", 30L);
-        assertThat(aggregateLineCounts).containsEntry("Others", 30L);
+        assertThat(aggregateLineCounts.get(0)).isEqualToComparingFieldByField(new ProjectExtensionLineCount("G", 70L));
+        assertThat(aggregateLineCounts.get(1)).isEqualToComparingFieldByField(new ProjectExtensionLineCount("F", 60L));
+        assertThat(aggregateLineCounts.get(2)).isEqualToComparingFieldByField(new ProjectExtensionLineCount("E", 50L));
+        assertThat(aggregateLineCounts.get(3)).isEqualToComparingFieldByField(new ProjectExtensionLineCount("D", 40L));
+        assertThat(aggregateLineCounts.get(4)).isEqualToComparingFieldByField(new ProjectExtensionLineCount("C", 30L));
+        assertThat(aggregateLineCounts.get(5)).isEqualToComparingFieldByField(new ProjectExtensionLineCount("Others", 30L));
     }
 }

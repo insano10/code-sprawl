@@ -1,16 +1,14 @@
 package com.insano10.codesprawl.source.language;
 
 import com.insano10.codesprawl.servlets.ProjectConfiguration;
-import com.insano10.codesprawl.source.FileInspector;
-import com.insano10.codesprawl.source.ProjectFile;
-import com.insano10.codesprawl.source.ProjectFileBuilder;
+import com.insano10.codesprawl.source.*;
 import org.junit.Before;
 import org.junit.Test;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Collection;
-import java.util.Map;
+import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -100,11 +98,12 @@ public class FileInspectorTest
         inspector.inspectFiles();
 
         //then
-        final Map<String, Long> lineCounts = inspector.getLineCounts();
+        final List<ProjectExtensionLineCount> lineCounts = inspector.getAggregateLineCounts();
 
-        assertThat(lineCounts).containsEntry("java", 80L);
-        assertThat(lineCounts).containsEntry("properties", 2L);
-        assertThat(lineCounts).doesNotContainKeys("f90");
+        assertThat(lineCounts.get(0)).isEqualToComparingFieldByField(new ProjectExtensionLineCount("java", 80L));
+        assertThat(lineCounts.get(1)).isEqualToComparingFieldByField(new ProjectExtensionLineCount("properties", 2L));
+        assertThat(lineCounts.get(2)).isEqualToComparingFieldByField(new ProjectExtensionLineCount("Others", 0L));
+        assertThat(lineCounts).hasSize(3);
     }
 
     @Test

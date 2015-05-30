@@ -1,16 +1,10 @@
 package com.insano10.codesprawl.source;
 
-import com.google.gson.internal.LinkedTreeMap;
-
-import java.util.LinkedHashMap;
-import java.util.Map;
-import java.util.TreeMap;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class ProjectFileLineCounts
 {
-    private static final int LINE_COUNT_GROUPS = 5;
-
     private final Map<String, Long> lineCounts = new ConcurrentHashMap<>();
 
     public long getCountForFileExtension(String fileExtension)
@@ -28,28 +22,30 @@ public class ProjectFileLineCounts
         lineCounts.compute(fileExtension, (key, value) -> value == null ? lineCount : value + lineCount);
     }
 
-    public Map<String, Long> getAggregateLineCounts()
+    public List<ProjectExtensionLineCount> getAggregateLineCounts()
     {
         final Map<String, Long> sortedMap = new TreeMap<>(new LongValueAscendingComparator<String>(lineCounts));
         sortedMap.putAll(lineCounts);
-        final Map<String, Long> aggregateMap = new LinkedHashMap<>();
+        final List<ProjectExtensionLineCount> aggregateCounts = new ArrayList<>();
 
+        //store the top 5 entries
         for (Map.Entry<String, Long> lineCount : sortedMap.entrySet())
         {
-            if(aggregateMap.size() >= LINE_COUNT_GROUPS)
+            if(aggregateCounts.size() >= 5)
             {
                 break;
             }
-            aggregateMap.put(lineCount.getKey(), lineCount.getValue());
+            aggregateCounts.add(new ProjectExtensionLineCount(lineCount.getKey(), lineCount.getValue()));
         }
 
-        //remove these top X entries from the main map
-        aggregateMap.keySet().stream().forEach(sortedMap::remove);
+        //remove these top 5 entries from the main map
+        aggregateCounts.stream().forEach(lc -> sortedMap.remove(lc.getLabel()));
 
         //add up the rest
         long others = sortedMap.values().stream().reduce(0L, (c1, c2) -> c1 + c2);
-        aggregateMap.put("Others", others);
+        aggregateCounts.add(new ProjectExtensionLineCount("Others", others));
 
-        return aggregateMap;
+        return aggregateCounts;
     }
+
 }

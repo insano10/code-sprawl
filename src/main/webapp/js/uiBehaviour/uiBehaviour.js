@@ -126,27 +126,40 @@ define(['jquery', 'LoadedCityBlueprint', 'controls', 'jqueryui'], function ($, L
             }
         };
 
-        var updateProjectBreakdownBar = function updateProjectBreakdownBar(lineCounts)
+        var createProjectBreakdownSubBar = function createProjectBreakdownSubBar(lineCountObj, styleClass, totalLineCount)
         {
-            //todo: handle when there are less than 5 file types available
+            var content = lineCountObj.label + ": " + lineCountObj.lineCount.toLocaleString();
 
-            console.log(JSON.stringify(lineCounts));
+            var childBar = document.createElement("div");
+            childBar.className = "progress-bar " + styleClass;
+            childBar.style.width = (lineCountObj.lineCount/totalLineCount) * 100 + "%";
+            childBar.innerHTML = content;
+            childBar.title = content;
 
-            //add these 6 stacks to the progress bar
+            return childBar;
+        };
 
-            /*
-             <div class="progress">
-             <div class="progress-bar progress-bar-success" style="width: 55%">
-             <span class="sr-only">35% Complete (success)</span>
-             </div>
-             <div class="progress-bar progress-bar-warning progress-bar-striped" style="width: 30%">
-             <span class="sr-only">20% Complete (warning)</span>
-             </div>
-             <div class="progress-bar progress-bar-danger" style="width: 15%">
-             <span class="sr-only">10% Complete (danger)</span>
-             </div>
-             </div>
-             */
+        var updateProjectBreakdownBar = function updateProjectBreakdownBar(lineCountList)
+        {
+            console.log(JSON.stringify(lineCountList));
+
+            var totalLineCount = 0;
+            $.each(lineCountList, function(idx, lineCountObj) {
+                totalLineCount += lineCountObj.lineCount;
+            });
+
+            var totalBar = $(".line-counts-bar");
+
+            totalBar.append(createProjectBreakdownSubBar(lineCountList[0], "progress-bar-green", totalLineCount));
+            totalBar.append(createProjectBreakdownSubBar(lineCountList[1], "progress-bar-blue", totalLineCount));
+            totalBar.append(createProjectBreakdownSubBar(lineCountList[2], "progress-bar-yellow", totalLineCount));
+            totalBar.append(createProjectBreakdownSubBar(lineCountList[3], "progress-bar-warning", totalLineCount));
+            totalBar.append(createProjectBreakdownSubBar(lineCountList[4], "progress-bar-danger", totalLineCount));
+            totalBar.append(createProjectBreakdownSubBar(lineCountList[5], "progress-bar-purple", totalLineCount));
+
+            $( ".progress-bar" ).tooltip({
+                position: { my: "top center+40", at: "bottom center" }
+            });
         };
 
         UiBehaviour.prototype.setLoadCityCallback = function setLoadCityCallback(loadCityCallback)
@@ -170,7 +183,7 @@ define(['jquery', 'LoadedCityBlueprint', 'controls', 'jqueryui'], function ($, L
                                 responseObj.visualisationSourceDir,
                                 responseObj.vcsTimeLine.history));
 
-                            updateProjectBreakdownBar(responseObj.lineCounts);
+                            updateProjectBreakdownBar(responseObj.aggregateLineCounts);
 
                             loadingIcon.hide();
                         },
