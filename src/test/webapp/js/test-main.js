@@ -23,8 +23,8 @@ require.config(
         baseUrl: '/base',
 
         paths:    {
-            "jquery":            "src/main/webapp/js/lib/jquery-2.1.0.min"
-
+            "jquery": "src/main/webapp/js/lib/jquery-2.1.0.min",
+            "tree":   "src/main/webapp/js/tree/tree"
         },
 
         // dynamically load all test files
