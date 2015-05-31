@@ -14,6 +14,7 @@ import static java.util.stream.Collectors.toList;
 public class FileInspector implements ConfigurationChangeListener
 {
     private static final Logger LOGGER = Logger.getLogger(FileInspector.class);
+    private static final Set<String> EXCLUDED_MIME_TYPES = new HashSet<>();
     private final ProjectFileLineCounts lineCounts;
     private Path sourcePath;
     private String[] fileExtensions;
@@ -21,6 +22,8 @@ public class FileInspector implements ConfigurationChangeListener
     public FileInspector()
     {
         this.lineCounts = new ProjectFileLineCounts();
+        EXCLUDED_MIME_TYPES.add("image.*");
+        EXCLUDED_MIME_TYPES.add("application/gzip");
     }
 
     @Override
@@ -61,7 +64,7 @@ public class FileInspector implements ConfigurationChangeListener
         {
             directoryStream.forEach(path -> {
 
-                if (pathMatcher.matches(path))
+                if (pathMatcher.matches(path) && isAcceptedFileType(path))
                 {
                     matchingPaths.add(path);
                 }
@@ -80,6 +83,31 @@ public class FileInspector implements ConfigurationChangeListener
         }
 
         return matchingPaths;
+    }
+
+    private boolean isAcceptedFileType(Path path)
+    {
+        try
+        {
+            if(path.toFile().isFile())
+            {
+                final String contentType = Files.probeContentType(path);
+                for (String excludedMimeType : EXCLUDED_MIME_TYPES)
+                {
+                    if (contentType.matches(excludedMimeType))
+                    {
+                        return false;
+                    }
+                }
+                return true;
+            }
+        }
+        catch (IOException e)
+        {
+            LOGGER.error("Failed to determine if " + path + " is an acceptable type.", e);
+        }
+
+        return false;
     }
 
     private ProjectFile convert(final Path file, Path sourceDirectory)
@@ -104,7 +132,7 @@ public class FileInspector implements ConfigurationChangeListener
         }
         catch (IOException e)
         {
-            LOGGER.error("Failed to read lines from " + file.getFileName(), e);
+            LOGGER.warn("Failed to count lines from " + file.getFileName());
         }
         return 0;
     }
@@ -112,12 +140,12 @@ public class FileInspector implements ConfigurationChangeListener
     private String getFileName(Path file)
     {
         String[] tokens = file.getFileName().toString().split("\\.");
-        return String.join(".", Arrays.copyOfRange(tokens, 0, tokens.length-1));
+        return String.join(".", Arrays.copyOfRange(tokens, 0, tokens.length - 1));
     }
 
     private String getFileType(Path file)
     {
         String[] tokens = file.getFileName().toString().split("\\.");
-        return tokens[tokens.length-1];
+        return tokens[tokens.length - 1];
     }
 }
