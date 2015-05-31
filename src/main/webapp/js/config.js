@@ -44,7 +44,9 @@ require(
             FileUnit:            'renderedObjects/FileUnit',
             FileNeighbourhood:   'renderedObjects/FileNeighbourhood',
             InformationPanel:    'renderedObjects/InformationPanel',
-            uiBehaviour:         'uiBehaviour/uiBehaviour'
+            uiBehaviour:         'uiBehaviour/uiBehaviour',
+            tree:                "cityConstruction/tree",
+            neighbourhood:       "cityConstruction/Neighbourhood"
         }
     },
     ["main"],

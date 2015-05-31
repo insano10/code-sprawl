@@ -15,6 +15,14 @@ Object.keys(window.__karma__.files).forEach(function (file)
     }
 });
 
+// PhantomJS doesn't support bind yet
+Function.prototype.bind = Function.prototype.bind || function (thisp) {
+    var fn = this;
+    return function () {
+        return fn.apply(thisp, arguments);
+    };
+};
+
 console.log("Test files: " + allTestFiles);
 
 require.config(
@@ -23,8 +31,10 @@ require.config(
         baseUrl: '/base',
 
         paths:    {
-            "jquery": "src/main/webapp/js/lib/jquery-2.1.0.min",
-            "tree":   "src/main/webapp/js/tree/tree"
+            "jquery":        "src/main/webapp/js/lib/jquery-2.1.0.min",
+            "tree":          "src/main/webapp/js/cityConstruction/tree",
+            "CityBuilder":   "src/main/webapp/js/cityConstruction/CityBuilder",
+            "Neighbourhood": "src/main/webapp/js/cityConstruction/Neighbourhood"
         },
 
         // dynamically load all test files

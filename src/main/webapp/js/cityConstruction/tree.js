@@ -13,12 +13,6 @@ define(["jquery"], function ($)
 
         Tree.prototype.postOrderTraversal = function postOrderTraversal(visitCallback)
         {
-            /*
-             postorder(node)
-             if node == null then return
-             visitAllChildrenLeftToRight
-             visit(node)
-             */
             postOrder(this.head, visitCallback, []);
         };
 
@@ -26,6 +20,7 @@ define(["jquery"], function ($)
         {
             if (node != null)
             {
+                console.log("tree visit: " + node.name);
                 var nextChildToVisit = getNextChildToVisit(node, visitedArray);
                 while (nextChildToVisit != null)
                 {
